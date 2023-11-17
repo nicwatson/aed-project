@@ -1,4 +1,4 @@
-# COM3004
+# COMP3004
 Repo for the development work on the Comp 3004 group project for Team 14
 
 
