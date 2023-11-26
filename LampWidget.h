@@ -3,6 +3,9 @@
 
 #include <QWidget>
 #include <QFrame>
+#include <QTimer>
+
+#define FLASH_TIME 200
 
 class LampWidget : public QFrame
 {
@@ -33,15 +36,25 @@ class LampWidget : public QFrame
         virtual void setLit(bool);
 
         bool lit;
+        bool flashing;
         QString styleUnlit;
         QString styleLit;
 
+        QTimer flashTimer;
+        QTimer flashTimerOff;
+        QTimer synchronizingTimer;
+
+
+    protected slots:
+        void flashTimerExpired();
 
     public slots:
 
         // Turn on or off the light (swaps style sheets)
         virtual void turnOn();
         virtual void turnOff();
+        virtual void startFlash();
+        virtual void stopFlash();
 
 };
 

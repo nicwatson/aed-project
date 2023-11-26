@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "InitialAdviceEvent.h"
+#include "PictogramAdviceEvent.h"
+#include <QKeyEvent>
+#include <QDebug>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -9,40 +11,28 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    numKeysDown = 0;
 
     QString lit_style = "background: rgb(248,228,92);";
     QString unlit_style = "background: rgb(30,30,30);";
-    ui->lamp1->setStyleUnlit(unlit_style);
-    ui->lamp1->setStyleLit(lit_style);
-    ui->lamp1->turnOff();
-    ui->lamp2->setStyleUnlit(unlit_style);
-    ui->lamp2->setStyleLit(lit_style);
-    ui->lamp2->turnOff();
-    ui->lamp3->setStyleUnlit(unlit_style);
-    ui->lamp3->setStyleLit(lit_style);
-    ui->lamp3->turnOff();
-    ui->lamp4->setStyleUnlit(unlit_style);
-    ui->lamp4->setStyleLit(lit_style);
-    ui->lamp4->turnOff();
+    ui->lamp_CheckResp->setStyleUnlit(unlit_style);
+    ui->lamp_CheckResp->setStyleLit(lit_style);
+    ui->lamp_CheckResp->turnOff();
+    ui->lamp_CallHelp->setStyleUnlit(unlit_style);
+    ui->lamp_CallHelp->setStyleLit(lit_style);
+    ui->lamp_CallHelp->turnOff();
+    ui->lamp_AttPads->setStyleUnlit(unlit_style);
+    ui->lamp_AttPads->setStyleLit(lit_style);
+    ui->lamp_AttPads->turnOff();
 
     repaint();
 
-    seq = new aed::EventSequence();
-    seq->add(new aed::InitialAdviceEvent("InitialAdvice: Stay calm", INITIAL_ADVICE_DELAY, "STAY CALM", ui->lamp1));
-    seq->add(new aed::InitialAdviceEvent("InitialAdvice: Check responsiveness", INITIAL_ADVICE_DELAY, "CHECK RESPONSIVENESS", ui->lamp2));
-    seq->add(new aed::InitialAdviceEvent("InitialAdvice: Call for help", INITIAL_ADVICE_DELAY, "CALL FOR HELP", ui->lamp3));
-    seq->add(new aed::InitialAdviceEvent("InitialAdvice: Attach pads", aed::SequencedEvent::NOTIMER, "ATTACH DEFIB PADS TO PATIENT'S BARE CHEST", ui->lamp4));
+    startupSequence = new aed::ModuleStartupAdvice(ui->lamp_CheckResp, ui->lamp_CallHelp, ui->lamp_AttPads);
 
-    for(int i = 0; i < seq->getLength(); i++)
-    {
-        eventHandles.append(seq->getAt(i));
-    }
+    connect(this, SIGNAL(startSequence()), startupSequence, SLOT(start()));
+    connect(ui->padsButton, SIGNAL(pressed()), startupSequence, SLOT(stop()));
 
-    connect(this, SIGNAL(startSequence()), seq, SLOT(start()));
-    connect(ui->padsButton, SIGNAL(pressed()), seq, SLOT(stop()));
-
-    emit startSequence();
-
+    startupSequence->startFromBeginning();
 
 
 }
@@ -55,9 +45,26 @@ MainWindow::~MainWindow()
 
 void MainWindow::quitProgram()
 {
-    for(int i = 0; i < eventHandles.size(); i++)
-    {
-        if(eventHandles[i] != nullptr) eventHandles[i]->deleteLater();
-    }
     QApplication::quit();
+}
+
+
+void MainWindow::keyPressEvent(QKeyEvent * e)
+{
+    /*if(e->text().contains(acceptedKeys))
+    {
+        e->accept();
+        ++numKeysDown;
+        qDebug() << "Accepted key pressed: " << e->text() << " : Now " << QString::number(numKeysDown) << " keys pressed." << Qt::endl;
+    }*/
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent * e)
+{
+    /*if(e->text().contains(acceptedKeys))
+    {
+        e->accept();
+        --numKeysDown;
+        qDebug() << "Accepted key released: " << e->text() << " : Now " << QString::number(numKeysDown) << " keys pressed." << Qt::endl;
+    }*/
 }

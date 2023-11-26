@@ -4,6 +4,11 @@
 #include <QObject>
 #include <QString>
 
+#include "EventSequence.h"
+#include "ModuleSelfTest.h"
+
+#define DURATION_UNIT_OK 4000
+
 namespace aed
 {
 
@@ -12,21 +17,28 @@ namespace aed
         Q_OBJECT
 
         public:
-            enum padState_t { UNPLUGGED, ADULT_OFF, CHILD_OFF, ADULT_ON, CHILD_ON };
 
+            enum state_t { OFF, SELF_TEST, FAILURE, STARTUP_ADVICE, DETECT_PAD, ECG_ASSESS, SHOCK, CPR };
+            enum cableState_t { UNPLUGGED, PAD_ADULT, PAD_CHILD };
 
             AED();
+            ~AED();
 
-            inline bool isOn() const { return on; }
-            inline padState_t getPadState() const { return padState; }
+            inline bool isOn() const { return aedState != OFF; }
+            inline state_t getState() const { return aedState; }
+            inline cableState_t getCableState() const { return cableState; }
             inline float getBattery() const { return battery; }
             inline bool willPassTest() const { return passTest; }
 
         private:
-            bool on;                // AED is powered on
-            padState_t padState;    // Pad connectvity (see type def above)
+            state_t aedState;
+            cableState_t cableState;
             float battery;          // Battery from 0 (depleted) to 1 (full charge)
             bool passTest;          // Assuming battery and cable fine, will AED pass self-test? (Use for modeling misc. unit failures)
+
+            EventSequence seq;
+
+            QTimer timer;
 
         public:
 
@@ -44,15 +56,45 @@ namespace aed
             bool removeCPRHelpModule(CPRHelpModule *);
             */
 
+        private:
+            void startSelfTest();
+            void reportLowBattery();
+            void reportUnitFailed();
+
+            void plugCable(cableState_t);
+            void reportNoCable();
+
+            void doStartupAdvice();
+
+            void attachPads(bool);
+
+            void startECG();
+            void reportElectrodeProblem();
+
+            void prepShock();
+
+            void startCPR();
+
+
+
+
         public slots:
+
+            void changeBatteries();
+
+            void selfTestResult(ModuleSelfTest::testResult_t);
+
+
             void turnOn();
             void turnOff();
 
             void setBattery(float newBatt);
             void eatBattery(float loseBatt);
 
-            void voicePrompt(QString & prompt);
+            void userPrompt(const QString & prompt);
 
+        signals:
+            void batteryChanged(float newBatt);
 
     };
 }

@@ -1,6 +1,6 @@
 #ifndef AED_MODULEECGASSESSMENT_H
 #define AED_MODULEECGASSESSMENT_H
-
+/*
 #include <QObject>
 
 namespace aed {
@@ -76,3 +76,4 @@ namespace aed {
 } // namespace aed
 
 #endif // AED_MODULEECGASSESSMENT_H
+*/

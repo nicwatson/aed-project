@@ -4,7 +4,10 @@
 #include <QMainWindow>
 
 #include "SequencedEvent.h"
-#include "EventSequence.h"
+#include "ModuleStartupAdvice.h"
+
+#include <QString>
+#include <QRegExp>
 
 #define INITIAL_ADVICE_DELAY 3000
 
@@ -24,9 +27,16 @@ private:
     Ui::MainWindow *ui;
 
     QList<aed::SequencedEvent *> eventHandles;
-    aed::EventSequence * seq;
+    aed::ModuleStartupAdvice * startupSequence;
 
     QTimer timer;
+
+    const QRegExp acceptedKeys = QRegExp("[asdfjkl;]");
+    int numKeysDown;
+
+protected:
+    void keyPressEvent(QKeyEvent * e) override;
+    void keyReleaseEvent(QKeyEvent * e) override;
 
 private slots:
     void quitProgram();
