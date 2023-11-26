@@ -1,0 +1,4 @@
+#ifndef SHOCKMODULE_H
+#define SHOCKMODULE_H
+
+#endif // SHOCKMODULE_H
