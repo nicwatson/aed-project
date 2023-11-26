@@ -12,13 +12,13 @@ namespace aed
         Q_OBJECT
 
         public:
-            enum padState_t { UNPLUGGED, ADULT_OFF, CHILD_OFF, ADULT_ON, CHILD_ON }
+            enum padState_t { UNPLUGGED, ADULT_OFF, CHILD_OFF, ADULT_ON, CHILD_ON };
 
 
             AED();
 
             inline bool isOn() const { return on; }
-            inline const padState_t getPadState() const { return padState; }
+            inline padState_t getPadState() const { return padState; }
             inline float getBattery() const { return battery; }
             inline bool willPassTest() const { return passTest; }
 
@@ -30,6 +30,7 @@ namespace aed
 
         public:
 
+            /*
             void addStartupAdviceModule(StartupAdviceModule *);
             void addSelfTestModule(SelfTestModule *);
             void addShockModule(ShockModule *);
@@ -41,6 +42,7 @@ namespace aed
             bool removeShockModule(ShockModule *);
             bool removeECGModule(ECGModule *);
             bool removeCPRHelpModule(CPRHelpModule *);
+            */
 
         public slots:
             void turnOn();
@@ -53,5 +55,6 @@ namespace aed
 
 
     };
+}
 
 #endif // AED_H
