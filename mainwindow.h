@@ -5,6 +5,8 @@
 
 #include "SequencedEvent.h"
 #include "EventSequence.h"
+#include "LCDDisplay.h"
+#include "ModuleECGAssessment.h"
 
 #define INITIAL_ADVICE_DELAY 3000
 
@@ -25,6 +27,8 @@ private:
 
     QList<aed::SequencedEvent *> eventHandles;
     aed::EventSequence * seq;
+    LCDDisplay* lcdDisplay;
+    aed::ModuleECGAssessment* ecgModule;
 
     QTimer timer;
 

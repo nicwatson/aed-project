@@ -43,6 +43,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     emit startSequence();
 
+    lcdDisplay = new LCDDisplay(ui->ecgWaveform);
+    ecgModule = new aed::ModuleECGAssessment();
+
+    connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
+    connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(stopAssessment()));
+    connect(ui->tachyButton, SIGNAL(pressed()), lcdDisplay, SLOT(setTachyPic()));
+    connect(ui->fibButton, SIGNAL(pressed()), lcdDisplay, SLOT(setFibPic()));
+    connect(ui->nonShockableButton, SIGNAL(pressed()), lcdDisplay, SLOT(setNonShockablePic()));
+
+
+
 
 
 }
@@ -51,6 +62,8 @@ MainWindow::~MainWindow()
 {
 
     delete ui;
+    if (lcdDisplay !=  nullptr) delete lcdDisplay;
+    if (ecgModule !=  nullptr) delete ecgModule;
 }
 
 void MainWindow::quitProgram()

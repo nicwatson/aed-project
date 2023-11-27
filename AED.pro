@@ -12,6 +12,7 @@ SOURCES += \
     AED.cpp \
     EventSequence.cpp \
     InitialAdviceEvent.cpp \
+    LCDDisplay.cpp \
     LampWidget.cpp \
     ModuleECGAssessment.cpp \
     SequencedEvent.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     ECGAssessment.h \
     EventSequence.h \
     InitialAdviceEvent.h \
+    LCDDisplay.h \
     LampWidget.h \
     ModuleECGAssessment.h \
     SelfTest.h \
