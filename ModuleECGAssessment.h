@@ -2,6 +2,7 @@
 #define AED_MODULEECGASSESSMENT_H
 
 #include <QObject>
+#include <QTimer>
 
 namespace aed {
 
@@ -22,11 +23,6 @@ namespace aed {
 //      * AED will be aware of the reason (pad/cable disconnection), will issue the stop signal and handle the error message itself.
 //          ModuleECGAnalysis doesn't need to know the specific reason - it just needs to stop the analysis and blank out the
 //          waveform diagram (if applicable).
-//      * What about "Analysis halted" prompt in the event of "excessive ECG signal artifact"?
-//          * Are we going to include this case in our model at all?
-//          * If so, it should probably be handled inside the ModuleECGAssessent, and should probably read some GUI control (or use
-//              some random logic?) to decide if such an error has occurred. Then we would want another outgoing signal from
-//              ModuleECGAssessment to a slot on AED to tell AED about this.
 //      * Deciding on the type of rhythm detected: will we just use radio buttons so that the user can specify whether to simulate
 //          V-FIB, V-TACH, or OTHER (non-shockable)? If so, ModuleECGAssessment can perhaps poll/read that widget directly instead
 //          of having to have the data sent in by AED when ECG starts.
@@ -44,11 +40,17 @@ namespace aed {
     {
         Q_OBJECT
     public:
+        enum rhythm_t { VENT_FIB, VENT_TACHY, NON_SHOCKABLE };
         explicit ModuleECGAssessment();
         ~ModuleECGAssessment();
 
     private:
-        bool active;    // Is the ECG assessment happening right now?
+        bool active;        // Is the ECG assessment happening right now?
+        rhythm_t rhythm;    // Rhythm type of the patient (see type def above). We can set this via GUI
+        QTimer* timer;      // Simulates the 5 seconds of analysis
+
+        void sendShockableSignal();
+        void sendNonShockableSignal();
 
     signals:
 

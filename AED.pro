@@ -13,6 +13,7 @@ SOURCES += \
     EventSequence.cpp \
     InitialAdviceEvent.cpp \
     LampWidget.cpp \
+    ModuleECGAssessment.cpp \
     SequencedEvent.cpp \
     main.cpp \
     mainwindow.cpp
@@ -23,6 +24,7 @@ HEADERS += \
     EventSequence.h \
     InitialAdviceEvent.h \
     LampWidget.h \
+    ModuleECGAssessment.h \
     SelfTest.h \
     SequencedEvent.h \
     ShockModule.h \
