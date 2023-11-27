@@ -27,6 +27,9 @@ namespace aed
             virtual void exit() override;
             virtual void abort() override;
 
+        signals:
+            void sendUserPrompt(const QString & prompt);
+
     };
 
 

@@ -4,6 +4,7 @@
 #include <QObject>
 #include "EventSequence.h"
 #include "LampWidget.h"
+#include "AdviceEvent.h"
 
 #define DURATION_UNIT_OK 3000
 #define DURATION_STAY_CALM 3000
@@ -24,6 +25,18 @@ namespace aed
         public:
             explicit ModuleStartupAdvice(LampWidget * lamp_CheckResponsiveness, LampWidget * lamp_CallHelp, LampWidget * lamp_AttachPads);
             ~ModuleStartupAdvice();
+
+            virtual int add(AdviceEvent * newEvent);
+            virtual int addBefore(AdviceEvent * newEvent, int index);
+            virtual int remove(AdviceEvent * target);
+            virtual int remove(int index) override;
+
+
+        public slots:
+            void userPrompt(const QString & prompt);
+
+        signals:
+            void sendUserPrompt(const QString & prompt);
 
     };
 }

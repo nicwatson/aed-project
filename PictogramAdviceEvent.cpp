@@ -42,7 +42,7 @@ void PictogramAdviceEvent::enter()
           << ")"
           << "   :   The light should now be FLASHING."
           << Qt::endl;
-    debug << "[TODO] VOICE PROMPT: \"" << prompt << "\"" << Qt::endl;
+    emit sendUserPrompt(prompt);
     SequencedEvent::enter();
 }
 

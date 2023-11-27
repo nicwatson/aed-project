@@ -18,7 +18,7 @@ void AdviceEvent::enter()
           << QString::number(id)
           << ")"
           << Qt::endl;
-    debug << "[TODO] VOICE PROMPT: \"" << prompt << "\"" << Qt::endl;
+    emit sendUserPrompt(prompt);
     SequencedEvent::enter();
 }
 

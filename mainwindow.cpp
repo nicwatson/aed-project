@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "PictogramAdviceEvent.h"
+
 #include <QKeyEvent>
 #include <QDebug>
 
@@ -10,8 +11,11 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
     numKeysDown = 0;
+
+    aed = new aed::AED();
 
     QString lit_style = "background: rgb(248,228,92);";
     QString unlit_style = "background: rgb(30,30,30);";
@@ -29,10 +33,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     startupSequence = new aed::ModuleStartupAdvice(ui->lamp_CheckResp, ui->lamp_CallHelp, ui->lamp_AttPads);
 
+    aed->addModuleStartupAdvice(startupSequence);
+    connect(ui->padsButton, SIGNAL(pressed()), aed, SLOT(notifyPadsAttached()));
+
+
+    aed->doStartupAdvice();
+    /*
     connect(this, SIGNAL(startSequence()), startupSequence, SLOT(start()));
     connect(ui->padsButton, SIGNAL(pressed()), startupSequence, SLOT(stop()));
 
-    startupSequence->startFromBeginning();
+    startupSequence->startFromBeginning();*/
 
 
 }

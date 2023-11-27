@@ -5,6 +5,7 @@
 
 #include "SequencedEvent.h"
 #include "ModuleStartupAdvice.h"
+#include "AED.h"
 
 #include <QString>
 #include <QRegExp>
@@ -30,6 +31,7 @@ private:
     aed::ModuleStartupAdvice * startupSequence;
 
     QTimer timer;
+    aed::AED * aed;
 
     const QRegExp acceptedKeys = QRegExp("[asdfjkl;]");
     int numKeysDown;

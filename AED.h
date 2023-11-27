@@ -6,8 +6,7 @@
 
 #include "EventSequence.h"
 #include "ModuleSelfTest.h"
-
-#define DURATION_UNIT_OK 4000
+#include "ModuleStartupAdvice.h"
 
 namespace aed
 {
@@ -40,10 +39,15 @@ namespace aed
 
             QTimer timer;
 
+
         public:
 
+
+            void addModuleStartupAdvice(ModuleStartupAdvice *);
+
+            void doStartupAdvice();
+
             /*
-            void addStartupAdviceModule(StartupAdviceModule *);
             void addSelfTestModule(SelfTestModule *);
             void addShockModule(ShockModule *);
             void addECGModule(ECGModule *);
@@ -64,7 +68,7 @@ namespace aed
             void plugCable(cableState_t);
             void reportNoCable();
 
-            void doStartupAdvice();
+
 
             void attachPads(bool);
 
@@ -93,9 +97,13 @@ namespace aed
 
             void userPrompt(const QString & prompt);
 
+            void notifyPadsAttached();
+
         signals:
             void batteryChanged(float newBatt);
 
+            void signalStartupAdvice();
+            void signalPadsAttached();
     };
 }
 

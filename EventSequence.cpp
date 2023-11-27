@@ -59,7 +59,7 @@ int EventSequence::remove(SequencedEvent * target)
 {
     if(!active && target != nullptr)
     {
-        queue.removeOne(target);
+        queue.removeAll(target);
         //disconnectFrom(target);
     }
     return queue.size();

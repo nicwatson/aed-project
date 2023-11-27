@@ -26,3 +26,41 @@ ModuleStartupAdvice::~ModuleStartupAdvice()
         }
     }
 }
+
+int ModuleStartupAdvice::add(AdviceEvent * newEvent)
+{
+    qDebug() << "Special add with " << newEvent->getID() << Qt::endl;
+    int ret = EventSequence::add(newEvent);
+    connect(newEvent, SIGNAL(sendUserPrompt(const QString &)), this, SLOT(userPrompt(const QString &)));
+    return ret;
+}
+
+int ModuleStartupAdvice::addBefore(AdviceEvent * newEvent, int index)
+{
+    int ret = EventSequence::addBefore(newEvent, index);
+    connect(newEvent, SIGNAL(sendUserPrompt(const QString &)), this, SLOT(userPrompt(const QString &)));
+    return ret;
+}
+
+int ModuleStartupAdvice::remove(AdviceEvent * target)
+{
+    disconnect(target, SIGNAL(sendUserPrompt(const QString &)), this, SLOT(userPrompt(const QString &)));
+    return EventSequence::remove(target);
+}
+
+int ModuleStartupAdvice::remove(int index)
+{
+    if(validateIndex(index) && queue[index] != nullptr)
+    {
+        disconnect(queue[index], SIGNAL(sendUserPrompt(const QString &)), this, SLOT(userPrompt(const QString &)));
+    }
+    return EventSequence::remove(index);
+}
+
+// SLOT
+void ModuleStartupAdvice::userPrompt(const QString & prompt)
+{
+    qDebug() << "Received prompt: " << prompt << Qt::endl;
+    emit sendUserPrompt(prompt);
+}
+
