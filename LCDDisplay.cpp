@@ -1,41 +1,58 @@
 #include "LCDDisplay.h"
 
-LCDDisplay::LCDDisplay(QLabel* graph)
-    : graph(graph)
+LCDDisplay::LCDDisplay(QCustomPlot* g)
+//    : graph(graph) // , graphXData(nullptr), graphYData(nullptr)
 {
-//    QString currentDir = QDir::currentPath();
-    QDir parentDir = QDir::current();
-    parentDir.cdUp();
-    QString pictureDirPath = parentDir.path() + "/comp3004-team14";
-    ventTachyPic = new QPixmap(pictureDirPath + QString("/v_tachy.png"), nullptr, Qt::AutoColor);
-    ventFibPic = new QPixmap(pictureDirPath + QString("/v_fib.png"), nullptr, Qt::AutoColor);
-    nonShockablePic = new QPixmap(pictureDirPath + QString("/non_shockable.png"), nullptr, Qt::AutoColor);
+    graph = g;
 }
 
 LCDDisplay::~LCDDisplay()
 {
-    if (graph != nullptr) delete graph;
-    if (ventTachyPic != nullptr) delete ventTachyPic;
-    if (ventFibPic != nullptr) delete ventFibPic;
-    if (nonShockablePic != nullptr) delete nonShockablePic;
 }
 
-void LCDDisplay::setFibPic()
+void LCDDisplay::setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDataToCopy) // setGraphData(aed::ModuleECGAssessment&  m)
 {
-    graph->setPixmap(ventFibPic->scaled(graph->width(), graph->height(), Qt::KeepAspectRatio));
+    //  LCDDisplay is like driver
+    // ModuleECGAssessment is like distributor
+    // ModuleECGAssessment::ventFibXData is  not public, so can't say setGraphData(&ventFibXData, &ventFibYData)  is
+//    m.LCDDownload(graphXData, graphYData);
+    qDebug() << "GRAPH DATA SET";
+    graphXData = *xDataToCopy;
+    graphYData = *yDataToCopy;
 }
 
-void LCDDisplay::setTachyPic()
+void LCDDisplay::plotGraphData()
 {
-    graph->setPixmap(ventTachyPic->scaled(graph->width(), graph->height(), Qt::KeepAspectRatio));
+    if (graph != nullptr) {
+//        graph->clearGraphs();
+
+        QVector<double> x(5), y(5);
+        for (int i = 0; i < 5; i++) {
+            x[i] = i;
+            y[i] = i;
+        }
+
+        graph->addGraph();
+        graph->graph(0)->setData(x, y);
+        graph->xAxis->setRange(0, 22);
+        graph->yAxis->setRange(0, 5);
+
+
+//        graph->addGraph();
+//        graph->graph(0)->setData(graphXData, graphYData);
+//        graph->xAxis->setRange(0, 22);
+//        graph->yAxis->setRange(0, 5);
+//        qDebug() << "GRAPH DATA PLOTTED";
+//        qDebug() << QString("%1").arg(graphXData.at(0));
+//        qDebug() << QString("%1").arg(graphYData.at(0));
+//        qDebug() << QString("%1").arg(graphXData.at(1));
+//        qDebug() << QString("%1").arg(graphYData.at(1));
+    }
 }
 
-void LCDDisplay::setNonShockablePic()
+void LCDDisplay::clearGraphData()
 {
-    graph->setPixmap(nonShockablePic->scaled(graph->width(), graph->height(), Qt::KeepAspectRatio));
-}
-
-void LCDDisplay::setNoPic()
-{
-    graph->clear();
+    if (graph != nullptr) {
+        graph->clearGraphs();
+    }
 }

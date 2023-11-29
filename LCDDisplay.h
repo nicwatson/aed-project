@@ -4,32 +4,27 @@
 #define LCDDISPLAY_H
 #include <QObject>
 #include <QLabel>
-#include <QProgressBar>
-#include <QPixmap>
-#include <QDir>
-#include <QCoreApplication>
 #include <QDebug>
+#include <QVector>
+#include "qcustomplot.h"
 
 class LCDDisplay : public QObject
 {
     Q_OBJECT
 
     public:
-        explicit LCDDisplay(QLabel* graph);
+        explicit LCDDisplay(QCustomPlot* graph);
         ~LCDDisplay();
 
     private:
-        QLabel* graph;
-        QPixmap* ventTachyPic;
-        QPixmap* ventFibPic;
-        QPixmap* nonShockablePic;
-
+        QCustomPlot* graph;
+        QVector<double> graphXData;
+        QVector<double> graphYData;
 
     public slots:
-        void setTachyPic();
-        void setFibPic();
-        void setNonShockablePic();
-        void setNoPic();
+        void setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDataToCopy); // setGraphData(aed::ModuleECGAssessment&  m) // setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDataToCopy)
+        void plotGraphData();
+        void clearGraphData();
 };
 
 #endif // LCDDISPLAY_H

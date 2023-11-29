@@ -43,17 +43,25 @@ MainWindow::MainWindow(QWidget *parent)
 
     emit startSequence();
 
-    lcdDisplay = new LCDDisplay(ui->ecgWaveform);
-    ecgModule = new aed::ModuleECGAssessment();
+    lcdDisplay = new LCDDisplay(ui->graph);
+    ecgModule = new aed::ModuleECGAssessment(lcdDisplay);
 
     connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
-    connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(stopAssessment()));
-    connect(ui->tachyButton, SIGNAL(pressed()), lcdDisplay, SLOT(setTachyPic()));
-    connect(ui->fibButton, SIGNAL(pressed()), lcdDisplay, SLOT(setFibPic()));
-    connect(ui->nonShockableButton, SIGNAL(pressed()), lcdDisplay, SLOT(setNonShockablePic()));
+    connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(endAssessment()));
+    connect(ui->tachyButton, SIGNAL(pressed()), ecgModule, SLOT(setTachyRhythm()));
+    connect(ui->fibButton, SIGNAL(pressed()), ecgModule, SLOT(setRhythm(VENT_FIB)));
+    connect(ui->nonShockableButton, SIGNAL(pressed()), ecgModule, SLOT(setRhythm(NON_SHOCKABLE)));
 
+//    QVector<double> x(5), y(5);
+//    for (int i = 0; i < 5; i++) {
+//        x[i] = i;
+//        y[i] = i;
+//    }
 
-
+//    ui->graph->addGraph();
+//    ui->graph->graph(0)->setData(x, y);
+//    ui->graph->xAxis->setRange(0, 22);
+//    ui->graph->yAxis->setRange(0, 5);
 
 
 }
