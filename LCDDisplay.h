@@ -13,15 +13,16 @@ class LCDDisplay : public QObject
     Q_OBJECT
 
     public:
-        explicit LCDDisplay(QCustomPlot* graph, QLabel* t);
+        explicit LCDDisplay(QCustomPlot* graph, QLabel* prompt);
         ~LCDDisplay();
         void plotGraphData();
         void clearGraphData();
+        void setPrompt(QString p) {prompt->setText(p);}
         QVector<double> getGraphXData() {return graphXData;}
         QVector<double> getGraphYData() {return graphYData;}
 
     private:
-        QLabel* testLabel;
+        QLabel* prompt;
         QCustomPlot* graph;
         QVector<double> graphXData;
         QVector<double> graphYData;

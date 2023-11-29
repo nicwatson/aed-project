@@ -65,6 +65,7 @@ namespace aed {
         QVector<double> nonShockableXData;
         QVector<double> nonShockableYData;
 
+        void readCSVFile(QString fileDirectory, QString fileName);
         void sendShockableSignal();
         void sendNonShockableSignal();
 
@@ -87,14 +88,7 @@ namespace aed {
         // probably doesn't need to run this function.
         void endAssessment();
 
-        void setRhythm(rhythm_t  r) {
-            rhythm = r;
-            qDebug() << QString("Rhythm r %1").arg(r);
-        }
-        void setTachyRhythm() {
-            qDebug() << "TESTING TACHY RHYTHM";
-        }
-
+        void setRhythm(rhythm_t  r) { rhythm = r; }
     };
 
 } // namespace aed
