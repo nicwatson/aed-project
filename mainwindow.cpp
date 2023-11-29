@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "PictogramAdviceEvent.h"
+#include "event/PictogramAdviceEvent.h"
 
 #include <QKeyEvent>
 #include <QDebug>
@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     numKeysDown = 0;
 
-    aed = new aed::AED();
+    aed = new aedModel::AED();
 
     QString lit_style = "background: rgb(248,228,92);";
     QString unlit_style = "background: rgb(30,30,30);";
@@ -31,18 +31,29 @@ MainWindow::MainWindow(QWidget *parent)
 
     repaint();
 
-    startupSequence = new aed::ModuleStartupAdvice(ui->lamp_CheckResp, ui->lamp_CallHelp, ui->lamp_AttPads);
+    startupSequence = new aedModel::ModuleStartupAdvice(ui->lamp_CheckResp, ui->lamp_CallHelp, ui->lamp_AttPads);
 
     aed->addModuleStartupAdvice(startupSequence);
     connect(ui->padsButton, SIGNAL(pressed()), aed, SLOT(notifyPadsAttached()));
 
 
-    aed->doStartupAdvice();
+    //aed->doStartupAdvice();
     /*
     connect(this, SIGNAL(startSequence()), startupSequence, SLOT(start()));
     connect(ui->padsButton, SIGNAL(pressed()), startupSequence, SLOT(stop()));
 
     startupSequence->startFromBeginning();*/
+
+    /*
+    lcdDisplay = new LCDDisplay(ui->ecgWaveform);
+    ecgModule = new aed::ModuleECGAssessment();
+
+    connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
+    connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(stopAssessment()));
+    connect(ui->tachyButton, SIGNAL(pressed()), lcdDisplay, SLOT(setTachyPic()));
+    connect(ui->fibButton, SIGNAL(pressed()), lcdDisplay, SLOT(setFibPic()));
+    connect(ui->nonShockableButton, SIGNAL(pressed()), lcdDisplay, SLOT(setNonShockablePic()));
+    */
 
 
 }
@@ -51,6 +62,9 @@ MainWindow::~MainWindow()
 {
 
     delete ui;
+
+    if (lcdDisplay !=  nullptr) lcdDisplay->deleteLater();
+    if (ecgModule !=  nullptr) ecgModule->deleteLater();
 }
 
 void MainWindow::quitProgram()

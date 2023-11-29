@@ -3,9 +3,12 @@
 
 #include <QMainWindow>
 
-#include "SequencedEvent.h"
-#include "ModuleStartupAdvice.h"
-#include "AED.h"
+#include "aedModel/ModuleStartupAdvice.h"
+#include "aedModel/ModuleECGAssessment.h"
+#include "aedModel/AED.h"
+
+#include "aedGui/LCDDisplay.h"
+
 
 #include <QString>
 #include <QRegExp>
@@ -27,14 +30,17 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    QList<aed::SequencedEvent *> eventHandles;
-    aed::ModuleStartupAdvice * startupSequence;
+    QList<event::SequencedEvent *> eventHandles;
+    aedModel::ModuleStartupAdvice * startupSequence;
 
     QTimer timer;
-    aed::AED * aed;
+    aedModel::AED * aed;
 
     const QRegExp acceptedKeys = QRegExp("[asdfjkl;]");
     int numKeysDown;
+
+    aedGui::LCDDisplay* lcdDisplay;
+    aedModel::ModuleECGAssessment* ecgModule;
 
 protected:
     void keyPressEvent(QKeyEvent * e) override;
