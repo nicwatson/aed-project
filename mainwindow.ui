@@ -251,7 +251,7 @@
      <string>Non-shockable</string>
     </property>
    </widget>
-   <widget class="QCustomPlot" name="graph" native="true">
+   <widget class="QCustomPlot" name="ecgGraph" native="true">
     <property name="geometry">
      <rect>
       <x>479</x>
@@ -259,6 +259,19 @@
       <width>191</width>
       <height>101</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="testLabel">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>130</y>
+      <width>62</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>test label</string>
     </property>
    </widget>
   </widget>

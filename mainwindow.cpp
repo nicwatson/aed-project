@@ -43,7 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     emit startSequence();
 
-    lcdDisplay = new LCDDisplay(ui->graph);
+    ui->testLabel->setText("hoohaa");
+    lcdDisplay = new LCDDisplay(ui->ecgGraph, ui->testLabel);
     ecgModule = new aed::ModuleECGAssessment(lcdDisplay);
 
     connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
@@ -51,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->tachyButton, SIGNAL(pressed()), ecgModule, SLOT(setTachyRhythm()));
     connect(ui->fibButton, SIGNAL(pressed()), ecgModule, SLOT(setRhythm(VENT_FIB)));
     connect(ui->nonShockableButton, SIGNAL(pressed()), ecgModule, SLOT(setRhythm(NON_SHOCKABLE)));
+    connect(lcdDisplay, SIGNAL(plotGraphSignal()), this, SLOT(plotGraph()));
+    connect(lcdDisplay, SIGNAL(clearGraphSignal()), this, SLOT(clearGraph()));
 
 //    QVector<double> x(5), y(5);
 //    for (int i = 0; i < 5; i++) {
@@ -63,6 +66,11 @@ MainWindow::MainWindow(QWidget *parent)
 //    ui->graph->xAxis->setRange(0, 22);
 //    ui->graph->yAxis->setRange(0, 5);
 
+    ecgModule->startAssessment();
+    ui->ecgGraph->addGraph();
+    ui->ecgGraph->graph(0)->setData(lcdDisplay->getGraphXData(), lcdDisplay->getGraphYData());
+    ui->ecgGraph->xAxis->setRange(0, 22);
+    ui->ecgGraph->yAxis->setRange(0, 5);
 
 }
 
@@ -73,6 +81,38 @@ MainWindow::~MainWindow()
     if (lcdDisplay !=  nullptr) delete lcdDisplay;
     if (ecgModule !=  nullptr) delete ecgModule;
 }
+
+void MainWindow::plotGraph()
+{
+
+      QVector<double> x(5), y(5);
+      for (int i = 0; i < 5; i++) {
+        x[i] = i;
+        y[i] = i;
+      }
+
+      ui->ecgGraph->addGraph();
+      ui->ecgGraph->graph(0)->setData(x, y);
+      ui->ecgGraph->xAxis->setRange(0, 22);
+      ui->ecgGraph->yAxis->setRange(0, 5);
+//    ui->ecgGraph->clearGraphs();
+//    ui->ecgGraph->addGraph();
+//    ui->ecgGraph->graph(0)->setData(lcdDisplay->getGraphXData(), lcdDisplay->getGraphYData());
+//    ui->ecgGraph->xAxis->setRange(0, 22);
+//    ui->ecgGraph->yAxis->setRange(0, 5);
+//    qDebug() << "GRAPH DATA PLOTTED";
+//    qDebug() << QString("%1").arg(lcdDisplay->getGraphXData().at(0));
+//    qDebug() << QString("%1").arg(lcdDisplay->getGraphYData().at(0));
+//    qDebug() << QString("%1").arg(lcdDisplay->getGraphXData().at(1));
+//    qDebug() << QString("%1").arg(lcdDisplay->getGraphYData().at(1));
+}
+
+void MainWindow::clearGraph()
+{
+    ui->ecgGraph->clearGraphs();
+    qDebug() << "GRAPH DATA CLEAREeD";
+}
+
 
 void MainWindow::quitProgram()
 {

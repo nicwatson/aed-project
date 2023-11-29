@@ -1,9 +1,9 @@
 #include "LCDDisplay.h"
 
-LCDDisplay::LCDDisplay(QCustomPlot* g)
+LCDDisplay::LCDDisplay(QCustomPlot* g, QLabel* t): graph(g),  testLabel(t)
 //    : graph(graph) // , graphXData(nullptr), graphYData(nullptr)
 {
-    graph = g;
+
 }
 
 LCDDisplay::~LCDDisplay()
@@ -17,25 +17,23 @@ void LCDDisplay::setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDa
     // ModuleECGAssessment::ventFibXData is  not public, so can't say setGraphData(&ventFibXData, &ventFibYData)  is
 //    m.LCDDownload(graphXData, graphYData);
     qDebug() << "GRAPH DATA SET";
-    graphXData = *xDataToCopy;
-    graphYData = *yDataToCopy;
+    QVector<double> xdata(*xDataToCopy);
+    QVector<double> ydata(*yDataToCopy);
+    graphXData = xdata; //*xDataToCopy;
+    graphYData = ydata; //*yDataToCopy;
+
+    qDebug() << QString("%1").arg(graphXData.at(0));
+    qDebug() << QString("%1").arg(graphYData.at(0));
+    qDebug() << QString("%1").arg(graphXData.at(1));
+    qDebug() << QString("%1").arg(graphYData.at(1));
 }
 
 void LCDDisplay::plotGraphData()
 {
-    if (graph != nullptr) {
+    emit plotGraphSignal();
+//    if (graph != nullptr) {
 //        graph->clearGraphs();
-
-        QVector<double> x(5), y(5);
-        for (int i = 0; i < 5; i++) {
-            x[i] = i;
-            y[i] = i;
-        }
-
-        graph->addGraph();
-        graph->graph(0)->setData(x, y);
-        graph->xAxis->setRange(0, 22);
-        graph->yAxis->setRange(0, 5);
+//        testLabel->setText("teehee");
 
 
 //        graph->addGraph();
@@ -47,12 +45,13 @@ void LCDDisplay::plotGraphData()
 //        qDebug() << QString("%1").arg(graphYData.at(0));
 //        qDebug() << QString("%1").arg(graphXData.at(1));
 //        qDebug() << QString("%1").arg(graphYData.at(1));
-    }
+//    }
 }
 
 void LCDDisplay::clearGraphData()
 {
-    if (graph != nullptr) {
-        graph->clearGraphs();
-    }
+    emit clearGraphSignal();
+//    if (graph != nullptr) {
+//        graph->clearGraphs();
+//    }
 }

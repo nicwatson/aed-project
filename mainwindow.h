@@ -34,6 +34,8 @@ private:
 
 private slots:
     void quitProgram();
+    void plotGraph();
+    void clearGraph();
 
 signals:
     void startSequence();
