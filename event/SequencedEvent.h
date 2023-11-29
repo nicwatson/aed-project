@@ -5,7 +5,7 @@
 #include <QTimer>
 #include <QDebug>
 
-namespace aed
+namespace event
 {
     class SequencedEvent : public QObject
     {
@@ -51,7 +51,5 @@ namespace aed
 
     };
 }
-
-QDebug & operator<<(QDebug & out, aed::SequencedEvent & event);
 
 #endif // SEQUENCEDEVENT_H

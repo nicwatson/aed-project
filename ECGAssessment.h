@@ -1,4 +1,0 @@
-#ifndef ECGASSESSMENT_H
-#define ECGASSESSMENT_H
-
-#endif // ECGASSESSMENT_H

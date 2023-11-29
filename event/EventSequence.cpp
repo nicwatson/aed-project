@@ -1,6 +1,6 @@
 #include "EventSequence.h"
 
-using namespace aed;
+using namespace event;
 
 EventSequence::EventSequence() : position(0), active(false)
 {
@@ -59,7 +59,7 @@ int EventSequence::remove(SequencedEvent * target)
 {
     if(!active && target != nullptr)
     {
-        queue.removeOne(target);
+        queue.removeAll(target);
         //disconnectFrom(target);
     }
     return queue.size();

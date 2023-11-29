@@ -29,7 +29,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="LampWidget" name="lamp3" native="true">
+    <widget class="aedGui::LampWidget" name="lamp_CallHelp" native="true">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -42,20 +42,7 @@
       <string notr="true"> background: rgb(255,255,255);</string>
      </property>
     </widget>
-    <widget class="LampWidget" name="lamp1" native="true">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>60</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"> background: rgb(255,255,255);</string>
-     </property>
-    </widget>
-    <widget class="LampWidget" name="lamp4" native="true">
+    <widget class="aedGui::LampWidget" name="lamp_AttPads" native="true">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -68,7 +55,7 @@
       <string notr="true"> background: rgb(255,255,255);</string>
      </property>
     </widget>
-    <widget class="LampWidget" name="lamp2" native="true">
+    <widget class="aedGui::LampWidget" name="lamp_CheckResp" native="true">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -92,19 +79,6 @@
      </property>
      <property name="text">
       <string>Initial advice lamp test</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>70</y>
-       <width>131</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Stay calm</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_3">
@@ -146,19 +120,6 @@
       <string>Attach pads</string>
      </property>
     </widget>
-    <widget class="QWidget" name="widget" native="true">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>250</y>
-       <width>120</width>
-       <height>80</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"> background: rgb(248,228,92);</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QPushButton" name="padsButton">
     <property name="geometry">
@@ -171,6 +132,84 @@
     </property>
     <property name="text">
      <string>Attach pads</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ecgWaveform">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>210</y>
+      <width>241</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="beginECGButton">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>170</y>
+      <width>83</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>begin ECG</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="stopECGButton">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>170</y>
+      <width>83</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>stop ECG</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="tachyButton">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>40</y>
+      <width>171</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ventricular Tachycardia</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="fibButton">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>60</y>
+      <width>171</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ventricular Fibrillation</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="nonShockableButton">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>80</y>
+      <width>171</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Non-shockable</string>
     </property>
    </widget>
   </widget>
@@ -188,9 +227,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>LampWidget</class>
+   <class>aedGui::LampWidget</class>
    <extends>QWidget</extends>
-   <header>LampWidget.h</header>
+   <header>aedGui/LampWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

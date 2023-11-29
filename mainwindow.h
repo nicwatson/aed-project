@@ -3,8 +3,15 @@
 
 #include <QMainWindow>
 
-#include "SequencedEvent.h"
-#include "EventSequence.h"
+#include "aedModel/ModuleStartupAdvice.h"
+#include "aedModel/ModuleECGAssessment.h"
+#include "aedModel/AED.h"
+
+#include "aedGui/LCDDisplay.h"
+
+
+#include <QString>
+#include <QRegExp>
 
 #define INITIAL_ADVICE_DELAY 3000
 
@@ -23,10 +30,21 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    QList<aed::SequencedEvent *> eventHandles;
-    aed::EventSequence * seq;
+    QList<event::SequencedEvent *> eventHandles;
+    aedModel::ModuleStartupAdvice * startupSequence;
 
     QTimer timer;
+    aedModel::AED * aed;
+
+    const QRegExp acceptedKeys = QRegExp("[asdfjkl;]");
+    int numKeysDown;
+
+    aedGui::LCDDisplay* lcdDisplay;
+    aedModel::ModuleECGAssessment* ecgModule;
+
+protected:
+    void keyPressEvent(QKeyEvent * e) override;
+    void keyReleaseEvent(QKeyEvent * e) override;
 
 private slots:
     void quitProgram();

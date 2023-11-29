@@ -7,7 +7,7 @@
 
 #include "SequencedEvent.h"
 
-namespace aed
+namespace event
 {
     class EventSequence : public QObject
     {
@@ -28,11 +28,11 @@ namespace aed
             SequencedEvent * getNext() const;
             SequencedEvent * getAt(int i) const;
 
-            int add(SequencedEvent * newEvent);
-            int addAfter(SequencedEvent * newEvent, int index);
-            int addBefore(SequencedEvent * newEvent, int index);
-            int remove(SequencedEvent * target);
-            int remove(int index);
+            virtual int add(SequencedEvent * newEvent);
+            virtual int addAfter(SequencedEvent * newEvent, int index);
+            virtual int addBefore(SequencedEvent * newEvent, int index);
+            virtual int remove(SequencedEvent * target);
+            virtual int remove(int index);
 
             bool startFrom(int index);
             bool startFromBeginning();
@@ -47,14 +47,16 @@ namespace aed
 
             QTimer timer;
 
-        private:
             bool validateIndex(int index) const;
+
+        private:
+
             void connectTo(SequencedEvent * event);
             void disconnectFrom(SequencedEvent * event);
 
         public slots:
-            void start();
-            void stop();
+            virtual void start();
+            virtual void stop();
 
         protected slots:
             void advance();

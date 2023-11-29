@@ -4,7 +4,7 @@
 #include "SequencedEvent.h"
 #include <QObject>
 
-namespace aed
+namespace event
 {
     class SequencedDebugEvent : public SequencedEvent
     {

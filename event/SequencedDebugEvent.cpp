@@ -3,7 +3,7 @@
 #include "SequencedDebugEvent.h"
 
 
-using namespace aed;
+using namespace event;
 
 SequencedDebugEvent::SequencedDebugEvent(const QString & name, int timerInterval) : SequencedEvent(name, timerInterval)
 {

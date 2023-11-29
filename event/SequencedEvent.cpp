@@ -1,6 +1,6 @@
 #include "SequencedEvent.h"
 
-using namespace aed;
+using namespace event;
 
 const int SequencedEvent::NOTIMER = -1;
 

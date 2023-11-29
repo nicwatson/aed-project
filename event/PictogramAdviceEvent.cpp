@@ -1,36 +1,38 @@
-#include "InitialAdviceEvent.h"
+#include "PictogramAdviceEvent.h"
 
-using namespace aed;
+using namespace event;
 
-InitialAdviceEvent::InitialAdviceEvent(const QString & name, int timerInterval) : SequencedEvent(name, timerInterval)
+PictogramAdviceEvent::PictogramAdviceEvent(const QString & name, int timerInterval, const QString & prompt)
+    : AdviceEvent(name, timerInterval, prompt)
 {
-    prompt = "";
+
 }
 
-InitialAdviceEvent::InitialAdviceEvent(const QString & name, int timerInterval, const QString & voicePrompt, LampWidget * lamp)
-    : SequencedEvent(name, timerInterval), prompt(voicePrompt)
+PictogramAdviceEvent::PictogramAdviceEvent(const QString & name, int timerInterval, const QString & prompt, aedGui::LampWidget * lamp)
+    : PictogramAdviceEvent(name, timerInterval, prompt)
 {
     bindLampWidget(lamp);
 }
 
-void InitialAdviceEvent::bindLampWidget(LampWidget * widget)
+void PictogramAdviceEvent::bindLampWidget(aedGui::LampWidget * widget)
 {
     if(widget == nullptr) return;
     connect(this, SIGNAL(signalLampOff()), widget, SLOT(turnOff()));
     connect(this, SIGNAL(signalLampOn()), widget, SLOT(turnOn()));
+    connect(this, SIGNAL(signalLampFlash()), widget, SLOT(startFlash()));
 }
 
-void InitialAdviceEvent::releaseLampWidget(LampWidget * widget)
+void PictogramAdviceEvent::releaseLampWidget(aedGui::LampWidget * widget)
 {
     if(widget == nullptr) return;
     disconnect(this, SIGNAL(signalLampOff()), widget, SLOT(turnOff()));
     disconnect(this, SIGNAL(signalLampOn()), widget, SLOT(turnOn()));
+    disconnect(this, SIGNAL(signalLampFlash()), widget, SLOT(startFlash()));
 }
 
-// OVERRIDE
-void InitialAdviceEvent::enter()
+void PictogramAdviceEvent::enter()
 {
-    emit signalLampOn();
+    emit signalLampFlash();
     QDebug debug = qDebug().noquote().nospace();
     debug
           << "[DEBUG] Starting advice stage: \""
@@ -38,14 +40,13 @@ void InitialAdviceEvent::enter()
           << " (id: "
           << QString::number(id)
           << ")"
-          << "   :   The light should now be ON."
+          << "   :   The light should now be FLASHING."
           << Qt::endl;
-    debug << "[TODO] VOICE PROMPT: \"" << prompt << "\"" << Qt::endl;
+    emit sendUserPrompt(prompt);
     SequencedEvent::enter();
 }
 
-// OVERRIDE
-void InitialAdviceEvent::exit()
+void PictogramAdviceEvent::exit()
 {
     emit signalLampOff();
     QDebug debug = qDebug().noquote().nospace();
@@ -60,8 +61,7 @@ void InitialAdviceEvent::exit()
     SequencedEvent::exit();
 }
 
-// OVERRIDE
-void InitialAdviceEvent::abort()
+void PictogramAdviceEvent::abort()
 {
     emit signalLampOff();
     QDebug debug = qDebug().noquote().nospace();
