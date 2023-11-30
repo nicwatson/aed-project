@@ -130,6 +130,7 @@ void ModuleECGAssessment::sendShockableSignal()
     endAssessment();
     lcdDisplay->setPrompt("Shock Advised");
     emit signalShockable();
+    emit signalResult(true);
 
 }
 
@@ -139,4 +140,5 @@ void ModuleECGAssessment::sendNonShockableSignal()
     endAssessment();
     lcdDisplay->setPrompt("No Shock Advised");
     emit signalNotShockable();
+    emit signalResult(false);
 }
