@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "event/PictogramAdviceEvent.h"
+#include "aedGui/CompressionDepthBar.h"
 
 #include <QKeyEvent>
 #include <QDebug>
@@ -17,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     aed = new aedModel::AED();
 
-    QString lit_style = "background: rgb(248,228,92);";
-    QString unlit_style = "background: rgb(30,30,30);";
+    QString lit_style = "background: rgb(248,228,92); border-radius: 8px;";
+    QString unlit_style = "background: rgb(132,130,132); border-radius: 8px;";
     ui->lamp_CheckResp->setStyleUnlit(unlit_style);
     ui->lamp_CheckResp->setStyleLit(lit_style);
     ui->lamp_CheckResp->turnOff();
@@ -28,19 +29,25 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lamp_AttPads->setStyleUnlit(unlit_style);
     ui->lamp_AttPads->setStyleLit(lit_style);
     ui->lamp_AttPads->turnOff();
+    ui->lamp_Analysing->setStyleUnlit(unlit_style);
+    ui->lamp_Analysing->setStyleLit(lit_style);
+    ui->lamp_Analysing->turnOff();
+    ui->lamp_CPR->setStyleUnlit(unlit_style);
+    ui->lamp_CPR->setStyleLit(lit_style);
+    ui->lamp_CPR->turnOff();
 
     repaint();
 
     startupSequence = new aedModel::ModuleStartupAdvice(ui->lamp_CheckResp, ui->lamp_CallHelp, ui->lamp_AttPads);
 
     aed->addModuleStartupAdvice(startupSequence);
-    connect(ui->padsButton, SIGNAL(pressed()), aed, SLOT(notifyPadsAttached()));
+    connect(ui->attachedPadsButton, SIGNAL(pressed()), aed, SLOT(notifyPadsAttached()));
 
 
     //aed->doStartupAdvice();
     
     connect(this, SIGNAL(startSequence()), startupSequence, SLOT(start()));
-    connect(ui->padsButton, SIGNAL(pressed()), startupSequence, SLOT(stop()));
+    connect(ui->detachedPadsButton, SIGNAL(pressed()), startupSequence, SLOT(stop()));
 
     startupSequence->startFromBeginning();
 
