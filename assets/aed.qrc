@@ -8,5 +8,10 @@
         <file>shockButton/ShockButton_Button.svg</file>
         <file>shockButton/ShockButton_ButtonPressed.svg</file>
         <file>shockButton/ShockButton_Background.svg</file>
+        <file>powerButton/PowerOff.svg</file>
+        <file>powerButton/PowerOn.svg</file>
+        <file>selfTest/Passed.svg</file>
+        <file>selfTest/Failed.svg</file>
+        <file>selfTest/Off.svg</file>
     </qresource>
 </RCC>

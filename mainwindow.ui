@@ -43,7 +43,7 @@
      </property>
      <property name="styleSheet">
       <string notr="true">border-image: url(:/pictograms/05_CPR.svg);
-background-color: rgba(191, 64, 64, 0);</string>
+background-color: rgba(0,0,0,0);</string>
      </property>
     </widget>
     <widget class="QGraphicsView" name="graphicsView_2">
@@ -88,7 +88,7 @@ background-color: rgba(191, 64, 64, 0);</string>
     <widget class="QGraphicsView" name="graphicsView_5">
      <property name="geometry">
       <rect>
-       <x>460</x>
+       <x>430</x>
        <y>530</y>
        <width>150</width>
        <height>114</height>
@@ -101,7 +101,7 @@ background-color: rgba(191, 64, 64, 0);</string>
     <widget class="QGraphicsView" name="shockButtonBackground">
      <property name="geometry">
       <rect>
-       <x>280</x>
+       <x>260</x>
        <y>410</y>
        <width>171</width>
        <height>151</height>
@@ -111,10 +111,10 @@ background-color: rgba(191, 64, 64, 0);</string>
       <string notr="true">border-image: url(:/shockButton/ShockButton_Background.svg);</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="shockButton">
      <property name="geometry">
       <rect>
-       <x>310</x>
+       <x>290</x>
        <y>430</y>
        <width>101</width>
        <height>101</height>
@@ -178,7 +178,7 @@ QPushButton:pressed {
     <widget class="aedGui::LampWidget" name="lamp_Analysing" native="true">
      <property name="geometry">
       <rect>
-       <x>550</x>
+       <x>520</x>
        <y>550</y>
        <width>16</width>
        <height>16</height>
@@ -201,7 +201,7 @@ QPushButton:pressed {
       <string notr="true"> background: rgb(255,255,255);</string>
      </property>
     </widget>
-    <widget class="QFrame" name="frame_3">
+    <widget class="QFrame" name="lcdDisplay">
      <property name="geometry">
       <rect>
        <x>190</x>
@@ -287,7 +287,7 @@ QPushButton:pressed {
        <string>00:00</string>
       </property>
      </widget>
-     <widget class="QProgressBar" name="CompressionDepthBar">
+     <widget class="QProgressBar" name="compressionDepthBar">
       <property name="geometry">
        <rect>
         <x>275</x>
@@ -372,7 +372,7 @@ QPushButton:pressed {
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="lcdShocks">
       <property name="geometry">
        <rect>
         <x>75</x>
@@ -390,9 +390,53 @@ QPushButton:pressed {
        </font>
       </property>
       <property name="text">
-       <string>10</string>
+       <string>00</string>
       </property>
      </widget>
+    </widget>
+    <widget class="QGraphicsView" name="selfTestIndicator">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>620</y>
+       <width>71</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/selfTest/Off.svg);
+background-color: rgba(0,0,0,0)</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="powerButton">
+     <property name="geometry">
+      <rect>
+       <x>600</x>
+       <y>610</y>
+       <width>71</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	image: url(:/powerButton/PowerOff.svg);
+	background-color: rgba(0,0,0,0);
+    border: 0;
+}
+
+QPushButton:checked {
+	image: url(:/powerButton/PowerOn.svg);
+    background-color: rgba(0,0,0,0);
+    border: 0;
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
     </widget>
     <zorder>shockButtonBackground</zorder>
     <zorder>graphicsView</zorder>
@@ -400,13 +444,15 @@ QPushButton:pressed {
     <zorder>graphicsView_3</zorder>
     <zorder>graphicsView_4</zorder>
     <zorder>graphicsView_5</zorder>
-    <zorder>pushButton</zorder>
+    <zorder>shockButton</zorder>
     <zorder>lamp_CheckResp</zorder>
     <zorder>lamp_CallHelp</zorder>
     <zorder>lamp_AttPads</zorder>
     <zorder>lamp_Analysing</zorder>
     <zorder>lamp_CPR</zorder>
-    <zorder>frame_3</zorder>
+    <zorder>lcdDisplay</zorder>
+    <zorder>selfTestResults</zorder>
+    <zorder>powerButton</zorder>
    </widget>
    <widget class="QFrame" name="frame_4">
     <property name="geometry">
@@ -672,6 +718,9 @@ QPushButton:pressed {
       </property>
       <property name="text">
        <string>Start</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QLabel" name="label_8">
