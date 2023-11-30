@@ -6,22 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1062</width>
+    <height>717</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame">
+   <widget class="QFrame" name="frame_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>251</width>
-      <height>351</height>
+      <x>20</x>
+      <y>20</y>
+      <width>681</width>
+      <height>681</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(132, 130, 132);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -29,13 +32,130 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <widget class="QGraphicsView" name="graphicsView">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>460</y>
+       <width>256</width>
+       <height>192</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/pictograms/05_CPR.svg);
+background-color: rgba(0,0,0,0);</string>
+     </property>
+    </widget>
+    <widget class="QGraphicsView" name="graphicsView_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>150</y>
+       <width>150</width>
+       <height>114</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/pictograms/01_CheckResponsiveness.svg);</string>
+     </property>
+    </widget>
+    <widget class="QGraphicsView" name="graphicsView_3">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>10</y>
+       <width>150</width>
+       <height>114</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/pictograms/02_CallForHelp.svg);</string>
+     </property>
+    </widget>
+    <widget class="QGraphicsView" name="graphicsView_4">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>160</y>
+       <width>150</width>
+       <height>114</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/pictograms/03_AttachPads.svg);</string>
+     </property>
+    </widget>
+    <widget class="QGraphicsView" name="graphicsView_5">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>530</y>
+       <width>150</width>
+       <height>114</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/pictograms/04_Analysing.svg);</string>
+     </property>
+    </widget>
+    <widget class="QGraphicsView" name="shockButtonBackground">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>410</y>
+       <width>171</width>
+       <height>151</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/shockButton/ShockButton_Background.svg);</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="shockButton">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>430</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+image: url(:/shockButton/ShockButton_Button.svg);
+border: 0;
+}
+
+QPushButton:pressed {
+	image: url(:/shockButton/ShockButton_ButtonPressed.svg);
+    border: 0;
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="aedGui::LampWidget" name="lamp_CheckResp" native="true">
+     <property name="geometry">
+      <rect>
+       <x>146</x>
+       <y>240</y>
+       <width>16</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"> background: rgb(255,255,255);</string>
+     </property>
+    </widget>
     <widget class="aedGui::LampWidget" name="lamp_CallHelp" native="true">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>31</width>
-       <height>31</height>
+       <x>310</x>
+       <y>100</y>
+       <width>16</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -45,207 +165,791 @@
     <widget class="aedGui::LampWidget" name="lamp_AttPads" native="true">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>180</y>
-       <width>31</width>
-       <height>31</height>
+       <x>528</x>
+       <y>250</y>
+       <width>16</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true"> background: rgb(255,255,255);</string>
      </property>
     </widget>
-    <widget class="aedGui::LampWidget" name="lamp_CheckResp" native="true">
+    <widget class="aedGui::LampWidget" name="lamp_Analysing" native="true">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>100</y>
-       <width>31</width>
-       <height>31</height>
+       <x>520</x>
+       <y>550</y>
+       <width>16</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true"> background: rgb(255,255,255);</string>
+     </property>
+    </widget>
+    <widget class="aedGui::LampWidget" name="lamp_CPR" native="true">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>550</y>
+       <width>16</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"> background: rgb(255,255,255);</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="lcdDisplay">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>150</y>
+       <width>311</width>
+       <height>251</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QCustomPlot" name="ecgGraph" native="true">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>231</width>
+        <height>101</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lcdPrompt">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>160</y>
+        <width>231</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>DON'T TOUCH PATIENT. PRESS FLASHING SHOCK BUTTON</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>71</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Sans</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Shocks: </string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lcdTimer">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>10</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Sans</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>00:00</string>
+      </property>
+     </widget>
+     <widget class="QProgressBar" name="compressionDepthBar">
+      <property name="geometry">
+       <rect>
+        <x>275</x>
+        <y>40</y>
+        <width>21</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">selection-background-color: rgb(61, 56, 70);</string>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="value">
+       <number>83</number>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+      <property name="textVisible">
+       <bool>false</bool>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="invertedAppearance">
+       <bool>true</bool>
+      </property>
+      <property name="textDirection">
+       <enum>QProgressBar::TopToBottom</enum>
+      </property>
+      <property name="format">
+       <string>%p%</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lcdHelp">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>200</y>
+        <width>231</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>CHILD PADS. REALCPR HELP DISABLED</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>255</x>
+        <y>204</y>
+        <width>16</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>_</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>255</x>
+        <y>173</y>
+        <width>16</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>_</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lcdShocks">
+      <property name="geometry">
+       <rect>
+        <x>75</x>
+        <y>10</y>
+        <width>31</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Sans</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>00</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGraphicsView" name="selfTestIndicator">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>620</y>
+       <width>71</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/selfTest/Off.svg);
+background-color: rgba(0,0,0,0)</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="powerButton">
+     <property name="geometry">
+      <rect>
+       <x>600</x>
+       <y>610</y>
+       <width>71</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	image: url(:/powerButton/PowerOff.svg);
+	background-color: rgba(0,0,0,0);
+    border: 0;
+}
+
+QPushButton:checked {
+	image: url(:/powerButton/PowerOn.svg);
+    background-color: rgba(0,0,0,0);
+    border: 0;
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <zorder>selfTestIndicator</zorder>
+    <zorder>shockButtonBackground</zorder>
+    <zorder>graphicsView</zorder>
+    <zorder>graphicsView_2</zorder>
+    <zorder>graphicsView_3</zorder>
+    <zorder>graphicsView_4</zorder>
+    <zorder>graphicsView_5</zorder>
+    <zorder>shockButton</zorder>
+    <zorder>lamp_CheckResp</zorder>
+    <zorder>lamp_CallHelp</zorder>
+    <zorder>lamp_AttPads</zorder>
+    <zorder>lamp_Analysing</zorder>
+    <zorder>lamp_CPR</zorder>
+    <zorder>lcdDisplay</zorder>
+    <zorder>powerButton</zorder>
+   </widget>
+   <widget class="QFrame" name="frame_4">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>20</y>
+      <width>321</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Battery Percentage:</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="rechargeBatteryButton">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>10</y>
+       <width>101</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Recharge</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="batteryPercentLabel">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>10</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>100</string>
      </property>
     </widget>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>201</width>
-       <height>17</height>
+       <x>176</x>
+       <y>10</y>
+       <width>31</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>Initial advice lamp test</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>110</y>
-       <width>151</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Check responsiveness</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>150</y>
-       <width>131</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Call for help</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_5">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>190</y>
-       <width>131</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Attach pads</string>
+      <string>%</string>
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="padsButton">
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>10</y>
-      <width>101</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Attach pads</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="beginECGButton">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>170</y>
-      <width>83</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>begin ECG</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="stopECGButton">
-    <property name="geometry">
-     <rect>
-      <x>570</x>
-      <y>170</y>
-      <width>83</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>stop ECG</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="tachyButton">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>40</y>
-      <width>171</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Ventricular Tachycardia</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="fibButton">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>60</y>
-      <width>171</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Ventricular Fibrillation</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="nonShockableButton">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
+      <x>720</x>
       <y>80</y>
-      <width>171</width>
-      <height>21</height>
+      <width>141</width>
+      <height>141</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Non-shockable</string>
-    </property>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Cables</string>
+     </attribute>
+     <widget class="QRadioButton" name="unpluggedCablesButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>106</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Unplugged</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="pediatricPadsButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>121</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Pediatric Pads</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="adultPadsButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>106</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Adult Pads</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
-   <widget class="QCustomPlot" name="ecgGraph" native="true">
+   <widget class="QTabWidget" name="tabWidget_2">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>250</y>
-      <width>181</width>
-      <height>101</height>
+      <x>720</x>
+      <y>240</y>
+      <width>141</width>
+      <height>141</height>
      </rect>
     </property>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Pads</string>
+     </attribute>
+     <widget class="QRadioButton" name="detachedPadsButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>106</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Detached</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="attachedPadsButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>106</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Attached</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
-   <widget class="QLabel" name="lcdPrompt">
+   <widget class="QTabWidget" name="tabWidget_3">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>210</y>
+      <x>880</x>
+      <y>80</y>
+      <width>161</width>
+      <height>301</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="tab_6">
+     <attribute name="title">
+      <string>CPR Compressions</string>
+     </attribute>
+     <widget class="QSlider" name="cprDepthSlider">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>40</y>
+        <width>31</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>24</number>
+      </property>
+      <property name="singleStep">
+       <number>4</number>
+      </property>
+      <property name="pageStep">
+       <number>4</number>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksAbove</enum>
+      </property>
+      <property name="tickInterval">
+       <number>4</number>
+      </property>
+     </widget>
+     <widget class="QSlider" name="cprRateSlider">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>40</y>
+        <width>21</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="minimum">
+       <number>40</number>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="singleStep">
+       <number>10</number>
+      </property>
+      <property name="tracking">
+       <bool>false</bool>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="invertedAppearance">
+       <bool>false</bool>
+      </property>
+      <property name="invertedControls">
+       <bool>false</bool>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksAbove</enum>
+      </property>
+      <property name="tickInterval">
+       <number>10</number>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="startCompressionsButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>220</y>
+        <width>121</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Start</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>6</y>
+        <width>41</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Depth
+(in.)</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>6</y>
+        <width>41</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Rate
+(CPM)</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>92</x>
+        <y>184</y>
+        <width>21</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>40</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>84</x>
+        <y>37</y>
+        <width>31</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>100</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>92</x>
+        <y>111</y>
+        <width>21</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>60</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>8</x>
+        <y>183</y>
+        <width>21</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>2.4</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>8</x>
+        <y>136</y>
+        <width>21</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>1.6</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>8</x>
+        <y>87</y>
+        <width>21</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0.8</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>38</y>
+        <width>16</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>400</y>
       <width>231</width>
-      <height>20</height>
+      <height>201</height>
      </rect>
     </property>
-    <property name="text">
-     <string>lcd prompt</string>
-    </property>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>ECG Testing</string>
+     </attribute>
+     <widget class="QPushButton" name="beginECGButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>83</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>begin ECG</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="stopECGButton">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>120</y>
+        <width>83</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>stop ECG</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="nonShockableButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>80</y>
+        <width>151</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Non-shockable</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="fibButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>181</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ventricular Fibrillation</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="tachyButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>50</y>
+        <width>181</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ventricular Tachcardia</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>22</height>
-    </rect>
-   </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
-   <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>aedGui::LampWidget</class>
    <extends>QWidget</extends>
    <header>aedGui/LampWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -13,7 +13,7 @@ ModuleECGAssessment::ModuleECGAssessment(aedGui::LCDDisplay* l) : active(false),
     QString csvDirPath = parentDir.path() + "/comp3004-team14/assets/";
 
     // Iterate over all the csv files and load them into class attributes (to save time, no need to read from file each time the startaAsessment slot is called)
-    QStringList csvList = {"/v_fib.csv", "/v_tachy.csv", "/non_shockable.csv"};
+    QStringList csvList = {"/ecgs/v_fib.csv", "/ecgs/v_tachy.csv", "/ecgs/non_shockable.csv"};
     for (int i = 0; i < csvList.length(); i++)
     {
         readCSVFile(csvDirPath, csvList[i]);
@@ -104,15 +104,15 @@ void ModuleECGAssessment::readCSVFile(QString fileDirectory, QString fileName)
             QStringList data = lineData.split(",");
             for (int i = 0; i < data.length(); i++)
             {
-                if (fileName == "/v_fib.csv")
+                if (fileName == "/ecgs/v_fib.csv")
                 {
                     ventFibXData.push_back(data[0].toDouble()); // The datum in the 1st column of the current row is the x-coordinate
                     ventFibYData.push_back(data[1].toDouble()); // The datum in the 2nd column of the current row is the y-coordinate
-                } else if (fileName == "/v_tachy.csv")
+                } else if (fileName == "/ecgs/v_tachy.csv")
                 {
                     ventTachyXData.push_back(data[0].toDouble()); // The datum in the 1st column of the current row is the x-coordinate
                     ventTachyYData.push_back(data[1].toDouble()); // The datum in the 2nd column of the current row is the y-coordinate
-                } else if (fileName == "/non_shockable.csv")
+                } else if (fileName == "/ecgs/non_shockable.csv")
                 {
                     nonShockableXData.push_back(data[0].toDouble()); // The datum in the 1st column of the current row is the x-coordinate
                     nonShockableYData.push_back(data[1].toDouble()); // The datum in the 2nd column of the current row is the y-coordinate
