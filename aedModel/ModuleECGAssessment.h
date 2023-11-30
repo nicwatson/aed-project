@@ -3,6 +3,13 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QDir>
+#include <QDebug>
+#include <QString>
+#include <QCoreApplication>
+#include <QFile>
+#include <QTextStream>
+#include "aedGui/LCDDisplay.h"
 #include "AED.h"
 
 namespace aedModel {
@@ -42,14 +49,22 @@ namespace aedModel {
         Q_OBJECT
     public:
         enum rhythm_t { VENT_FIB, VENT_TACHY, NON_SHOCKABLE };
-        explicit ModuleECGAssessment();
+        explicit ModuleECGAssessment(aedGui::LCDDisplay* l);
         ~ModuleECGAssessment();
 
     private:
         bool active;        // Is the ECG assessment happening right now?
         rhythm_t rhythm;    // Rhythm type of the patient (see type def above). We can set this via GUI
         QTimer* timer;      // Simulates the 5 seconds of analysis
+        aedGui::LCDDisplay* lcdDisplay;
+        QVector<double> ventTachyXData;
+        QVector<double> ventTachyYData;
+        QVector<double> ventFibXData;
+        QVector<double> ventFibYData;
+        QVector<double> nonShockableXData;
+        QVector<double> nonShockableYData;
 
+        void readCSVFile(QString fileDirectory, QString fileName);
         void sendShockableSignal();
         void sendNonShockableSignal();
 
@@ -61,6 +76,7 @@ namespace aedModel {
         // Emit this signal if the rhythm is not shockable. AED will listen for this signal.
         void signalNotShockable();
 
+        // Emit this signal with a 'true' argument if the rhythm is shockable, and 'false' if it's non-shockable. AED will listen for this signal.
         void signalResult(bool);
 
     public slots:
@@ -73,6 +89,8 @@ namespace aedModel {
         // error conditions like pads detached/unplugged. A normal conclusion that emits a shockable/notshockable signal
         // probably doesn't need to run this function.
         void endAssessment();
+
+        void setRhythm(rhythm_t  r) { rhythm = r; }
 
     };
 

@@ -44,16 +44,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     startupSequence->startFromBeginning();*/
 
-    /*
-    lcdDisplay = new LCDDisplay(ui->ecgWaveform);
-    ecgModule = new aed::ModuleECGAssessment();
+
+    lcdDisplay = new aedGui::LCDDisplay(ui->ecgGraph, ui->lcdPrompt);
+    ecgModule = new aedModel::ModuleECGAssessment(lcdDisplay);
 
     connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
-    connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(stopAssessment()));
-    connect(ui->tachyButton, SIGNAL(pressed()), lcdDisplay, SLOT(setTachyPic()));
-    connect(ui->fibButton, SIGNAL(pressed()), lcdDisplay, SLOT(setFibPic()));
-    connect(ui->nonShockableButton, SIGNAL(pressed()), lcdDisplay, SLOT(setNonShockablePic()));
-    */
+    connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(endAssessment()));
+    connect(ui->tachyButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::VENT_TACHY);} );
+    connect(ui->fibButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::VENT_FIB);} );
+    connect(ui->nonShockableButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::NON_SHOCKABLE);} );
 
 
 }
