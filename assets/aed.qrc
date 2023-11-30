@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pictograms/01_CheckResponsiveness.svg</file>
+        <file>pictograms/02_CallForHelp.svg</file>
+        <file>pictograms/03_AttachPads.svg</file>
+        <file>pictograms/04_Analysing.svg</file>
+        <file>pictograms/05_CPR.svg</file>
+        <file>shockButton/ShockButton_Button.svg</file>
+        <file>shockButton/ShockButton_ButtonPressed.svg</file>
+        <file>shockButton/ShockButton_Background.svg</file>
+    </qresource>
+</RCC>
