@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 
 #include "event/PictogramAdviceEvent.h"
-#include "aedGui/CompressionDepthBar.h"
 
 #include <QKeyEvent>
 #include <QDebug>
