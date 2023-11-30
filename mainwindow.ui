@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>982</width>
+    <height>717</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>251</width>
-      <height>351</height>
+      <x>760</x>
+      <y>230</y>
+      <width>201</width>
+      <height>161</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -33,7 +33,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>140</y>
+       <y>80</y>
        <width>31</width>
        <height>31</height>
       </rect>
@@ -46,7 +46,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>180</y>
+       <y>120</y>
        <width>31</width>
        <height>31</height>
       </rect>
@@ -59,7 +59,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>100</y>
+       <y>40</y>
        <width>31</width>
        <height>31</height>
       </rect>
@@ -71,8 +71,8 @@
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>20</y>
+       <x>10</x>
+       <y>10</y>
        <width>201</width>
        <height>17</height>
       </rect>
@@ -85,7 +85,7 @@
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>110</y>
+       <y>50</y>
        <width>151</width>
        <height>17</height>
       </rect>
@@ -98,7 +98,7 @@
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>150</y>
+       <y>90</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -111,7 +111,7 @@
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>190</y>
+       <y>130</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -124,8 +124,8 @@
    <widget class="QPushButton" name="padsButton">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>10</y>
+      <x>760</x>
+      <y>410</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -137,8 +137,8 @@
    <widget class="QPushButton" name="beginECGButton">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>170</y>
+      <x>770</x>
+      <y>520</y>
       <width>83</width>
       <height>25</height>
      </rect>
@@ -150,8 +150,8 @@
    <widget class="QPushButton" name="stopECGButton">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>170</y>
+      <x>870</x>
+      <y>520</y>
       <width>83</width>
       <height>25</height>
      </rect>
@@ -163,8 +163,8 @@
    <widget class="QPushButton" name="tachyButton">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>40</y>
+      <x>780</x>
+      <y>450</y>
       <width>171</width>
       <height>21</height>
      </rect>
@@ -176,8 +176,8 @@
    <widget class="QPushButton" name="fibButton">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>60</y>
+      <x>780</x>
+      <y>470</y>
       <width>171</width>
       <height>21</height>
      </rect>
@@ -189,8 +189,8 @@
    <widget class="QPushButton" name="nonShockableButton">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>80</y>
+      <x>780</x>
+      <y>490</y>
       <width>171</width>
       <height>21</height>
      </rect>
@@ -202,8 +202,8 @@
    <widget class="QCustomPlot" name="ecgGraph" native="true">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>250</y>
+      <x>780</x>
+      <y>580</y>
       <width>181</width>
       <height>101</height>
      </rect>
@@ -212,8 +212,8 @@
    <widget class="QLabel" name="lcdPrompt">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>210</y>
+      <x>740</x>
+      <y>550</y>
       <width>231</width>
       <height>20</height>
      </rect>
@@ -222,30 +222,36 @@
      <string>lcd prompt</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>22</height>
-    </rect>
-   </property>
+   <widget class="QFrame" name="frame_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>661</width>
+      <height>591</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
-   <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>aedGui::LampWidget</class>
    <extends>QWidget</extends>
    <header>aedGui/LampWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

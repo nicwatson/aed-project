@@ -38,11 +38,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //aed->doStartupAdvice();
-    /*
+    
     connect(this, SIGNAL(startSequence()), startupSequence, SLOT(start()));
     connect(ui->padsButton, SIGNAL(pressed()), startupSequence, SLOT(stop()));
 
-    startupSequence->startFromBeginning();*/
+    startupSequence->startFromBeginning();
 
 
     lcdDisplay = new aedGui::LCDDisplay(ui->ecgGraph, ui->lcdPrompt);
