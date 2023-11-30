@@ -8,6 +8,7 @@
 #include <QDir>
 #include <QCoreApplication>
 #include <QDebug>
+#include  "qcustomplot.h"
 
 namespace aedGui
 {
@@ -15,22 +16,27 @@ namespace aedGui
     {
         Q_OBJECT
 
-        public:
-            explicit LCDDisplay(QLabel* graph);
-            ~LCDDisplay();
+    public:
+        explicit LCDDisplay(QCustomPlot* graph, QLabel* prompt);
+        ~LCDDisplay();
+        void plotGraphData();
+        void clearGraphData();
+        void setPrompt(QString p) {prompt->setText(p);}
+        QVector<double> getGraphXData() {return graphXData;}
+        QVector<double> getGraphYData() {return graphYData;}
 
-        private:
-            QLabel* graph;
-            QPixmap* ventTachyPic;
-            QPixmap* ventFibPic;
-            QPixmap* nonShockablePic;
+    private:
+        QLabel* prompt;
+        QCustomPlot* graph;
+        QVector<double> graphXData;
+        QVector<double> graphYData;
 
+    signals:
+        void plotGraphSignal();
+        void clearGraphSignal();
 
-        public slots:
-            void setTachyPic();
-            void setFibPic();
-            void setNonShockablePic();
-            void setNoPic();
+    public slots:
+        void setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDataToCopy);
     };
 }
 

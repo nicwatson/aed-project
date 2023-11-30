@@ -2,42 +2,37 @@
 
 using namespace aedGui;
 
-LCDDisplay::LCDDisplay(QLabel* graph)
-    : graph(graph)
+LCDDisplay::LCDDisplay(QCustomPlot* g, QLabel* p): graph(g), prompt(p)
 {
-//    QString currentDir = QDir::currentPath();
-    QDir parentDir = QDir::current();
-    parentDir.cdUp();
-    QString pictureDirPath = parentDir.path() + "/comp3004-team14";
-    ventTachyPic = new QPixmap(pictureDirPath + QString("/v_tachy.png"), nullptr, Qt::AutoColor);
-    ventFibPic = new QPixmap(pictureDirPath + QString("/v_fib.png"), nullptr, Qt::AutoColor);
-    nonShockablePic = new QPixmap(pictureDirPath + QString("/non_shockable.png"), nullptr, Qt::AutoColor);
+
 }
 
 LCDDisplay::~LCDDisplay()
 {
-    if (graph != nullptr) delete graph;
-    if (ventTachyPic != nullptr) delete ventTachyPic;
-    if (ventFibPic != nullptr) delete ventFibPic;
-    if (nonShockablePic != nullptr) delete nonShockablePic;
 }
 
-void LCDDisplay::setFibPic()
+void LCDDisplay::setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDataToCopy) // setGraphData(aed::ModuleECGAssessment&  m)
 {
-    graph->setPixmap(ventFibPic->scaled(graph->width(), graph->height(), Qt::KeepAspectRatio));
+    graphXData = *xDataToCopy;
+    graphYData = *yDataToCopy;
 }
 
-void LCDDisplay::setTachyPic()
+void LCDDisplay::plotGraphData()
 {
-    graph->setPixmap(ventTachyPic->scaled(graph->width(), graph->height(), Qt::KeepAspectRatio));
+    if (graph != nullptr) {
+        graph->clearGraphs();
+        graph->addGraph();
+        graph->graph(0)->setData(graphXData, graphYData);
+        graph->xAxis->setRange(0, 22);
+        graph->yAxis->setRange(0, 5);
+        graph->replot();
+    }
 }
 
-void LCDDisplay::setNonShockablePic()
+void LCDDisplay::clearGraphData()
 {
-    graph->setPixmap(nonShockablePic->scaled(graph->width(), graph->height(), Qt::KeepAspectRatio));
-}
-
-void LCDDisplay::setNoPic()
-{
-    graph->clear();
+    if (graph != nullptr) {
+        graph->clearGraphs();
+        graph->replot();
+    }
 }
