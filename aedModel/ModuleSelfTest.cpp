@@ -6,15 +6,23 @@ using namespace aedModel;
 bool ModuleSelfTest::FORCE_FAIL = false;
 
 ModuleSelfTest::ModuleSelfTest()
-    : QObject()
+    : QObject(), active(false), result(FAIL_OTHER)
 {
     timer.setSingleShot(true);
     timer.setInterval(TEST_TIME);
     connect(&timer, &QTimer::timeout, this, &aedModel::ModuleSelfTest::finishSelfTest);
 }
 
+void ModuleSelfTest::reset()
+{
+    active = false;
+    result = FAIL_OTHER;
+}
+
+// SLOT
 void ModuleSelfTest::startSelfTest(AED * unit)
 {
+    active = true;
     if(FORCE_FAIL)
     {
         result = FAIL_OTHER;
@@ -31,10 +39,23 @@ void ModuleSelfTest::startSelfTest(AED * unit)
     {
         result = OK;
     }
-    timer.start();
+    timer.start();  // Simulate short delay before reporting test result
 }
 
+// SLOT
+void ModuleSelfTest::abortSelfTest()
+{
+    timer.blockSignals(true);
+    timer.stop();
+    timer.blockSignals(false);
+    reset();
+}
+
+// SLOT
 void ModuleSelfTest::finishSelfTest()
 {
     emit signalResult(result);
+    reset();
 }
+
+

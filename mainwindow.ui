@@ -201,7 +201,7 @@ QPushButton:pressed {
       <string notr="true"> background: rgb(255,255,255);</string>
      </property>
     </widget>
-    <widget class="QFrame" name="lcdDisplay">
+    <widget class="QFrame" name="LCDDisplay">
      <property name="geometry">
       <rect>
        <x>190</x>
@@ -229,7 +229,7 @@ QPushButton:pressed {
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="lcdPrompt">
+     <widget class="QLabel" name="LCDPrompt">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -266,7 +266,7 @@ QPushButton:pressed {
        <string>Shocks: </string>
       </property>
      </widget>
-     <widget class="QLabel" name="lcdTimer">
+     <widget class="QLabel" name="LCDTimer">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -324,7 +324,7 @@ QPushButton:pressed {
        <string>%p%</string>
       </property>
      </widget>
-     <widget class="QLabel" name="lcdHelp">
+     <widget class="QLabel" name="LCDHelp">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -372,7 +372,7 @@ QPushButton:pressed {
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="lcdShocks">
+     <widget class="QLabel" name="LCDShocks">
       <property name="geometry">
        <rect>
         <x>75</x>
@@ -451,7 +451,7 @@ QPushButton:checked {
     <zorder>lamp_AttPads</zorder>
     <zorder>lamp_Analysing</zorder>
     <zorder>lamp_CPR</zorder>
-    <zorder>lcdDisplay</zorder>
+    <zorder>LCDDisplay</zorder>
     <zorder>powerButton</zorder>
    </widget>
    <widget class="QFrame" name="frame_4">

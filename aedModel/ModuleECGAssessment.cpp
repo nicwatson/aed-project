@@ -4,8 +4,6 @@ using namespace aedModel;
 
 ModuleECGAssessment::ModuleECGAssessment(aedGui::LCDDisplay* l) : active(false), rhythm(VENT_FIB), lcdDisplay(l)
 {
-    // Initialize the timer that simulates the 5 seconds of analysis time
-    timer = new QTimer(this);
 
     // Get the path of the directory containing the ECG data (data is in csv files)
     QDir parentDir = QDir::current();
@@ -22,7 +20,6 @@ ModuleECGAssessment::ModuleECGAssessment(aedGui::LCDDisplay* l) : active(false),
 
 ModuleECGAssessment::~ModuleECGAssessment()
 {
-    if (timer != nullptr) { delete timer; }
 }
 
 
@@ -37,8 +34,8 @@ void ModuleECGAssessment::startAssessment()
     lcdDisplay->setPrompt("Don't touch patient. Analysing");
 
     // Start the 5-second timer to simulate analysis. Once timer runs out, the appropriate function is called, depending on which rhythm is shockable.
-    timer->setInterval(5000);
-    timer->setSingleShot(true);
+    timer.setInterval(5000);
+    timer.setSingleShot(true);
     if (rhythm == VENT_FIB)
     {
         // This causes a vent fib graph to be plotted to the gui
@@ -46,7 +43,7 @@ void ModuleECGAssessment::startAssessment()
         lcdDisplay->plotGraphData();
 
         // When the timer runs out, send a shockable signal (this'll be received by the AED)
-        connect(timer, &QTimer::timeout, this, &ModuleECGAssessment::sendShockableSignal);
+        connect(&timer, &QTimer::timeout, this, &ModuleECGAssessment::sendShockableSignal);
     } else if (rhythm == VENT_TACHY)
     {
         // This causes a vent tachy graph to be plotted to the gui
@@ -54,7 +51,7 @@ void ModuleECGAssessment::startAssessment()
         lcdDisplay->plotGraphData();
 
         // When the timer runs out, send a shockable signal (this'll be received by the AED)
-         connect(timer, &QTimer::timeout, this, &ModuleECGAssessment::sendShockableSignal);
+         connect(&timer, &QTimer::timeout, this, &ModuleECGAssessment::sendShockableSignal);
     } else
     {
         // This causes a nonshockable graph to be plotted to the gui
@@ -62,9 +59,9 @@ void ModuleECGAssessment::startAssessment()
         lcdDisplay->plotGraphData();
 
         // When the timer runs out, send anon shockable signal (this'll be received by the AED)
-        connect(timer, &QTimer::timeout, this, &ModuleECGAssessment::sendNonShockableSignal);
+        connect(&timer, &QTimer::timeout, this, &ModuleECGAssessment::sendNonShockableSignal);
     }
-    timer->start();
+    timer.start();
 }
 
 // When a signal is received to this slot, the assessment should end immediately (this'll happen in case of error)
@@ -73,10 +70,10 @@ void ModuleECGAssessment::endAssessment()
     // Stops the analysis (the 5-second timer) prematurely. If-else statement checks wwhich timer to stop.
     if (rhythm == VENT_FIB || rhythm == VENT_TACHY)
     {
-        disconnect(timer, &QTimer::timeout, this, &ModuleECGAssessment::sendShockableSignal);
+        disconnect(&timer, &QTimer::timeout, this, &ModuleECGAssessment::sendShockableSignal);
     } else
     {
-        disconnect(timer, &QTimer::timeout, this, &ModuleECGAssessment::sendNonShockableSignal);
+        disconnect(&timer, &QTimer::timeout, this, &ModuleECGAssessment::sendNonShockableSignal);
     }
 
     // Cause the current graph to be removed from the gui

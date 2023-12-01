@@ -37,22 +37,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     repaint();
 
-    startupSequence = new aedModel::ModuleStartupAdvice(ui->lamp_CheckResp, ui->lamp_CallHelp, ui->lamp_AttPads);
 
-    aed->addModuleStartupAdvice(startupSequence);
-    connect(ui->attachedPadsButton, SIGNAL(pressed()), aed, SLOT(notifyPadsAttached()));
-
-
-    //aed->doStartupAdvice();
-    
-    connect(this, SIGNAL(startSequence()), startupSequence, SLOT(start()));
-    connect(ui->detachedPadsButton, SIGNAL(pressed()), startupSequence, SLOT(stop()));
-
-    startupSequence->startFromBeginning();
-
-
-    lcdDisplay = new aedGui::LCDDisplay(ui->ecgGraph, ui->lcdPrompt);
-    ecgModule = new aedModel::ModuleECGAssessment(lcdDisplay);
+    LCDDisplay = new aedGui::LCDDisplay(ui->ecgGraph, ui->LCDPrompt);
+    ecgModule = new aedModel::ModuleECGAssessment(LCDDisplay);
 
     connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
     connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(endAssessment()));
@@ -68,7 +55,7 @@ MainWindow::~MainWindow()
 
     delete ui;
 
-    if (lcdDisplay !=  nullptr) lcdDisplay->deleteLater();
+    if (LCDDisplay !=  nullptr) LCDDisplay->deleteLater();
     if (ecgModule !=  nullptr) ecgModule->deleteLater();
 }
 
@@ -77,23 +64,3 @@ void MainWindow::quitProgram()
     QApplication::quit();
 }
 
-
-void MainWindow::keyPressEvent(QKeyEvent * e)
-{
-    /*if(e->text().contains(acceptedKeys))
-    {
-        e->accept();
-        ++numKeysDown;
-        qDebug() << "Accepted key pressed: " << e->text() << " : Now " << QString::number(numKeysDown) << " keys pressed." << Qt::endl;
-    }*/
-}
-
-void MainWindow::keyReleaseEvent(QKeyEvent * e)
-{
-    /*if(e->text().contains(acceptedKeys))
-    {
-        e->accept();
-        --numKeysDown;
-        qDebug() << "Accepted key released: " << e->text() << " : Now " << QString::number(numKeysDown) << " keys pressed." << Qt::endl;
-    }*/
-}
