@@ -39,12 +39,8 @@ private:
     const QRegExp acceptedKeys = QRegExp("[asdfjkl;]");
     int numKeysDown;
 
-    aedGui::LCDDisplay* lcdDisplay;
+    aedGui::LCDDisplay* LCDDisplay;
     aedModel::ModuleECGAssessment* ecgModule;
-
-protected:
-    void keyPressEvent(QKeyEvent * e) override;
-    void keyReleaseEvent(QKeyEvent * e) override;
 
 private slots:
     void quitProgram();

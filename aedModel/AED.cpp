@@ -1,3 +1,5 @@
+// AED class - general function defs
+
 #include "AED.h"
 #include "aedGui/prompts.h"
 
@@ -11,9 +13,7 @@ using namespace aedModel;
 
 void AED::doSelfTest()
 {
-    emit signalStartTest();
-    // Invoke (signal?) the self-test module
-    // Wait for response to slot selfTestResult(testResult_t)
+    emit signalStartTest(this);
 }
 
 void AED::doStartupAdvice()
@@ -23,14 +23,22 @@ void AED::doStartupAdvice()
 
 void AED::doStartECG()
 {
+    emit signalStartLampStandback();
     emit signalStartECG();
 }
 
 void AED::doPrepShock()
 {
-    emit signalPrepShock();
+    emit signalStopLampStandback();
+    emit signalStartLampStandback();
+    emit signalPrepShock(cableState == PAD_CHILD);
 }
 
+void AED::doStartCPR()
+{
+    emit signalStartLampCPR();
+    emit signalStartCPR(cableState);
+}
 
 //
 // STATE TRANSITION LOGIC
@@ -38,7 +46,6 @@ void AED::doPrepShock()
 
 void AED::changeState(state_t newState)
 {
-    // TODO
     aedState = newState;
 }
 
@@ -74,14 +81,15 @@ bool AED::changeCableState(cableState_t newCableState)
     // Nothing to do if new cable state is same as old cable state
     if(newCableState == cableState) return false;
 
-    // Any cable change that happens while unit is on and not in self-test should trigger a return to self-test
+    cableState = newCableState;
+    // Any cable change that happens while unit is on should trigger a return to self-test
     // Otherwise, cable state can change "silently" (without side-effects)
-    if(aedState != OFF && aedState != SELF_TEST)
+    if(aedState != OFF)
     {
-        changeStateSafe(SELF_TEST);     // MOAR TODO HERE
+        stopActivity();
+        doSelfTest();
     }
 
-    cableState = newCableState;
     return true;
 }
 
@@ -105,6 +113,27 @@ void AED::errorOther()
     userPrompt(P_UNIT_FAILED);
 }
 
+void AED::failAED()
+{
+    changeStateSafe(FAILURE);
+    stopActivity();
+    emit signalUnitFailed();
+}
+
+void AED::clearPrompt()
+{
+    userPrompt("");
+}
+
+void AED::stopActivity()
+{
+    emit signalAbortAll();
+    emit signalStopLampStandback();
+    emit signalStopLampCPR();
+    timer.blockSignals(true);
+    timer.stop();
+    timer.blockSignals(false);
+}
 
 
 

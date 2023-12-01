@@ -1,3 +1,9 @@
+// FILE ModuleStartupAdvice.h
+//
+// Handles the initial sequence of lighted pictograms and prompts when the unit starts up, after the self-test
+// It stays on the final event in the sequence, "Attach pads," until pads are attached to the patient,
+// but will end early if pads are attached early.
+
 #ifndef MODULESTARTUPADVICE_H
 #define MODULESTARTUPADVICE_H
 
@@ -13,6 +19,10 @@
 #define DURATION_CHECK_RESP 4000
 #define DURATION_CALL_HELP 4000
 
+// NOTE: This class establishes its connections to GUI elements by having them (the three blinking lights, LampWidgets) passed to its constructor.
+// The object will not keep the pointers to the lamp widgets - it just uses them to connect. MainWindow (or other client) is responsible for the
+// LampWidgets' lifecycles.
+
 namespace aedModel
 {
 
@@ -25,6 +35,10 @@ namespace aedModel
         Q_OBJECT
 
         public:
+            // DO NOT USE THIS DEFAULT CONSTRUCTOR
+            // It's only here because QT's MOC requires it
+            explicit ModuleStartupAdvice();
+
             explicit ModuleStartupAdvice(aedGui::LampWidget * lamp_CheckResponsiveness, aedGui::LampWidget * lamp_CallHelp, aedGui::LampWidget * lamp_AttachPads);
             ~ModuleStartupAdvice();
 
@@ -40,7 +54,7 @@ namespace aedModel
             virtual void stop() override;
 
         signals:
-            void sendUserPrompt(const QString & prompt);
+            void signalUserPrompt(const QString & prompt);
 
     };
 }

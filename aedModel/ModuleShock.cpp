@@ -28,6 +28,7 @@ int ModuleShock::calcShockEnergy(bool usingChildPads)
     return ADULT_SHOCKS[std::max(shocksDelivered, 2)];
 }
 
+// SLOT
 void ModuleShock::chargeReady()
 {
     disconnect(&timer, SIGNAL(timeout()), this, SLOT(chargeReady()));
@@ -38,6 +39,7 @@ void ModuleShock::chargeReady()
     emit signalUserPrompt(P_CLEAR);     // CLEAR!
 }
 
+// SLOT
 void ModuleShock::start(bool usingChildPads)
 {
     active = true;
@@ -47,6 +49,7 @@ void ModuleShock::start(bool usingChildPads)
     timer.start(CHARGE_TIME);
 }
 
+// SLOT
 void ModuleShock::shockButtonPressed()
 {
     if(!active) return; // Shock button does nothing when not in defib mode
@@ -67,12 +70,15 @@ void ModuleShock::shockButtonPressed()
 
         emit signalShockDelivered(++shocksDelivered);
         emit signalUserPrompt(P_DELIVERED);
+
+        // Brief delay on exit to avoid overwriting "Shock delivered" with "Start CPR" immediately
         connect(&timer, SIGNAL(timeout()), this, SLOT(exit()));
         inExitDelay = true;
         timer.start(STOP_TIME);
     }
 }
 
+// SLOT
 void ModuleShock::shockButtonReleased()
 {
     if(buttonPressedEarly)
@@ -82,16 +88,24 @@ void ModuleShock::shockButtonReleased()
     }
 }
 
+// SLOT
 void ModuleShock::exit()
 {
     cleanup();
     emit signalDone();
 }
 
+// SLOT
 void ModuleShock::abort()
 {
     cleanup();
     emit signalAborted();
+}
+
+// SLOT
+void ModuleShock::fullReset()
+{
+    reset();
 }
 
 void ModuleShock::cleanup()
@@ -122,3 +136,5 @@ void ModuleShock::reset()
     cleanup();
     shocksDelivered = 0;
 }
+
+

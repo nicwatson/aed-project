@@ -1,8 +1,9 @@
 #ifndef ADVICEEVENT_H
 #define ADVICEEVENT_H
 
-#include "SequencedEvent.h"
 #include <QObject>
+#include <QString>
+#include "SequencedEvent.h"
 
 namespace event
 {

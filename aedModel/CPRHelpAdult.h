@@ -1,3 +1,9 @@
+// FILE CPRHelpAdult.h
+//
+// This CPR Help "strategy" defines the behaviour of the CPR help module for adult patients (i.e.
+// with adult pads plugged in). As per the Admin Guide spec, RealCPR Help provides feedback based
+// on the rate and depth of CPR compressions.
+
 #ifndef CPRHELPADULT_H
 #define CPRHELPADULT_H
 
@@ -10,10 +16,10 @@
 // Time interval (ms) that CPR should last for an adult patient (happens to be the same as for a child patient)
 #define CPR_TIME_ADULT CPR_TIME_COMMON
 
-// Recommended minimum depth of compressions for adult patient
+// Recommended minimum depth of compressions for adult patient (1/10th inches)
 #define CPR_ADULT_DEPTH_MIN 20
 
-// Recommended maximum depth of compressions for adult patient
+// Recommended maximum depth of compressions for adult patient (1/10th inches)
 #define CPR_ADULT_DEPTH_MAX 24
 
 // How long should we wait for compressions, before displaying "CONTINUE CPR" prompt?
@@ -30,7 +36,7 @@ namespace aedModel
         Q_OBJECT
 
         public:
-            CPRHelpAdult();
+            explicit CPRHelpAdult();
 
         protected:
             virtual void cleanup() override;
@@ -87,10 +93,6 @@ namespace aedModel
 
             // Triggered when too long since a compression occurred - used for "CONTINUE CPR" prompt
             void noCPRDetected();
-
-        signals:
-            // Used to update compression depth gauge on LCD
-            void signalUpdateCompressionDepth(int depth);
 
     };
 

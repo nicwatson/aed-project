@@ -2,7 +2,7 @@
 
 using namespace event;
 
-EventSequence::EventSequence() : position(0), active(false)
+EventSequence::EventSequence() : QObject(), position(0), active(false)
 {
    connect(&timer, SIGNAL(timeout()), this, SLOT(advance()));
 }

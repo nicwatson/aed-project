@@ -1,3 +1,11 @@
+// FILE: CPRHelpStrategy.h - ABSTRACT CLASS
+//
+// Generic "strategy" for CPR Help behaviour
+// The basic behaviour is to just run a timer when start() is called, and send the
+// signalCPREnded() when the timer runs out.
+// Other slots and signals provide polymorphic handles that subclasses should override
+// to define strategy-specific behaviours.
+
 #ifndef CPRHELPSTRATEGY_H
 #define CPRHELPSTRATEGY_H
 
@@ -8,6 +16,9 @@
 #define CPR_TARGET_MIN 95
 #define CPR_TOO_SLOW 80
 
+// No direct GUI connections needed here.
+// CPRHelpStrategy communicates with GUI through ModuleCPRHelp
+
 namespace aedModel
 {
     class CPRHelpStrategy : public QObject      // ABSTRACT
@@ -15,8 +26,10 @@ namespace aedModel
         Q_OBJECT
 
         public:
-            CPRHelpStrategy(int duration);
+            explicit CPRHelpStrategy(int duration);
             ~CPRHelpStrategy();
+
+            virtual void reset();
 
         protected:
             QTimer timer;
@@ -24,14 +37,13 @@ namespace aedModel
             int duration;
 
             virtual void cleanup();
-            virtual void reset();
 
-        protected slots:
+
+        public slots:
             virtual void start();
             virtual void abort();
             virtual void exit();
 
-        public slots:
             virtual void updateCompressionDepth(int depth) = 0;
             virtual void updateCompressionRate(int cpm) = 0;
 
@@ -45,7 +57,6 @@ namespace aedModel
 
             // Normal LCD/voice prompt signal - use for CPR-related prompts specified in the Admin Guide
             // i.e. relating to compression depth as well as start/stop CPR.
-            // This should be linked to the LCD's main user prompt QLabel.
             void signalUserPrompt(const QString & prompt);
 
             // Special secondary CPR advice prompt signal.
@@ -59,6 +70,9 @@ namespace aedModel
             // as extensiblity hooks.
             void signalCompressionsStarted();
             void signalCompressionsStopped();
+
+            // Used to update compression depth gauge on LCD (passing through the ModuleCPRHelp), if applicable
+            void signalDisplayCompressionDepth(int depth);
 
     };
 

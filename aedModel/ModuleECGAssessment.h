@@ -12,6 +12,13 @@
 #include "aedGui/LCDDisplay.h"
 #include "AED.h"
 
+// TODO not mission-critical but if there's time:
+// + Instead of using lcdDisplay->setPrompt(), use signalUserPrompt(const QString & prompt)
+//  ++ I already added that signal to this class, and AED's setup will handle connecting it to a slot.
+//  ++ This is for text prompts only, for consistency with the other four Module classes.
+//  ++ Continue to use the lcdDisplay pointer directly for updating the plots to display the ECG graph
+// + Use the constants in prompts.h instead of putting string literals directly in here
+
 namespace aedModel {
 
 // CONTROL IN:
@@ -55,7 +62,7 @@ namespace aedModel {
     private:
         bool active;        // Is the ECG assessment happening right now?
         rhythm_t rhythm;    // Rhythm type of the patient (see type def above). We can set this via GUI
-        QTimer* timer;      // Simulates the 5 seconds of analysis
+        QTimer timer;      // Simulates the 5 seconds of analysis
         aedGui::LCDDisplay* lcdDisplay;
         QVector<double> ventTachyXData;
         QVector<double> ventTachyYData;

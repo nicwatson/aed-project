@@ -26,8 +26,8 @@ namespace aedGui
         QVector<double> getGraphYData() {return graphYData;}
 
     private:
-        QLabel* prompt;
         QCustomPlot* graph;
+        QLabel* prompt;
         QVector<double> graphXData;
         QVector<double> graphYData;
 

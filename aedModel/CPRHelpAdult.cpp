@@ -109,7 +109,7 @@ void CPRHelpAdult::doCompression()
         signalUserPrompt(P_CPR_GOOD);
     }
 
-    signalUpdateCompressionDepth(compressionDepth);    // Update QProgressBar in LCD
+    signalDisplayCompressionDepth(compressionDepth);    // Update QProgressBar in LCD (passing through the ModuleCPRHelp)
 }
 
 // SLOT
