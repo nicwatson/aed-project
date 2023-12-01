@@ -54,7 +54,7 @@ void AED::attachPads(bool attached)
     if(aedState == STARTUP_ADVICE)
     {
         changeStateSafe(ECG_ASSESS);
-       // doStartECG();
+        doStartECG();
     }
     else if(aedState == ECG_ASSESS)
     {
@@ -73,6 +73,13 @@ void AED::attachPads(bool attached)
 
 void AED::ecgResult(bool shockable)
 {
+    // Entry guard: must be in ECG_ASSESS state
+    if(aedState != ECG_ASSESS)
+    {
+        qDebug() << "Error: AED received ecgResult signal when ECG_ASSESS was not active!" << Qt::endl;
+        return;
+    }
+
     if(shockable)
     {
         changeStateSafe(SHOCK);
@@ -92,6 +99,12 @@ void AED::startCPR()
 
 void AED::stopCPR()
 {
+    if(aedState != CPR)
+    {
+        qDebug() << "Error: AED received signal stopCPR() when CPR was not active." << Qt::endl;
+        return;
+    }
+
     changeStateSafe(ECG_ASSESS);
     // doStartECG();
 }
@@ -110,17 +123,17 @@ void AED::plugCable(cableState_t newCableState)
 // BATTERIES
 //
 
-void AED::setBattery(float newBatt)
+void AED::setBattery(double newBatt)
 {
     if(newBatt >= 0) battery = newBatt;
     emit batteryChanged(battery);
 }
 
-void AED::useBattery(float loseBatt)
+void AED::useBattery(double loseBatt)
 {
     if(loseBatt >= 0)
     {
-        setBattery(std::max(0.0f, battery - loseBatt));
+        setBattery(std::max(0.0, battery - loseBatt));
     }
 }
 

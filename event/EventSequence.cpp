@@ -35,7 +35,6 @@ int EventSequence::add(SequencedEvent * newEvent)
     if(!active && newEvent != nullptr)
     {
         queue.append(newEvent);
-        //connectTo(newEvent);
     }
     return queue.size();
 }
@@ -50,7 +49,6 @@ int EventSequence::addBefore(SequencedEvent * newEvent, int index)
     if(!active && newEvent != nullptr)
     {
         queue.insert(index, newEvent);
-        //connectTo(newEvent);
     }
     return queue.size();
 }
@@ -60,7 +58,6 @@ int EventSequence::remove(SequencedEvent * target)
     if(!active && target != nullptr)
     {
         queue.removeAll(target);
-        //disconnectFrom(target);
     }
     return queue.size();
 }

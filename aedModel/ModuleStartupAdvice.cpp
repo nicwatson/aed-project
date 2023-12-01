@@ -30,7 +30,6 @@ ModuleStartupAdvice::~ModuleStartupAdvice()
 
 int ModuleStartupAdvice::add(event::AdviceEvent * newEvent)
 {
-    qDebug() << "Special add with " << newEvent->getID() << Qt::endl;
     int ret = EventSequence::add(newEvent);
     connect(newEvent, SIGNAL(sendUserPrompt(const QString &)), this, SLOT(userPrompt(const QString &)));
     return ret;
@@ -61,7 +60,7 @@ int ModuleStartupAdvice::remove(int index)
 // SLOT
 void ModuleStartupAdvice::userPrompt(const QString & prompt)
 {
-    qDebug() << "Received prompt: " << prompt << Qt::endl;
+    // qDebug() << "Received prompt: " << prompt << Qt::endl;
     emit sendUserPrompt(prompt);
 }
 

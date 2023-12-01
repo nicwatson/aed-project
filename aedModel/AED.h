@@ -69,7 +69,7 @@ namespace aedModel
             cableState_t cableState;
             bool padsAttached;
 
-            float battery;          // Battery from 0 (depleted) to 1 (full charge)
+            double battery;          // Battery from 0 (depleted) to 1 (full charge)
             // bool passTest;          // Assuming battery and cable fine, will AED pass self-test? (Use for modeling misc. unit failures)
 
 
@@ -101,8 +101,8 @@ namespace aedModel
             void plugCable(cableState_t newCableState);
             void attachPads(bool);
 
-            void setBattery(float newBatt);
-            void useBattery(float loseBatt);
+            void setBattery(double newBatt);
+            void useBattery(double loseBatt);
             void changeBatteries();
 
             void userPrompt(const QString & prompt);

@@ -21,6 +21,16 @@ void AED::doStartupAdvice()
     emit signalStartupAdvice(cableState);
 }
 
+void AED::doStartECG()
+{
+    emit signalStartECG();
+}
+
+void AED::doPrepShock()
+{
+    emit signalPrepShock();
+}
+
 
 //
 // STATE TRANSITION LOGIC
