@@ -28,8 +28,11 @@ void LCDDisplay::setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDa
 
 void LCDDisplay::setCompressionDepth(int depth)
 {
-    if (depth >= 0 && depth <= 100) {
-        compressionDepthBar->setValue(depth);
+    if (depth >= 0 && depth <= 24) {
+        // Convert depth out of 24 (2.4 inches) to percentage for QProgressBar
+        int depthPercent = (int) (depth * 100 / 24);
+
+        compressionDepthBar->setValue(depthPercent);
     } else {
         qDebug() << "Compression depth out of range";
     }

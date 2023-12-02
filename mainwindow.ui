@@ -654,6 +654,9 @@ QPushButton:checked {
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
+      <property name="invertedAppearance">
+       <bool>true</bool>
+      </property>
       <property name="tickPosition">
        <enum>QSlider::TicksAbove</enum>
       </property>
