@@ -59,15 +59,15 @@ namespace aedModel
             // i.e. relating to compression depth as well as start/stop CPR.
             void signalUserPrompt(const QString & prompt);
 
-            // Special secondary CPR advice prompt signal.
+            // Special secondary CPR compression rate prompt signal.
             // Use for prompts related to compression rate. This is our alternative to the real AED Plus's
             // adaptive metronome function. This should be linked to the LCD's secondary CPR-specific QLabel.
             // Use two separate QLabels so that depth- and rate-related prompts do not overwrite each other in realtime.
-            void signalCPRAdvicePrompt(const QString & prompt);
+            void signalCPRCompressionRatePrompt(const QString & prompt);
 
             // These signals are defined in case clients have a use for them.
             // In the current version, there is nothing listening for these particular signals, but they are included
-            // as extensiblity hooks.
+            // as extensiblity hooks. SHAUN: We will use these to update the text of the  "Start compressions" buttonn
             void signalCompressionsStarted();
             void signalCompressionsStopped();
 

@@ -51,12 +51,62 @@ MainWindow::MainWindow(QWidget *parent)
     // Instantiating LCDDisplay and all modules
     LCDDisplay = new aedGui::LCDDisplay(params);
     ecgModule = new aedModel::ModuleECGAssessment(LCDDisplay);
+    cprHelpModule = new aedModel::ModuleCPRHelp();
 
+    // Connecting GUI buttons to ecg module
     connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
     connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(endAssessment()));
     connect(ui->tachyButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::VENT_TACHY);} );
     connect(ui->fibButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::VENT_FIB);} );
     connect(ui->nonShockableButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::NON_SHOCKABLE);} );
+
+    // Connecting GUI buttons to cpr help module
+    connect(ui->cprDepthSlider, SIGNAL(valueChanged(int)), cprHelpModule, SLOT(updateCompressionDepth(int)));
+    connect(ui->cprRateSlider, SIGNAL(valueChanged(int)), cprHelpModule, SLOT(updateCompressionRate(int)));
+    connect(ui->toggleCompressionsButton, SIGNAL(clicked(bool)), cprHelpModule, SLOT(toggleCompressions(bool))); // checked, working
+    connect(cprHelpModule, &aedModel::ModuleCPRHelp::signalCompressionsStarted, [=]() {
+        ui->toggleCompressionsButton->setText("Stop Compressions");
+        ui->toggleCompressionsButton->setChecked(true);
+    }); // checked- working
+    connect(cprHelpModule, &aedModel::ModuleCPRHelp::signalCompressionsStopped, [=]() {
+        ui->toggleCompressionsButton->setText("Start Compressions");
+        ui->toggleCompressionsButton->setChecked(false);
+    }); // checked- working
+    connect(cprHelpModule, &aedModel::ModuleCPRHelp::signalCPRCompressionRatePrompt, ui->LCDHelp, [this](QString msg) {ui->LCDHelp->setText(msg); }); // checked- working
+    connect(cprHelpModule, &aedModel::ModuleCPRHelp::signalDisplayCompressionDepth, ui->compressionDepthBar, [this](int val) {
+        qDebug() << QString("Old value is %1").arg(val);
+        val = (val * 100) / 24; // convert from slider scale of (0-24) to progress bar scale of (0-100)
+        ui->compressionDepthBar->setValue(val);
+        qDebug() << QString("Vvalue is %1").arg(val);
+    }); // Checked- working
+
+
+
+
+    // 2. CONNECT GUI BUTTONS TO MODULES (AND VICE VERSA)
+
+    // 3. CONNECT ELEMENTS TO AED (AND VICE VERSA)
+    connect(ui->powerButton, SIGNAL(pressed()), aed, SLOT(togglePowerButton()));
+    connect(ui->adultPadsButton, SIGNAL(clicked()), aed, SLOT(plugCableAdult()));
+    connect(ui->pediatricPadsButton, SIGNAL(clicked()), aed, SLOT(plugCableChild()));
+    connect(ui->unpluggedCablesButton, SIGNAL(clicked()), aed, SLOT(unplugCable()));
+    connect(ui->attachedPadsButton, &QRadioButton::clicked, [=]() {aed->attachPads(true);} ); // checked- working
+    connect(ui->detachedPadsButton, &QRadioButton::clicked, [=]() {aed->attachPads(false);} ); // checked- working
+    connect(ui->rechargeBatteryButton, SIGNAL(pressed()), aed, SLOT(changeBatteries()));
+    connect(aed, &aedModel::AED::signalUserPrompt, ui->LCDPrompt, [this](QString msg) {ui->LCDPrompt->setText(msg); }); // checked- working, I called a dummy AED method which emitted signalUserPrompt("dumbo")
+
+
+    aed->dummy();
+    cprHelpModule->dummy();
+
+    // 4. ADD MODULES TO AED
+
+
+
+
+
+
+
 }
 
 MainWindow::~MainWindow()
