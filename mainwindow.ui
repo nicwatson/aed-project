@@ -121,16 +121,7 @@ background-color: rgba(0,0,0,0);</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton {
-image: url(:/shockButton/ShockButton_Button.svg);
-border: 0;
-}
-
-QPushButton:pressed {
-	image: url(:/shockButton/ShockButton_ButtonPressed.svg);
-    border: 0;
-}
-</string>
+      <string notr="true">image: url(:/shockButton/ShockButton_Button.svg); border: 0;</string>
      </property>
      <property name="text">
       <string/>
@@ -946,7 +937,7 @@ QPushButton:checked {
   <customwidget>
    <class>aedGui::LampWidget</class>
    <extends>QWidget</extends>
-   <header>aedGui/LampWidget.h</header>
+   <header location="global">aedGui/LampWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

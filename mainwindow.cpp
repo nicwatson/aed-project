@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     LCDDisplay = new aedGui::LCDDisplay(ui->ecgGraph, ui->LCDPrompt);
     ecgModule = new aedModel::ModuleECGAssessment(LCDDisplay);
     cprHelpModule = new aedModel::ModuleCPRHelp();
+    shockModule = new aedModel::ModuleShock();
 
     // Connecting GUI buttons to ecg module
     connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
@@ -70,12 +71,40 @@ MainWindow::MainWindow(QWidget *parent)
         qDebug() << QString("Vvalue is %1").arg(val);
     }); // Checked- working
 
+    // Connect GUI Elements to ModuleShock (and vice versa)
+    QString shockLitStyle = "image: url(:/shockButton/ShockButton_ButtonPressed.svg); border: 0;";
+    QString shockUnlitStyle = "image: url(:/shockButton/ShockButton_Button.svg); border: 0;";
+    connect(ui->shockButton, &QPushButton::pressed, shockModule, [=]() {
+        shockModule->shockButtonPressed();
+        ui->shockButton->setStyleSheet(shockLitStyle);
+    });
+    connect(ui->shockButton, &QPushButton::released, shockModule, [=]() {
+        shockModule->shockButtonReleased();
+        ui->shockButton->setStyleSheet(shockUnlitStyle);
+    });
+    connect(shockModule, &aedModel::ModuleShock::signalCharged, [=]() {
+        shockButtonFlashTimer.setSingleShot(false);
+        shockButtonFlashTimer.setInterval(500);
+        connect(&shockButtonFlashTimer, &QTimer::timeout, this, &MainWindow::toggleShockButtonFlash);
+        shockButtonFlashTimer.start();
+    });
+    connect(shockModule, &aedModel::ModuleShock::signalAborted, [=]() {
+        shockButtonFlashTimer.stop();
+        disconnect(&shockButtonFlashTimer, &QTimer::timeout, this, &MainWindow::toggleShockButtonFlash);
+        ui->shockButton->setStyleSheet(shockUnlitStyle);
+    });
+
+//    connect(ui->shockButton, SIGNAL(pressed()), shockModule, SLOT(shockButtonPressed())); // Checked- working
+//    connect(ui->shockButton, SIGNAL(released()), shockModule, SLOT(shockButtonReleased())); // Checked- working
+//    connect(ui->shockButton, SIGNAL(pressed()), shockModule, SLOT(shockButtonPressed())); // Checked- working
+//    connect(ui->shockButton, SIGNAL(released()), shockModule, SLOT(shockButtonReleased())); // Checked- working
+
 
 
 
     // 2. CONNECT GUI BUTTONS TO MODULES (AND VICE VERSA)
 
-    // 3. CONNECT ELEMENTS TO AED (AND VICE VERSA)
+    // 3. CONNECT GUI ELEMENTS TO AED (AND VICE VERSA)
     connect(ui->powerButton, SIGNAL(pressed()), aed, SLOT(togglePowerButton()));
     connect(ui->adultPadsButton, SIGNAL(clicked()), aed, SLOT(plugCableAdult()));
     connect(ui->pediatricPadsButton, SIGNAL(clicked()), aed, SLOT(plugCableChild()));
@@ -88,6 +117,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     aed->dummy();
     cprHelpModule->dummy();
+    shockModule->dummy();
+
 
     // 4. ADD MODULES TO AED
 
@@ -106,6 +137,17 @@ MainWindow::~MainWindow()
 
     if (LCDDisplay !=  nullptr) LCDDisplay->deleteLater();
     if (ecgModule !=  nullptr) ecgModule->deleteLater();
+}
+
+void MainWindow::toggleShockButtonFlash()
+{
+    QString shockLitStyle = "image: url(:/shockButton/ShockButton_ButtonPressed.svg); border: 0;";
+    QString shockUnlitStyle = "image: url(:/shockButton/ShockButton_Button.svg); border: 0;";
+    if (ui->shockButton->styleSheet() == shockLitStyle) {
+        ui->shockButton->setStyleSheet(shockUnlitStyle);
+    } else {
+        ui->shockButton->setStyleSheet(shockLitStyle);
+    }
 }
 
 void MainWindow::quitProgram()
