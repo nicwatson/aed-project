@@ -230,7 +230,7 @@ background-color: rgba(0,0,0,0);</string>
        </rect>
       </property>
       <property name="text">
-       <string>DON'T TOUCH PATIENT. PRESS FLASHING SHOCK BUTTON</string>
+       <string/>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -328,7 +328,7 @@ background-color: rgba(0,0,0,0);</string>
        </rect>
       </property>
       <property name="text">
-       <string>CHILD PADS. REALCPR HELP DISABLED</string>
+       <string/>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
