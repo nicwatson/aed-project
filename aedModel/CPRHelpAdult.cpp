@@ -9,6 +9,8 @@ CPRHelpAdult::CPRHelpAdult()
     noCPRTimer.setSingleShot(true);
     noCPRTimer.setInterval(CPR_DELAY_TOLERANCE);
     cprCyclicTimer.setSingleShot(false);
+    cprCyclicTimer.blockSignals(true);
+    connect(&cprCyclicTimer, SIGNAL(timeout()), this, SLOT(doCompression()));
 }
 
 void CPRHelpAdult::cleanup()
@@ -44,6 +46,7 @@ void CPRHelpAdult::startCompressions()
     compressionsActive = true;
     if(compressionRate < 0) compressionRate = 40;
     if(compressionRate > 120) compressionRate = 120;
+    cprCyclicTimer.blockSignals(false);
     cprCyclicTimer.setInterval(60000 / compressionRate);
     cprCyclicTimer.start();
     emit signalCompressionsStarted();
@@ -56,7 +59,6 @@ void CPRHelpAdult::stopCompressions()
     compressionsActive = false;
     cprCyclicTimer.blockSignals(true);
     cprCyclicTimer.stop();
-    cprCyclicTimer.blockSignals(false);
     emit signalCompressionsStopped();
 }
 
