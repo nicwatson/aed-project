@@ -74,6 +74,7 @@ void CPRHelpAdult::start()
 // SLOT
 void CPRHelpAdult::doCompression()
 {
+    emit signalDisplayCompressionDepth(compressionDepth);    // TESTING ONLY pdate QProgressBar in LCD (passing through the ModuleCPRHelp)
     if(!eventActive || !compressionsActive) return;
 
     // Reset the noCPRTimer
@@ -87,15 +88,15 @@ void CPRHelpAdult::doCompression()
     // We just use the CPM we already know about.
     if(compressionRate > CPR_SLOW_THRESHHOLD)
     {
-        emit signalCPRAdvicePrompt(P_GOOD_SPEED);
+        emit signalCPRCompressionRatePrompt(P_GOOD_SPEED);
     }
     else if(compressionRate > CPR_VERYSLOW_THRESHHOLD)
     {
-        emit signalCPRAdvicePrompt(P_SLIGHTLY_FASTER);
+        emit signalCPRCompressionRatePrompt(P_SLIGHTLY_FASTER);
     }
     else
     {
-        emit signalCPRAdvicePrompt(P_FASTER);
+        emit signalCPRCompressionRatePrompt(P_FASTER);
     }
 
     // Compressions too shallow - issue prompt ("PUSH HARDER")
@@ -111,7 +112,7 @@ void CPRHelpAdult::doCompression()
         signalUserPrompt(P_CPR_GOOD);
     }
 
-    signalDisplayCompressionDepth(compressionDepth);    // Update QProgressBar in LCD (passing through the ModuleCPRHelp)
+    emit signalDisplayCompressionDepth(compressionDepth);    // Update QProgressBar in LCD (passing through the ModuleCPRHelp)
 }
 
 // SLOT

@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include "aedModel/ModuleCPRHelp.h"
+#include "aedModel/ModuleSelfTest.h"
+#include "aedModel/ModuleShock.h"
 #include "aedModel/ModuleStartupAdvice.h"
 #include "aedModel/ModuleECGAssessment.h"
 #include "aedModel/AED.h"
@@ -41,6 +44,10 @@ private:
 
     aedGui::LCDDisplay* LCDDisplay;
     aedModel::ModuleECGAssessment* ecgModule;
+    aedModel::ModuleCPRHelp* cprHelpModule;
+    aedModel::ModuleSelfTest* selfTestModule;
+    aedModel::ModuleShock* shockModule;
+    aedModel::ModuleStartupAdvice* startupAdviceModule;
 
 private slots:
     void quitProgram();

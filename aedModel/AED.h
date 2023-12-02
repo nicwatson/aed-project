@@ -66,6 +66,7 @@ namespace aedModel
             bool addModuleECG(ModuleECGAssessment *);
             bool addModuleShock(ModuleShock *);
             bool addModuleCPR(ModuleCPRHelp *);
+            void dummy() {emit signalUserPrompt("dumbo");}
 
         private:
 
@@ -108,35 +109,30 @@ namespace aedModel
             void clearPrompt();
 
             void stopActivity();        // Stop activity going on in all modules; reset in-device GUI elements
+            void turnOn();
+            void turnOff();
 
         public slots:
 
-            // TODO Connect to power button - trigger when turned on
-            void turnOn();
-            // TODO Connect to power button - trigger when turned off
-            void turnOff();
+            // COMPLETE Connect to power button - trigger when turned on / off
+            void togglePowerButton();
 
             // Nothing to do
             void plugCable(cableState_t newCableState);
 
-            // TODO Connect all three cable signals to corresponding radio buttons being selected
+            // COMPLETE Connect all three cable signals to corresponding radio buttons being selected
             void plugCableAdult();
             void plugCableChild();
             void unplugCable();
 
             // Attaches pads to patient (pass true to attach, false to detach)
-            // If it's too tedious to activate this slot directly from the radio buttons, use the
-            // attachPads() / removePads() slots below as they will call this method themselves.
+            // COMPLETE connect these to the corresponding radio buttons
             void attachPads(bool);
-
-            // TODO connect both of these pad slots to their corresponding radio buttons
-            void attachPads();
-            void removePads();
 
             void setBattery(double newBatt);
             void useBattery(double loseBatt);
 
-            // TODO Connect to the change/recharge batteries button
+            // COMPLETE Connect to the change/recharge batteries button
             void changeBatteries();
 
             // TODO Any Module that needs to update the main prompt should send a signal to this slot
@@ -181,7 +177,7 @@ namespace aedModel
             // Stop anything that is happening in any module
             void signalAbortAll();
 
-            // TODO Connect thiLCDo the main prompt QLabel (in the LCD) to update its text with the string
+            // PROBABLY COMPLETE Connect thiLCDo the main prompt QLabel (in the LCD) to update its text with the string
             // Any strings sent to AED::userPrompt() will get forwarded out again on this signal
             void signalUserPrompt(const QString & prompt); // Update LCD
 

@@ -15,5 +15,5 @@ void CPRHelpChild::updateCompressionDepth(int depth) { }
 // RealCPR Help does not monitor CPR for child patients
 void CPRHelpChild::updateCompressionRate(int cpm) { }
 
-void CPRHelpChild::startCompressions() { }
-void CPRHelpChild::stopCompressions() { }
+void CPRHelpChild::startCompressions() { emit signalCompressionsStarted(); }
+void CPRHelpChild::stopCompressions() { emit signalCompressionsStopped(); }
