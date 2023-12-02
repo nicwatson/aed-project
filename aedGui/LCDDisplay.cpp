@@ -16,14 +16,6 @@ LCDDisplay::LCDDisplay(const LCDDisplayParams& params)
     runningTimer = new QTimer(this);
     connect(runningTimer, SIGNAL(timeout()), this, SLOT(updateTimer()));
     runningTimer->start(1000);
-
-    flashTimer = new QTimer(this);
-    connect(flashTimer, &QTimer::timeout, this, &LCDDisplay::flashProgressBar);
-    flashTimer->start(1000); // Adjust for how often it flashes
-
-    revertTimer = new QTimer(this);
-    connect(revertTimer, &QTimer::timeout, this, &LCDDisplay::revertProgressBar);
-    revertTimer->setSingleShot(true); // Only trigger once per timeout
 }
 
 LCDDisplay::~LCDDisplay() {}
@@ -93,15 +85,4 @@ void LCDDisplay::addShock()
     if (shocks != nullptr) {
         shocks->setText(shocksString);
     }
-}
-
-void LCDDisplay::flashProgressBar()
-{
-    compressionDepthBar->setStyleSheet("selection-background-color: rgba(0, 0, 0, 0);");
-    revertTimer->start(200); // Adjust for how long it stays white
-}
-
-void LCDDisplay::revertProgressBar()
-{
-    compressionDepthBar->setStyleSheet("selection-background-color: rgb(61, 56, 70);");
 }
