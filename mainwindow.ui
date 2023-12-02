@@ -707,7 +707,7 @@ QPushButton:checked {
        <number>10</number>
       </property>
      </widget>
-     <widget class="QPushButton" name="startCompressionsButton">
+     <widget class="QPushButton" name="toggleCompressionsButton">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -721,6 +721,9 @@ QPushButton:checked {
       </property>
       <property name="checkable">
        <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
       </property>
      </widget>
      <widget class="QLabel" name="label_8">

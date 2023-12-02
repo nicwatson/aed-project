@@ -10,19 +10,21 @@ using namespace aedModel;
 // POWER
 //
 
-void AED::turnOn()
+void AED::togglePowerButton()
 {
-    aedState = SELF_TEST;
-    emit signalStartTest(this);
-}
-
-void AED::turnOff()
-{
-    // TODO Need to reset all modules and turn off widgets
-    stopActivity();
-    clearPrompt();
-    emit signalPowerOff();
-    aedState = OFF;
+    if (aedState == OFF) // If aed is OFF turned it on
+    {
+        aedState = SELF_TEST;
+        emit signalStartTest(this);
+    }
+    else // If aed is in one of the 'on' states turn it off
+    {
+        // TODO Need to reset all modules and turn off widgets
+        stopActivity();
+        clearPrompt();
+        emit signalPowerOff();
+        aedState = OFF;
+    }
 }
 
 //
@@ -95,15 +97,7 @@ void AED::attachPads(bool attached)
     }
 }
 
-void AED::attachPads()
-{
-    attachPads(true);
-}
 
-void AED::removePads()
-{
-    attachPads(false);
-}
 
 
 //
@@ -134,7 +128,7 @@ void AED::changeBatteries()
 {
     if(isOn())
     {
-        turnOff();
+        togglePowerButton(); // turn it off
     }
     battery = 1;
     emit signalBatteryChanged(battery);
