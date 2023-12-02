@@ -38,6 +38,10 @@ namespace aedModel
             // far, and whether adult or child pads are plugged in (pass true for child pads, false
             // for adult)
             int calcShockEnergy(bool childPads);
+            void dummy() {
+                emit signalCharged();
+                QTimer::singleShot(10000, this, [=]() {emit signalAborted();});
+            }
 
         private:
             bool active;                // Shock event is active
@@ -66,7 +70,7 @@ namespace aedModel
 
             void exit();
 
-            // TODO Connect the GUI's shock button's pressed and released signals to these slots
+            // COMPLETE Connect the GUI's shock button's pressed and released signals to these slots
             void shockButtonPressed();
             void shockButtonReleased();
 
