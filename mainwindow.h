@@ -37,6 +37,7 @@ private:
     aedModel::ModuleStartupAdvice * startupSequence;
 
     QTimer timer;
+    QTimer shockButtonFlashTimer;
     aedModel::AED * aed;
 
     const QRegExp acceptedKeys = QRegExp("[asdfjkl;]");
@@ -48,6 +49,9 @@ private:
     aedModel::ModuleSelfTest* selfTestModule;
     aedModel::ModuleShock* shockModule;
     aedModel::ModuleStartupAdvice* startupAdviceModule;
+
+public slots:
+    void toggleShockButtonFlash();
 
 private slots:
     void quitProgram();
