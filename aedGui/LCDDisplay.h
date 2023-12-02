@@ -47,6 +47,8 @@ namespace aedGui
         QVector<double> graphXData;
         QVector<double> graphYData;
         QTimer* runningTimer;
+        QTimer* flashTimer;
+        QTimer* revertTimer;
         int elapsedTime;    // time in seconds
         int numShocks;
 
@@ -63,6 +65,8 @@ namespace aedGui
     
     private slots:
         void updateTimer();
+        void flashProgressBar();
+        void revertProgressBar();
 
     };
 }
