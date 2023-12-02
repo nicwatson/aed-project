@@ -82,10 +82,10 @@ namespace aedModel
             void signalUserPrompt(const QString & prompt);
             void signalDrainBatt(double amt);
 
-            // TODO connect this to the shock button to make it flash
+            // COMPLETE connect this to the shock button to make it flash
             void signalCharged();
 
-            // TODO connect this to the flashing shock button to make it stop flashing if the shock event is aborted (e.g. unit turned off)
+            // COMPLETE connect this to the flashing shock button to make it stop flashing if the shock event is aborted (e.g. unit turned off)
             void signalAborted();
 
             void signalDone();

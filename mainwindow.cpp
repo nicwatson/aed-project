@@ -84,30 +84,31 @@ MainWindow::MainWindow(QWidget *parent)
     // Connect GUI Elements to ModuleShock (and vice versa)
     QString shockLitStyle = "image: url(:/shockButton/ShockButton_ButtonPressed.svg); border: 0;";
     QString shockUnlitStyle = "image: url(:/shockButton/ShockButton_Button.svg); border: 0;";
+
     connect(ui->shockButton, &QPushButton::pressed, shockModule, [=]() {
         shockModule->shockButtonPressed();
         ui->shockButton->setStyleSheet(shockLitStyle);
-    });
+    }); // Lights up the Shock button when pressed. Checked- working
+
     connect(ui->shockButton, &QPushButton::released, shockModule, [=]() {
         shockModule->shockButtonReleased();
         ui->shockButton->setStyleSheet(shockUnlitStyle);
-    });
+    }); // Darkens the Shock button when pressed. Checked- working
+
     connect(shockModule, &aedModel::ModuleShock::signalCharged, [=]() {
         shockButtonFlashTimer.setSingleShot(false);
         shockButtonFlashTimer.setInterval(500);
         connect(&shockButtonFlashTimer, &QTimer::timeout, this, &MainWindow::toggleShockButtonFlash);
         shockButtonFlashTimer.start();
-    });
+    }); // Makes the Shock Button start to flash. Checked- working
+
     connect(shockModule, &aedModel::ModuleShock::signalAborted, [=]() {
         shockButtonFlashTimer.stop();
         disconnect(&shockButtonFlashTimer, &QTimer::timeout, this, &MainWindow::toggleShockButtonFlash);
         ui->shockButton->setStyleSheet(shockUnlitStyle);
-    });
+    }); // Makes the Shock Button stop flashing. Checked- working
 
-//    connect(ui->shockButton, SIGNAL(pressed()), shockModule, SLOT(shockButtonPressed())); // Checked- working
-//    connect(ui->shockButton, SIGNAL(released()), shockModule, SLOT(shockButtonReleased())); // Checked- working
-//    connect(ui->shockButton, SIGNAL(pressed()), shockModule, SLOT(shockButtonPressed())); // Checked- working
-//    connect(ui->shockButton, SIGNAL(released()), shockModule, SLOT(shockButtonReleased())); // Checked- working
+
 
 
 
@@ -123,6 +124,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->detachedPadsButton, &QRadioButton::clicked, [=]() {aed->attachPads(false);} ); // checked- working
     connect(ui->rechargeBatteryButton, SIGNAL(pressed()), aed, SLOT(changeBatteries()));
     connect(aed, &aedModel::AED::signalUserPrompt, ui->LCDPrompt, [this](QString msg) {ui->LCDPrompt->setText(msg); }); // checked- working, I called a dummy AED method which emitted signalUserPrompt("dumbo")
+    connect(aed, &aedModel::AED::signalStartLampStandback, ui->lamp_Analysing, &aedGui::LampWidget::startFlash);
+    connect(aed, &aedModel::AED::signalStopLampStandback, ui->lamp_Analysing, &aedGui::LampWidget::stopFlash);
+    connect(aed, &aedModel::AED::signalStartLampCPR, ui->lamp_CPR, &aedGui::LampWidget::startFlash);
+    connect(aed, &aedModel::AED::signalStopLampCPR, ui->lamp_CPR, &aedGui::LampWidget::stopFlash);
 
 
     aed->dummy();
