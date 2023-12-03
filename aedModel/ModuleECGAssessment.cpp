@@ -31,7 +31,7 @@ void ModuleECGAssessment::startAssessment()
 
     // Set to true as assessment is in progress
     active = true;
-    lcdDisplay->setPrompt("Don't touch patient. Analysing");
+    lcdDisplay->setPromptLabel("Don't touch patient. Analysing");
 
     // Start the 5-second timer to simulate analysis. Once timer runs out, the appropriate function is called, depending on which rhythm is shockable.
     timer.setInterval(5000);
@@ -80,7 +80,7 @@ void ModuleECGAssessment::endAssessment()
     lcdDisplay->clearGraphData();
 
     // I wasnt sure what to do if analysis interrupted
-    lcdDisplay->setPrompt("");
+    lcdDisplay->setPromptLabel("");
 
     // An asssessment is no longer in process
     active = false;
@@ -125,7 +125,7 @@ void ModuleECGAssessment::readCSVFile(QString fileDirectory, QString fileName)
 void ModuleECGAssessment::sendShockableSignal()
 {
     endAssessment();
-    lcdDisplay->setPrompt("Shock Advised");
+    lcdDisplay->setPromptLabel("Shock Advised");
     emit signalShockable();
     emit signalResult(true);
 
@@ -135,7 +135,7 @@ void ModuleECGAssessment::sendShockableSignal()
 void ModuleECGAssessment::sendNonShockableSignal()
 {
     endAssessment();
-    lcdDisplay->setPrompt("No Shock Advised");
+    lcdDisplay->setPromptLabel("No Shock Advised");
     emit signalNotShockable();
     emit signalResult(false);
 }
