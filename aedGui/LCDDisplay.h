@@ -16,6 +16,8 @@
 // Recommended maximum depth of compressions for adult patient (1/10th inches)
 // Maybe we should have a constants file?
 #define CPR_ADULT_DEPTH_MAX 24
+#define LCD_ON_STYLE "background-color: rgb(255, 255, 255);"
+#define LCD_OFF_STYLE "background-color: rgb(61, 56, 70);"
 
 namespace aedGui
 {

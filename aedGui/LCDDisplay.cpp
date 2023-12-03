@@ -3,7 +3,8 @@
 using namespace aedGui;
 
 LCDDisplay::LCDDisplay(const LCDDisplayParams& params)
-    : lcdDisplayFrame(params.lcdDisplayFrame),
+    : active(false),
+        lcdDisplayFrame(params.lcdDisplayFrame),
         ecgGraph(params.ecgGraph), 
         prompt(params.prompt), 
         help(params.help), 
@@ -15,6 +16,11 @@ LCDDisplay::LCDDisplay(const LCDDisplayParams& params)
     // initializes running timer for AED
     runningTimer = new QTimer(this);
     connect(runningTimer, SIGNAL(timeout()), this, SLOT(updateTimer()));
+
+    // Set LCD Display to off when app first starts
+    if (lcdDisplayFrame != nullptr) {
+        setLCDDisplayVisible(false);
+    }
 }
 
 LCDDisplay::~LCDDisplay() {}
@@ -28,6 +34,8 @@ void LCDDisplay::setLCDDisplayVisible(bool visible)
             childWidget->setVisible(visible);
         }
     }
+
+    visible ? lcdDisplayFrame->setStyleSheet(LCD_ON_STYLE) : lcdDisplayFrame->setStyleSheet(LCD_OFF_STYLE);
 }
 
 void LCDDisplay::startLCD()
