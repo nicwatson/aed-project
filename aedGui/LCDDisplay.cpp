@@ -43,8 +43,12 @@ void LCDDisplay::startLCD()
         setLCDDisplayVisible(true);
     }
 
-    timer->setText(formatTime(elapsedTime));    // Sets timer to be '00:00'
     shocks->setText("00");  // Sets shocks to be '00'
+    timer->setText(formatTime(elapsedTime));    // Sets timer to be '00:00'
+    clearGraphData();   // Clears graph data
+    prompt->setText("");    // Clears prompt message
+    help->setText("");  // Clears help message
+    depthCompressionBar->setValue(0);   // Sets compression depth to be 0
 
     // Starts the timer
     runningTimer->start(1000);
