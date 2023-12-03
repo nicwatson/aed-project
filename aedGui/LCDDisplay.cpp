@@ -10,7 +10,7 @@ LCDDisplay::LCDDisplay(const LCDDisplayParams& params)
         shocks(params.shocks), 
         timer(params.timer), 
         compressionDepthBar(params.compressionDepthBar),
-        elapsedTime(0),
+        elapsedTime(0)
 {
     // initializes running timer for AED
     runningTimer = new QTimer(this);

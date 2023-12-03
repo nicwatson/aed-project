@@ -1,5 +1,6 @@
 #ifndef LCDDISPLAY_H
 #define LCDDISPLAY_H
+
 #include <QObject>
 #include <QLabel>
 #include <QProgressBar>
