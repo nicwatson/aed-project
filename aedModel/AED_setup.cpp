@@ -76,7 +76,8 @@ bool AED::addModuleCPR(ModuleCPRHelp * module)
     if(module == nullptr) return false;
     connect(module, SIGNAL(signalUserPrompt(const QString &)), this, SLOT(userPrompt(const QString &)));
     connect(module, SIGNAL(signalCPRComplete()), this, SLOT(cprStopped()));
-    connect(this, SIGNAL(signalStartCPR(cableState_t)), module, SLOT(start(cableState_t)));
+    connect(this, &aedModel::AED::signalStartCPR, module, &aedModel::ModuleCPRHelp::start);
+    // connect(this, SIGNAL(signalStartCPR(cableState_t)), module, SLOT(start(cableState_t)));
     connect(this, SIGNAL(signalAbortCPR()), module, SLOT(abort()));
     connect(this, SIGNAL(signalAbortAll()), module, SLOT(abort()));
     return true;

@@ -37,7 +37,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     repaint();
 
-
+    // 1. INSTNATIATE MODULES
+    // Instantiating LCDDisplay and all modules
     aedGui::LCDDisplayParams params = {
         .lcdDisplayFrame = ui->LCDDisplay,
         .ecgGraph = ui->ecgGraph,
@@ -47,8 +48,6 @@ MainWindow::MainWindow(QWidget *parent)
         .timer = ui->LCDTimer,
         .compressionDepthBar = ui->compressionDepthBar
     };
-    // 1. INSTNATIATE MODULES
-    // Instantiating LCDDisplay and all modules
     LCDDisplay = new aedGui::LCDDisplay(params);
     ecgModule = new aedModel::ModuleECGAssessment(LCDDisplay);
     cprHelpModule = new aedModel::ModuleCPRHelp();
@@ -56,15 +55,15 @@ MainWindow::MainWindow(QWidget *parent)
     selfTestModule = new aedModel::ModuleSelfTest();
     startupAdviceModule = new aedModel::ModuleStartupAdvice();
 
-    // 2. CONNECT GUI BUTTONS TO MODULES (AND VICE VERSA)
-    // Connecting GUI buttons to ecg module
+    // 2. CONNECT GUI ELEMENTS TO MODULES (AND VICE VERSA)
+    // Connecting GUI elements to ecg module
     connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
     connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(endAssessment()));
     connect(ui->tachyButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::VENT_TACHY);} );
     connect(ui->fibButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::VENT_FIB);} );
     connect(ui->nonShockableButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::NON_SHOCKABLE);} );
 
-    // Connecting GUI buttons to cpr help module
+    // Connecting GUI elements to ModuleCPrHelp
     connect(ui->cprDepthSlider, SIGNAL(valueChanged(int)), cprHelpModule, SLOT(updateCompressionDepth(int)));
     connect(ui->cprRateSlider, SIGNAL(valueChanged(int)), cprHelpModule, SLOT(updateCompressionRate(int)));
     connect(ui->toggleCompressionsButton, SIGNAL(clicked(bool)), cprHelpModule, SLOT(toggleCompressions(bool))); // checked, working
@@ -87,24 +86,20 @@ MainWindow::MainWindow(QWidget *parent)
     // Connect GUI Elements to ModuleShock (and vice versa)
     QString shockLitStyle = "image: url(:/shockButton/ShockButton_ButtonPressed.svg); border: 0;";
     QString shockUnlitStyle = "image: url(:/shockButton/ShockButton_Button.svg); border: 0;";
-
     connect(ui->shockButton, &QPushButton::pressed, shockModule, [=]() {
         shockModule->shockButtonPressed();
         ui->shockButton->setStyleSheet(shockLitStyle);
     }); // Lights up the Shock button when pressed. Checked- working
-
     connect(ui->shockButton, &QPushButton::released, shockModule, [=]() {
         shockModule->shockButtonReleased();
         ui->shockButton->setStyleSheet(shockUnlitStyle);
     }); // Darkens the Shock button when pressed. Checked- working
-
     connect(shockModule, &aedModel::ModuleShock::signalCharged, [=]() {
         shockButtonFlashTimer.setSingleShot(false);
         shockButtonFlashTimer.setInterval(500);
         connect(&shockButtonFlashTimer, &QTimer::timeout, this, &MainWindow::toggleShockButtonFlash);
         shockButtonFlashTimer.start();
     }); // Makes the Shock Button start to flash. Checked- working
-
     connect(shockModule, &aedModel::ModuleShock::signalAborted, [=]() {
         shockButtonFlashTimer.stop();
         disconnect(&shockButtonFlashTimer, &QTimer::timeout, this, &MainWindow::toggleShockButtonFlash);
@@ -123,7 +118,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->detachedPadsButton, &QRadioButton::clicked, [=]() {aed->attachPads(false);} ); // checked- working
     connect(ui->rechargeBatteryButton, SIGNAL(pressed()), aed, SLOT(changeBatteries()));
     connect(aed, SIGNAL(signalUserPrompt(QString)), LCDDisplay, SLOT(setPromptLabel(QString))); // checked- working
-    // connect(aed, &aedModel::AED::signalUserPrompt, ui->LCDPrompt, [this](QString msg) {ui->LCDPrompt->setText(msg); }); // checked- working, I called a dummy AED method which emitted signalUserPrompt("dumbo")
     connect(aed, &aedModel::AED::signalStartLampStandback, ui->lamp_Analysing, &aedGui::LampWidget::startFlash); // checked- working
     connect(aed, &aedModel::AED::signalStopLampStandback, ui->lamp_Analysing, &aedGui::LampWidget::stopFlash); // checked- working
     connect(aed, &aedModel::AED::signalStartLampCPR, ui->lamp_CPR, &aedGui::LampWidget::startFlash); // checked- working
@@ -133,7 +127,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(aed, &aedModel::AED::signalBatteryChanged, ui->batteryPercentLabel, [this](double newBatt) {ui->batteryPercentLabel->setText(QString("%1").arg((int) (newBatt * 100))); }); // checked- working
     connect(aed, &aedModel::AED::signalStartTest, [this](aedModel::AED*) {LCDDisplay->startLCD();} ); // checked- working
     connect(aed, SIGNAL(signalPowerOff()), LCDDisplay, SLOT(endLCD()));
-
     QString indicatorPassStyle = "border-image: url(:/selfTest/Passed.svg);\nbackground-color: rgba(0,0,0,0)";
     QString indicatorFailStyle = "border-image: url(:/selfTest/Failed.svg);\nbackground-color: rgba(0,0,0,0)";
     QString indicatorOffStyle = "border-image: url(:/selfTest/Off.svg);\nbackground-color: rgba(0,0,0,0)";
@@ -141,7 +134,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(aed, &aedModel::AED::signalUnitFailed, ui->selfTestIndicator, [=]() { ui->selfTestIndicator->setStyleSheet(indicatorFailStyle); });
     connect(aed, &aedModel::AED::signalPowerOff, ui->selfTestIndicator, [=]() { ui->selfTestIndicator->setStyleSheet(indicatorOffStyle); });
 
-
+//    Dummy functions are for testing thatt certain connections are working (since we cant easily test functions via the GUI as the overall flow isnt working)
 //    aed->dummy();
 //    cprHelpModule->dummy();
 //    shockModule->dummy();
@@ -153,12 +146,6 @@ MainWindow::MainWindow(QWidget *parent)
     aed->addModuleECG(ecgModule);
     aed->addModuleShock(shockModule);
     aed->addModuleCPR(cprHelpModule);
-
-
-
-
-
-
 
 }
 

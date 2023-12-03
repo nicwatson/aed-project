@@ -12,7 +12,7 @@
 #include "aedGui/LCDDisplay.h"
 #include "AED.h"
 
-// TODO not mission-critical but if there's time:
+// COMPLETE not mission-critical but if there's time:
 // + Instead of using lcdDisplay->setPromptLabel(), use signalUserPrompt(const QString & prompt)
 //  ++ I already added that signal to this class, and AED's setup will handle connecting it to a slot.
 //  ++ This is for text prompts only, for consistency with the other four Module classes.
@@ -76,6 +76,8 @@ namespace aedModel {
         void sendNonShockableSignal();
 
     signals:
+        // Talks to the AED object, which updates the GUI
+        void signalUserPrompt(const QString & prompt);
 
         // Emit this signal if the rhythm is shockable. AED will listen for this signal.
         void signalShockable();

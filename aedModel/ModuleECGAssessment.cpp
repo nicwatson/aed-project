@@ -1,4 +1,5 @@
 #include "ModuleECGAssessment.h"
+#include "aedGui/prompts.h"
 
 using namespace aedModel;
 
@@ -31,7 +32,7 @@ void ModuleECGAssessment::startAssessment()
 
     // Set to true as assessment is in progress
     active = true;
-    lcdDisplay->setPromptLabel("Don't touch patient. Analysing");
+    emit signalUserPrompt(P_ANALYZING);
 
     // Start the 5-second timer to simulate analysis. Once timer runs out, the appropriate function is called, depending on which rhythm is shockable.
     timer.setInterval(5000);
@@ -80,7 +81,7 @@ void ModuleECGAssessment::endAssessment()
     lcdDisplay->clearGraphData();
 
     // I wasnt sure what to do if analysis interrupted
-    lcdDisplay->setPromptLabel("");
+    emit signalUserPrompt("");
 
     // An asssessment is no longer in process
     active = false;
@@ -125,7 +126,7 @@ void ModuleECGAssessment::readCSVFile(QString fileDirectory, QString fileName)
 void ModuleECGAssessment::sendShockableSignal()
 {
     endAssessment();
-    lcdDisplay->setPromptLabel("Shock Advised");
+    emit signalUserPrompt(P_SHOCKABLE);
     emit signalShockable();
     emit signalResult(true);
 
@@ -135,7 +136,7 @@ void ModuleECGAssessment::sendShockableSignal()
 void ModuleECGAssessment::sendNonShockableSignal()
 {
     endAssessment();
-    lcdDisplay->setPromptLabel("No Shock Advised");
+    emit signalUserPrompt(P_NOTSHOCKABLE);
     emit signalNotShockable();
     emit signalResult(false);
 }
