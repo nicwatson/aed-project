@@ -1,22 +1,69 @@
+#include "LCDDisplay.h"
+
 using namespace aedGui;
 
 LCDDisplay::LCDDisplay(const LCDDisplayParams& params)
-    : ecgGraph(params.ecgGraph), 
+    : lcdDisplayFrame(params.lcdDisplayFrame),
+        ecgGraph(params.ecgGraph), 
         prompt(params.prompt), 
         help(params.help), 
         shocks(params.shocks), 
         timer(params.timer), 
         compressionDepthBar(params.compressionDepthBar),
         elapsedTime(0),
-        numShocks(0)
 {
-    // initializes and starts running timer for AED
+    // initializes running timer for AED
     runningTimer = new QTimer(this);
     connect(runningTimer, SIGNAL(timeout()), this, SLOT(updateTimer()));
-    runningTimer->start(1000);
 }
 
 LCDDisplay::~LCDDisplay() {}
+
+void LCDDisplay::setLCDDisplayVisible(bool visible)
+{
+    const QObjectList& children = lcdDisplayFrame->children();
+    for (QObject* child : children) {
+        QWidget* childWidget = qobject_cast<QWidget*>(child);
+        if (childWidget != nullptr) {
+            childWidget->setVisible(visible);
+        }
+    }
+}
+
+void LCDDisplay::startLCD()
+{
+    // If LCD Display is already on, don't turn it on again
+    if (active) return;
+
+    // Set LCD Display to be active
+    active = true;
+
+    // Sets LCDDisplay to be visible
+    if (lcdDisplayFrame != nullptr) {
+        setLCDDisplayVisible(true);
+    }
+
+    timer->setText(formatTime(elapsedTime));    // Sets timer to be '00:00'
+    shocks->setText("00");  // Sets shocks to be '00'
+
+    // Starts the timer
+    runningTimer->start(1000);
+}
+
+void LCDDisplay::endLCD()
+{
+    // If LCD Display is already off, don't turn it off again
+    if (!active) return;
+
+    // Sets LCDDisplay to be invisible
+    if (lcdDisplayFrame != nullptr) {
+        setLCDDisplayVisible(false);
+    }
+
+    active = false;     // Set LCD Display to be inactive
+    runningTimer->stop();   // stops timer
+    elapsedTime = 0;    // clears timer count
+}
 
 void LCDDisplay::setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDataToCopy) // setGraphData(aed::ModuleECGAssessment&  m)
 {
@@ -26,9 +73,9 @@ void LCDDisplay::setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDa
 
 void LCDDisplay::setCompressionDepth(int depth)
 {
-    if (depth >= 0 && depth <= 24) {
-        // Convert depth out of 24 (2.4 inches) to percentage for QProgressBar
-        int depthPercent = (int) (depth * 100 / 24);
+    if (depth >= 0 && depth <= CPR_ADULT_DEPTH_MAX) {
+        // Convert depth in 1/10th inch to percentage for QProgressBar
+        int depthPercent = (int) (depth * 100 / CPR_ADULT_DEPTH_MAX);
 
         compressionDepthBar->setValue(depthPercent);
     } else {
@@ -77,11 +124,10 @@ void LCDDisplay::updateTimer()
     }
 }
 
-void LCDDisplay::addShock()
+void LCDDisplay::setShock(int shockCount)
 {
-    numShocks++;
     // Format shocks to be '00'
-    QString shocksString = QString("%1").arg(numShocks, 2, 10, QChar('0'));
+    QString shocksString = QString("%1").arg(shockCount, 2, 10, QChar('0'));
 
     if (shocks != nullptr) {
         shocks->setText(shocksString);

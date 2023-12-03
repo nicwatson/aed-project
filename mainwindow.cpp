@@ -38,7 +38,18 @@ MainWindow::MainWindow(QWidget *parent)
     repaint();
 
 
-    LCDDisplay = new aedGui::LCDDisplay(ui->ecgGraph, ui->LCDPrompt);
+    aedGui::LCDDisplayParams params = {
+        .lcdDisplayFrame = ui->lcdDisplay,
+        .ecgGraph = ui->ecgGraph,
+        .prompt = ui->LCDPrompt,
+        .help = ui->LCDHelp,
+        .shocks = ui->LCDShocks,
+        .timer = ui->LCDTimer,
+        .compressionDepthBar = ui->compressionDepthBar
+    };
+    // 1. INSTNATIATE MODULES
+    // Instantiating LCDDisplay and all modules
+    LCDDisplay = new aedGui::LCDDisplay(params);
     ecgModule = new aedModel::ModuleECGAssessment(LCDDisplay);
 
     connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
@@ -46,8 +57,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->tachyButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::VENT_TACHY);} );
     connect(ui->fibButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::VENT_FIB);} );
     connect(ui->nonShockableButton, &QPushButton::pressed, ecgModule, [=]() {ecgModule->setRhythm(aedModel::ModuleECGAssessment::NON_SHOCKABLE);} );
-
-
 }
 
 MainWindow::~MainWindow()
