@@ -11,7 +11,7 @@ LCDDisplay::LCDDisplay(const LCDDisplayParams& params)
         shocks(params.shocks), 
         timer(params.timer), 
         compressionDepthBar(params.compressionDepthBar),
-        elapsedTime(0)
+        elapsedTime(-1) // Allows startLCD() to set timer to '00:00'
 {
     // initializes running timer for AED
     runningTimer = new QTimer(this);
@@ -74,7 +74,7 @@ void LCDDisplay::endLCD()
 
     active = false;     // Set LCD Display to be inactive
     runningTimer->stop();   // stops timer
-    elapsedTime = 0;    // clears timer count
+    elapsedTime = -1;    // clears timer count. Allows startLCD() to set timer to '00:00'
 }
 
 void LCDDisplay::setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDataToCopy) // setGraphData(aed::ModuleECGAssessment&  m)
