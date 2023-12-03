@@ -75,7 +75,7 @@ int EventSequence::remove(int index)
 
 bool EventSequence::startFrom(int index)
 {
-    // qDebug() << "Starting from " << QString::number(index) << " with active: " << (active ? "true " : "false ") << " and index " << (validateIndex(index) ? "valid" : "invalid") << Qt::endl;
+     qDebug() << "Starting from " << QString::number(index) << " with active: " << (active ? "true " : "false ") << " and index " << (validateIndex(index) ? "valid" : "invalid") << Qt::endl;
     if(active || !validateIndex(index)) return false;
     position = index;
     return startFromHere();
@@ -92,6 +92,7 @@ bool EventSequence::startFromHere()
 bool EventSequence::proceed()
 {
     if(!active || !validateIndex(position)) return false;
+    qDebug() << "In proceed functionn for EventSequencee";
     if(!queue[position]->isUntimed())
     {
         timer.setSingleShot(true);
@@ -104,6 +105,7 @@ bool EventSequence::proceed()
 bool EventSequence::startFromBeginning()
 {
     // qDebug() << "Starting sequence" << Qt::endl;
+    qDebug() << "Event sequence starting from beginning";
     return startFrom(0);
 }
 
@@ -116,6 +118,7 @@ bool EventSequence::validateIndex(int index) const
 // SLOT
 void EventSequence::start()
 {
+    qDebug() << "Event sequence starting";
     if(!active) startFromBeginning();
 }
 

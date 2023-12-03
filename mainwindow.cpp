@@ -53,7 +53,10 @@ MainWindow::MainWindow(QWidget *parent)
     ecgModule = new aedModel::ModuleECGAssessment(LCDDisplay);
     cprHelpModule = new aedModel::ModuleCPRHelp();
     shockModule = new aedModel::ModuleShock();
+    selfTestModule = new aedModel::ModuleSelfTest();
+    startupAdviceModule = new aedModel::ModuleStartupAdvice();
 
+    // 2. CONNECT GUI BUTTONS TO MODULES (AND VICE VERSA)
     // Connecting GUI buttons to ecg module
     connect(ui->beginECGButton, SIGNAL(pressed()), ecgModule, SLOT(startAssessment()));
     connect(ui->stopECGButton, SIGNAL(pressed()), ecgModule, SLOT(endAssessment()));
@@ -107,13 +110,9 @@ MainWindow::MainWindow(QWidget *parent)
         disconnect(&shockButtonFlashTimer, &QTimer::timeout, this, &MainWindow::toggleShockButtonFlash);
         ui->shockButton->setStyleSheet(shockUnlitStyle);
     }); // Makes the Shock Button stop flashing. Checked- working
+    connect(shockModule, SIGNAL(signalShockDelivered(int)), LCDDisplay, SLOT(setShockCounter(int)));
 
 
-
-
-
-
-    // 2. CONNECT GUI BUTTONS TO MODULES (AND VICE VERSA)
 
     // 3. CONNECT GUI ELEMENTS TO AED (AND VICE VERSA)
     connect(ui->powerButton, SIGNAL(pressed()), aed, SLOT(togglePowerButton()));
@@ -123,19 +122,37 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->attachedPadsButton, &QRadioButton::clicked, [=]() {aed->attachPads(true);} ); // checked- working
     connect(ui->detachedPadsButton, &QRadioButton::clicked, [=]() {aed->attachPads(false);} ); // checked- working
     connect(ui->rechargeBatteryButton, SIGNAL(pressed()), aed, SLOT(changeBatteries()));
-    connect(aed, &aedModel::AED::signalUserPrompt, ui->LCDPrompt, [this](QString msg) {ui->LCDPrompt->setText(msg); }); // checked- working, I called a dummy AED method which emitted signalUserPrompt("dumbo")
-    connect(aed, &aedModel::AED::signalStartLampStandback, ui->lamp_Analysing, &aedGui::LampWidget::startFlash);
-    connect(aed, &aedModel::AED::signalStopLampStandback, ui->lamp_Analysing, &aedGui::LampWidget::stopFlash);
-    connect(aed, &aedModel::AED::signalStartLampCPR, ui->lamp_CPR, &aedGui::LampWidget::startFlash);
-    connect(aed, &aedModel::AED::signalStopLampCPR, ui->lamp_CPR, &aedGui::LampWidget::stopFlash);
+    connect(aed, SIGNAL(signalUserPrompt(QString)), LCDDisplay, SLOT(setPromptLabel(QString))); // checked- working
+    // connect(aed, &aedModel::AED::signalUserPrompt, ui->LCDPrompt, [this](QString msg) {ui->LCDPrompt->setText(msg); }); // checked- working, I called a dummy AED method which emitted signalUserPrompt("dumbo")
+    connect(aed, &aedModel::AED::signalStartLampStandback, ui->lamp_Analysing, &aedGui::LampWidget::startFlash); // checked- working
+    connect(aed, &aedModel::AED::signalStopLampStandback, ui->lamp_Analysing, &aedGui::LampWidget::stopFlash); // checked- working
+    connect(aed, &aedModel::AED::signalStartLampCPR, ui->lamp_CPR, &aedGui::LampWidget::startFlash); // checked- working
+    connect(aed, &aedModel::AED::signalStopLampCPR, ui->lamp_CPR, &aedGui::LampWidget::stopFlash); // checked- working
+    connect(aed, &aedModel::AED::signalStartLampECG, ui->lamp_Analysing, &aedGui::LampWidget::startFlash); // checked- working
+    connect(aed, &aedModel::AED::signalStopLampECG, ui->lamp_Analysing, &aedGui::LampWidget::stopFlash); // checked- working
+    connect(aed, &aedModel::AED::signalBatteryChanged, ui->batteryPercentLabel, [this](double newBatt) {ui->batteryPercentLabel->setText(QString("%1").arg((int) (newBatt * 100))); }); // checked- working
+    connect(aed, &aedModel::AED::signalStartTest, [this](aedModel::AED*) {LCDDisplay->startLCD();} ); // checked- working
+    connect(aed, SIGNAL(signalPowerOff()), LCDDisplay, SLOT(endLCD()));
+
+    QString indicatorPassStyle = "border-image: url(:/selfTest/Passed.svg);\nbackground-color: rgba(0,0,0,0)";
+    QString indicatorFailStyle = "border-image: url(:/selfTest/Failed.svg);\nbackground-color: rgba(0,0,0,0)";
+    QString indicatorOffStyle = "border-image: url(:/selfTest/Off.svg);\nbackground-color: rgba(0,0,0,0)";
+    connect(aed, &aedModel::AED::signalDisplayPassTest, ui->selfTestIndicator, [=]() { ui->selfTestIndicator->setStyleSheet(indicatorPassStyle); });
+    connect(aed, &aedModel::AED::signalUnitFailed, ui->selfTestIndicator, [=]() { ui->selfTestIndicator->setStyleSheet(indicatorFailStyle); });
+    connect(aed, &aedModel::AED::signalPowerOff, ui->selfTestIndicator, [=]() { ui->selfTestIndicator->setStyleSheet(indicatorOffStyle); });
 
 
-    aed->dummy();
-    cprHelpModule->dummy();
-    shockModule->dummy();
+//    aed->dummy();
+//    cprHelpModule->dummy();
+//    shockModule->dummy();
 
 
     // 4. ADD MODULES TO AED
+    aed->addModuleSelfTest(selfTestModule);
+    aed->addModuleStartupAdvice(startupAdviceModule);
+    aed->addModuleECG(ecgModule);
+    aed->addModuleShock(shockModule);
+    aed->addModuleCPR(cprHelpModule);
 
 
 

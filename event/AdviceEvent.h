@@ -29,7 +29,7 @@ namespace event
             virtual void abort() override;
 
         signals:
-            void sendUserPrompt(const QString & prompt);
+            void signalUserPrompt(const QString & prompt);
 
     };
 

@@ -14,6 +14,7 @@ void AED::togglePowerButton()
 {
     if (aedState == OFF) // If aed is OFF turned it on
     {
+        qDebug() << "Toggling power button on";
         aedState = SELF_TEST;
         emit signalStartTest(this);
     }
@@ -137,6 +138,7 @@ void AED::changeBatteries()
 
 void AED::selfTestResult(ModuleSelfTest::testResult_t result)
 {
+    qDebug() << "AED has received notice of passing self test";
     switch(result)
     {
         case ModuleSelfTest::OK:

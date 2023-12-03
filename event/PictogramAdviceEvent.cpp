@@ -32,6 +32,7 @@ void PictogramAdviceEvent::releaseLampWidget(aedGui::LampWidget * widget)
 
 void PictogramAdviceEvent::enter()
 {
+    qDebug() << "Entering pictogram advice event";
     emit signalLampFlash();
     QDebug debug = qDebug().noquote().nospace();
     debug
@@ -42,7 +43,7 @@ void PictogramAdviceEvent::enter()
           << ")"
           << "   :   The light should now be FLASHING."
           << Qt::endl;
-    emit sendUserPrompt(prompt);
+    emit signalUserPrompt(prompt);
     SequencedEvent::enter();
 }
 

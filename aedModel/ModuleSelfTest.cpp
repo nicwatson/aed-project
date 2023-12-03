@@ -15,6 +15,7 @@ ModuleSelfTest::ModuleSelfTest()
 
 void ModuleSelfTest::reset()
 {
+    qDebug() << "Self test module is being reset";
     active = false;
     result = FAIL_OTHER;
 }
@@ -22,6 +23,7 @@ void ModuleSelfTest::reset()
 // SLOT
 void ModuleSelfTest::startSelfTest(AED * unit)
 {
+    qDebug() << "Start self test";
     active = true;
     if(FORCE_FAIL)
     {
@@ -37,6 +39,7 @@ void ModuleSelfTest::startSelfTest(AED * unit)
     }
     else
     {
+        qDebug() << "Result OK, starting timer";
         result = OK;
     }
     timer.start();  // Simulate short delay before reporting test result
@@ -54,6 +57,7 @@ void ModuleSelfTest::abortSelfTest()
 // SLOT
 void ModuleSelfTest::finishSelfTest()
 {
+    qDebug() << "Self test finished";
     emit signalResult(result);
     reset();
 }

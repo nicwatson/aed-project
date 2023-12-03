@@ -42,6 +42,7 @@ void LCDDisplay::setLCDDisplayVisible(bool visible)
 
 void LCDDisplay::startLCD()
 {
+    qDebug() << "Starting LCD";
     // If LCD Display is already on, don't turn it on again
     if (active) return;
 
@@ -66,6 +67,7 @@ void LCDDisplay::startLCD()
 
 void LCDDisplay::endLCD()
 {
+    qDebug() << "Ending LCD";
     // If LCD Display is already off, don't turn it off again
     if (!active) return;
 

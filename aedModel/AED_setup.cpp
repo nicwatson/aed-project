@@ -26,8 +26,9 @@ AED::~AED()
 bool AED::addModuleSelfTest(ModuleSelfTest * module)
 {
     if(module == nullptr) return false;
-    connect(module, SIGNAL(signalResult(ModuleSelfTest::testResult_t)), this, SLOT(selfTestResult(ModuleSelfTest::testResult_t)));
-    connect(this, SIGNAL(signalStartTest(AED *)), module, SLOT(doSelfTest(AED *)));
+    connect(module, &aedModel::ModuleSelfTest::signalResult, this, &aedModel::AED::selfTestResult);
+    // connect(module, SIGNAL(signalResult(ModuleSelfTest::testResult_t)), this, SLOT(selfTestResult(ModuleSelfTest::testResult_t)));
+    connect(this, SIGNAL(signalStartTest(AED *)), module, SLOT(startSelfTest(AED *)));
     connect(this, SIGNAL(signalAbortSelfTest()), module, SLOT(abortSelfTest()));
     connect(this, SIGNAL(signalAbortAll()), module, SLOT(abortSelfTest()));
     return true;
@@ -38,7 +39,8 @@ bool AED::addModuleStartupAdvice(ModuleStartupAdvice * module)
 
     if(module == nullptr) return false;
     connect(module, SIGNAL(signalUserPrompt(const QString &)), this, SLOT(userPrompt(const QString &)));
-    connect(this, SIGNAL(signalStartupAdvice(AED::cableState_t)), module, SLOT(startAdvice(AED::cableState_t)));
+    connect(this, &aedModel::AED::signalStartupAdvice, module, &aedModel::ModuleStartupAdvice::startAdvice);
+//    connect(this, SIGNAL(signalStartupAdvice(AED::cableState_t)), module, SLOT(startAdvice(AED::cableState_t)));
     connect(this, SIGNAL(signalPadsAttached()), module, SLOT(stop()));
     connect(this, SIGNAL(signalAbortStartupAdvice()), module, SLOT(stop()));
     connect(this, SIGNAL(signalAbortAll()), module, SLOT(stop()));

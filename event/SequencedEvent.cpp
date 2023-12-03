@@ -27,6 +27,7 @@ void SequencedEvent::exit()
 
 void SequencedEvent::enter()
 {
+    qDebug() << "Entering sequencedevent";
     if(active) return;
     active = true;
     emit started(this);

@@ -73,6 +73,7 @@ void ModuleStartupAdvice::userPrompt(const QString & prompt)
 // SLOT
 void ModuleStartupAdvice::startAdvice(AED::cableState_t cable)
 {
+    qDebug() << "Startadvice slot called on sModuleStartupPAdvice";
     if(cable == AED::UNPLUGGED) return;
     addBefore(new event::AdviceEvent("Msg: Unit OK", DURATION_UNIT_OK, P_UNIT_OK + QString(" / ") + (cable == AED::PAD_ADULT ? P_PAD_ADULT : P_PAD_CHILD)), 0);
     start();

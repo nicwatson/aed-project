@@ -10,6 +10,7 @@ AdviceEvent::AdviceEvent(const QString & name, int timerInterval, const QString 
 
 void AdviceEvent::enter()
 {
+    qDebug() << "Entering advice event";
     QDebug debug = qDebug().noquote().nospace();
     debug
           << "[DEBUG] Starting advice stage: \""
@@ -18,7 +19,7 @@ void AdviceEvent::enter()
           << QString::number(id)
           << ")"
           << Qt::endl;
-    emit sendUserPrompt(prompt);
+    emit signalUserPrompt(prompt);
     SequencedEvent::enter();
 }
 

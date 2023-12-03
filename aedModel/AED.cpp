@@ -18,6 +18,7 @@ void AED::doSelfTest()
 
 void AED::doStartupAdvice()
 {
+    qDebug() << "Starting startup advice by AED emitting signal to ModuleStartupPAdvice";
     emit signalStartupAdvice(cableState);
 }
 
@@ -51,6 +52,7 @@ void AED::changeState(state_t newState)
 
 bool AED::changeStateSafe(state_t newState)
 {
+    qDebug() << QString("Changing state to %1").arg(newState);
     bool result = legalStateChange(newState);
     if(result) changeState(newState);
     return result;

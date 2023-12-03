@@ -40,7 +40,10 @@ namespace aedModel
             int calcShockEnergy(bool childPads);
             void dummy() {
                 emit signalCharged();
-                QTimer::singleShot(10000, this, [=]() {emit signalAborted();});
+                QTimer::singleShot(10000, this, [=]() {
+                    emit signalAborted();
+                    emit signalShockDelivered(4);
+                });
             }
 
         private:
@@ -90,7 +93,7 @@ namespace aedModel
 
             void signalDone();
 
-            // TODO This should connect to the LCD to update the shock count.
+            // COMPLETE This should connect to the LCD to update the shock count.
             // Not sure if it can connect directly to the QLabel. The LCD may need some intermediate slot
             // to convert the number to a string?
             // This should also stop the shock button from flashing.

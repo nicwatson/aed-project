@@ -66,7 +66,18 @@ namespace aedModel
             bool addModuleECG(ModuleECGAssessment *);
             bool addModuleShock(ModuleShock *);
             bool addModuleCPR(ModuleCPRHelp *);
-            void dummy() {emit signalUserPrompt("dumbo");}
+            void dummy() {
+
+                emit signalBatteryChanged(0.255);
+                emit signalStartLampStandback();
+                emit signalStartLampCPR();
+
+                QTimer::singleShot(5000, this, [=]() {
+                    emit signalUserPrompt("dumbodore");
+                    emit signalStopLampStandback();
+                    emit signalStopLampCPR();
+                });
+            }
 
         private:
 
@@ -151,10 +162,10 @@ namespace aedModel
         signals:
             void signalStartTest(AED *);
 
-            // TODO Connect this to some mainwindow/GUI logic that will make the green checkmark show
+            // COMPLETE Connect this to some mainwindow/GUI logic that will make the green checkmark show
             void signalDisplayPassTest();
 
-            // TODO connect this to some mainwindow/GUI logic that will make the red x show
+            // COMPLETE connect this to some mainwindow/GUI logic that will make the red x show
             void signalUnitFailed();
 
             void signalStartupAdvice(cableState_t);
@@ -177,21 +188,26 @@ namespace aedModel
             // Stop anything that is happening in any module
             void signalAbortAll();
 
-            // PROBABLY COMPLETE Connect thiLCDo the main prompt QLabel (in the LCD) to update its text with the string
+            // COMPLETE Connect thiLCDo the main prompt QLabel (in the LCD) to update its text with the string
             // Any strings sent to AED::userPrompt() will get forwarded out again on this signal
             void signalUserPrompt(const QString & prompt); // Update LCD
 
-            // TODO This needs to update the battery percentage QLabel.
+            // COMPLETE This needs to update the battery percentage QLabel.
             // Might be necessary to add a slot to MainWindLCDand connect this to it. That slot would take the double,
             // convert it to an int from 0 to 100, and then embed it in a string so that it can be sent to the QLabel.
             void signalBatteryChanged(double newBatt); // Update LCD
 
-            // TODO connect these to the startFlash() and stopFlash() slots for the Lamp Widgets being used for the
+            // COMPLETE connect these to the startFlash() and stopFlash() slots for the Lamp Widgets being used for the
             // "stand back / ECG / shock" and "CPR" pictograms.
             void signalStartLampStandback();        // startFlash
             void signalStopLampStandback();         // stopFlash
             void signalStartLampCPR();              // startFlash
             void signalStopLampCPR();               // stopFlash
+            // TODO? Not sure if we need these
+            void signalStartLampECG();               // startFlash
+            void signalStopLampECG();                // stopFlash
+            void signalStartLampShock();        // startFlash
+            void signalStopLampShock();         // stopFlash
 
             void signalPowerOff();
     };
