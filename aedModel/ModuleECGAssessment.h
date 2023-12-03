@@ -13,7 +13,7 @@
 #include "AED.h"
 
 // TODO not mission-critical but if there's time:
-// + Instead of using lcdDisplay->setPrompt(), use signalUserPrompt(const QString & prompt)
+// + Instead of using lcdDisplay->setPromptLabel(), use signalUserPrompt(const QString & prompt)
 //  ++ I already added that signal to this class, and AED's setup will handle connecting it to a slot.
 //  ++ This is for text prompts only, for consistency with the other four Module classes.
 //  ++ Continue to use the lcdDisplay pointer directly for updating the plots to display the ECG graph

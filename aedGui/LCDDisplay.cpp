@@ -6,9 +6,9 @@ LCDDisplay::LCDDisplay(const LCDDisplayParams& params)
     : active(false),
         lcdDisplayFrame(params.lcdDisplayFrame),
         ecgGraph(params.ecgGraph), 
-        prompt(params.prompt), 
-        help(params.help), 
-        shocks(params.shocks), 
+        promptLabel(params.promptLabel), 
+        helpLabel(params.helpLabel), 
+        shockCounter(params.shockCounter), 
         timer(params.timer), 
         compressionDepthBar(params.compressionDepthBar),
         elapsedTime(-1) // Allows startLCD() to set timer to '00:00'
@@ -27,6 +27,7 @@ LCDDisplay::~LCDDisplay() {}
 
 void LCDDisplay::setLCDDisplayVisible(bool visible)
 {
+    // Sets visibility of all children of lcdDisplayFrame
     const QObjectList& children = lcdDisplayFrame->children();
     for (QObject* child : children) {
         QWidget* childWidget = qobject_cast<QWidget*>(child);
@@ -35,6 +36,7 @@ void LCDDisplay::setLCDDisplayVisible(bool visible)
         }
     }
 
+    // Sets background color of lcdDisplayFrame depending on if visible or not (on or off)
     visible ? lcdDisplayFrame->setStyleSheet(LCD_ON_STYLE) : lcdDisplayFrame->setStyleSheet(LCD_OFF_STYLE);
 }
 
@@ -51,12 +53,12 @@ void LCDDisplay::startLCD()
         setLCDDisplayVisible(true);
     }
 
-    setShock(0);  // Sets shocks to 0
+    setShockCounter(0);  // Sets shocks to 0
     updateTimer();    // Sets timer to be '00:00'. Elapsed time is 0 from initialization, or endLCD()
     clearGraphData();   // Clears graph data
-    setPrompt("");    // Clears prompt message
-    setHelp("");  // Clears help message
-    setCompressionDepth(0);   // Sets compression depth to be 0
+    setPromptLabel("");    // Clears prompt message
+    setHelpLabel("");  // Clears help message
+    setCompressionDepthBar(0);   // Sets compression depth to be 0
 
     // Starts the timer
     runningTimer->start(1000);
@@ -83,10 +85,10 @@ void LCDDisplay::setGraphData(QVector<double>* xDataToCopy, QVector<double>* yDa
     graphYData = *yDataToCopy;
 }
 
-void LCDDisplay::setCompressionDepth(int depth)
+void LCDDisplay::setCompressionDepthBar(int depth)
 {
     if (depth >= 0 && depth <= CPR_ADULT_DEPTH_MAX) {
-        // Convert depth in 1/10th inch to percentage for QProgressBar
+        // Convert depth in 1/10th inches to percentage for QProgressBar
         int depthPercent = (int) (depth * 100 / CPR_ADULT_DEPTH_MAX);
 
         compressionDepthBar->setValue(depthPercent);
@@ -136,12 +138,12 @@ void LCDDisplay::updateTimer()
     }
 }
 
-void LCDDisplay::setShock(int shockCount)
+void LCDDisplay::setShockCounter(int shockCount)
 {
-    // Format shocks to be '00'
+    // Format shock counter to be '00'
     QString shocksString = QString("%1").arg(shockCount, 2, 10, QChar('0'));
 
-    if (shocks != nullptr) {
-        shocks->setText(shocksString);
+    if (shockCounter != nullptr) {
+        shockCounter->setText(shocksString);
     }
 }

@@ -41,9 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
     aedGui::LCDDisplayParams params = {
         .lcdDisplayFrame = ui->LCDDisplay,
         .ecgGraph = ui->ecgGraph,
-        .prompt = ui->LCDPrompt,
-        .help = ui->LCDHelp,
-        .shocks = ui->LCDShocks,
+        .promptLabel = ui->LCDPrompt,
+        .helpLabel = ui->LCDHelp,
+        .shockCounter = ui->LCDShocks,
         .timer = ui->LCDTimer,
         .compressionDepthBar = ui->compressionDepthBar
     };
