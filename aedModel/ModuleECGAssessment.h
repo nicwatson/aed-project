@@ -71,7 +71,7 @@ namespace aedModel {
         QVector<double> nonShockableXData;
         QVector<double> nonShockableYData;
 
-        void readCSVFile(QString fileDirectory, QString fileName);
+        void readCSVFile(QString fileName);
         void sendShockableSignal();
         void sendNonShockableSignal();
 
