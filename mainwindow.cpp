@@ -37,19 +37,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     repaint();
 
-
-    aedGui::LCDDisplayParams params = {
-        .lcdDisplayFrame = ui->LCDDisplay,
-        .ecgGraph = ui->ecgGraph,
-        .promptLabel = ui->LCDPrompt,
-        .helpLabel = ui->LCDHelp,
-        .shockCounter = ui->LCDShocks,
-        .timer = ui->LCDTimer,
-        .compressionDepthBar = ui->compressionDepthBar
-    };
     // 1. INSTNATIATE MODULES
     // Instantiating LCDDisplay and all modules
-    LCDDisplay = new aedGui::LCDDisplay(params);
+    LCDDisplay = new aedGui::LCDDisplay(ui->ecgGraph, ui->LCDPrompt);
     ecgModule = new aedModel::ModuleECGAssessment(LCDDisplay);
     cprHelpModule = new aedModel::ModuleCPRHelp();
     shockModule = new aedModel::ModuleShock();

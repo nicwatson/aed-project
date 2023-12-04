@@ -294,7 +294,7 @@ background-color: rgba(0,0,0,0);</string>
        <number>100</number>
       </property>
       <property name="value">
-       <number>0</number>
+       <number>10</number>
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
