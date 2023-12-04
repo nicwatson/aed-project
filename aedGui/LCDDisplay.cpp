@@ -1,4 +1,5 @@
 #include "LCDDisplay.h"
+#include "aedGui/strings.h"
 
 using namespace aedGui;
 
@@ -13,6 +14,11 @@ LCDDisplay::LCDDisplay(const LCDDisplayParams& params)
         compressionDepthBar(params.compressionDepthBar),
         elapsedTime(-1) // Allows startLCD() to set timer to '00:00'
 {
+
+    // QProgressBar can be set to an arbitrary min/max integer scale
+    compressionDepthBar->setMaximum(CPR_ADULT_DEPTH_MAX + 1);
+    compressionDepthBar->setMinimum(0);
+
     // initializes running timer for AED
     runningTimer = new QTimer(this);
     connect(runningTimer, SIGNAL(timeout()), this, SLOT(updateTimer()));
@@ -57,8 +63,8 @@ void LCDDisplay::startLCD()
     setShockCounter(0);  // Sets shocks to 0
     updateTimer();    // Sets timer to be '00:00'. Elapsed time is 0 from initialization, or endLCD()
     clearGraphData();   // Clears graph data
-    setPromptLabel("");    // Clears prompt message
-    setHelpLabel("");  // Clears help message
+    // setPromptLabel("");    // Clears prompt message      // Delegate this to AED so that it can initialize prompts before LCD has fully started
+    setHelpLabel(P_BLANK);  // Clears help message
     setCompressionDepthBar(0);   // Sets compression depth to be 0
 
     // Starts the timer

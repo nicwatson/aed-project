@@ -11,23 +11,6 @@
 #include <QTimer>
 #include "CPRHelpStrategy.h"
 
-// CONSTANTS
-
-// Time interval (ms) that CPR should last for an adult patient (happens to be the same as for a child patient)
-#define CPR_TIME_ADULT CPR_TIME_COMMON
-
-// Recommended minimum depth of compressions for adult patient (1/10th inches)
-#define CPR_ADULT_DEPTH_MIN 20
-
-// Recommended maximum depth of compressions for adult patient (1/10th inches)
-#define CPR_ADULT_DEPTH_MAX 24
-
-// How long should we wait for compressions, before displaying "CONTINUE CPR" prompt?
-#define CPR_DELAY_TOLERANCE 4000
-
-// CPM thressholds for giving "go slightly faster" or "go faster" prompts
-#define CPR_SLOW_THRESHHOLD 95
-#define CPR_VERYSLOW_THRESHHOLD 80
 
 namespace aedModel
 {
@@ -37,6 +20,8 @@ namespace aedModel
 
         public:
             explicit CPRHelpAdult();
+
+        bool getCompressionsActive() const { return compressionsActive; }
 
         protected:
             virtual void cleanup() override;
@@ -55,6 +40,9 @@ namespace aedModel
             // Flag determines if the user was previously issued a "PUSH HARDER" prompt.
             // The "GOOD COMPRESSIONS" prompt is contingent on having received "PUSH HARDER" previously.
             bool pushHarder;
+
+            // Flag determines if the "Continue CPR" prompt is currently active
+            bool continueCPR;
 
             // This timer will be reset every time a compression occurs. If it ever expires, the AED will
             // issue the "CONTINUE CPR" prompt.

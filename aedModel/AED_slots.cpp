@@ -1,7 +1,7 @@
 // AED class - slot function defs
 
 #include "AED.h"
-#include "aedGui/prompts.h"
+#include "aedGui/strings.h"
 
 using namespace aedModel;
 
@@ -15,8 +15,7 @@ void AED::togglePowerButton()
     if (aedState == OFF) // If aed is OFF turned it on
     {
         qDebug() << "Toggling power button on";
-        aedState = SELF_TEST;
-        emit signalStartTest(this);
+        doSelfTest();
     }
     else // If aed is in one of the 'on' states turn it off
     {
@@ -24,7 +23,7 @@ void AED::togglePowerButton()
         stopActivity();
         clearPrompt();
         emit signalPowerOff();
-        aedState = OFF;
+        changeStateSafe(OFF);
     }
 }
 
@@ -143,7 +142,6 @@ void AED::selfTestResult(ModuleSelfTest::testResult_t result)
     {
         case ModuleSelfTest::OK:
             emit signalDisplayPassTest();
-            changeStateSafe(STARTUP_ADVICE);
             doStartupAdvice();
             break;
         case ModuleSelfTest::FAIL_BATTERY:
@@ -186,7 +184,7 @@ void AED::ecgResult(bool shockable)
         // Introduce a short delay to give time for the "NOT SHOCKABLE" message to be read
         // Before it gets replaced by "START CPR"
         timer.setSingleShot(true);
-        timer.setInterval(TIMER_STANDARD_DELAY);
+        timer.setInterval(AED_TIMER_DEFAULT);
         connect(&timer, SIGNAL(timeout()), this, SLOT(startCPR()));
         timer.start();
     }
@@ -197,14 +195,14 @@ void AED::shockDelivered()
     // Introduce a short delay to give time for the "SHOCK DELIVERED" message to be read
     // Before it gets replaced by "START CPR"
     timer.setSingleShot(true);
-    timer.setInterval(TIMER_STANDARD_DELAY);
+    timer.setInterval(AED_TIMER_DEFAULT);
     connect(&timer, SIGNAL(timeout()), this, SLOT(startCPR()));
     timer.start();
 }
 
-
 void AED::startCPR()
 {
+    emit signalStopLampStandback();
     disconnect(&timer, SIGNAL(timeout()), this, SLOT(startCPR()));
     doStartCPR();
 }
@@ -218,12 +216,10 @@ void AED::cprStopped()
         return;
     }
 
-    changeStateSafe(ECG_ASSESS);
-
     // Introduce a short delay to give time for the "STOP CPR" prompt to be read
     // Before it gets replaced by "DON'T TOUCH PATIENT"
     timer.setSingleShot(true);
-    timer.setInterval(TIMER_STANDARD_DELAY);
+    timer.setInterval(AED_TIMER_DEFAULT);
     connect(&timer, SIGNAL(timeout()), this, SLOT(restartECG()));
     timer.start();
 }

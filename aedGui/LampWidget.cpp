@@ -2,12 +2,12 @@
 
 using namespace aedGui;
 
-LampWidget::LampWidget(QWidget * parent, const QString & styleUnlit, const QString & styleLit)
-    : QFrame(parent), lit(false), flashing(false), styleUnlit(styleUnlit), styleLit(styleLit)
+LampWidget::LampWidget(QWidget * parent, const QString & styleUnlit, const QString & styleLit, int flashInterval)
+    : QFrame(parent), lit(false), flashing(false), styleUnlit(styleUnlit), styleLit(styleLit), flashInterval(flashInterval)
 {
     flashTimer.setSingleShot(false);
-    flashTimer.setInterval(FLASH_TIME);
-    connect(&flashTimer, SIGNAL(timeout()), this, SLOT(flashTimerExpired()));
+    flashTimer.setInterval(flashInterval);
+    connect(&flashTimer, &QTimer::timeout, this, &aedGui::LampWidget::flashTimerExpired);
 
     setStyleSheet(styleUnlit);
     setVisible(true);
@@ -15,7 +15,7 @@ LampWidget::LampWidget(QWidget * parent, const QString & styleUnlit, const QStri
 }
 
 LampWidget::LampWidget(QWidget * parent)
-    : LampWidget(parent, "","")
+    : LampWidget(parent, "","", 200)
 {
 
 }

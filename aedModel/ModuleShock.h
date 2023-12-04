@@ -10,9 +10,7 @@
 #include <QString>
 #include "AED.h"
 
-#define BATT_RATIO 1.0/700.0
-#define CHARGE_TIME 3000
-#define STOP_TIME 1500
+
 
 // TODO there are GUI widget connections needed for this class: Look for "TODO" comments below
 // SLOT shockButtonPressed

@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
+        <file>ecgs/non_shockable.csv</file>
+        <file>ecgs/v_fib.csv</file>
+        <file>ecgs/v_tachy.csv</file>
         <file>pictograms/01_CheckResponsiveness.svg</file>
         <file>pictograms/02_CallForHelp.svg</file>
         <file>pictograms/03_AttachPads.svg</file>
@@ -13,8 +16,5 @@
         <file>selfTest/Passed.svg</file>
         <file>selfTest/Failed.svg</file>
         <file>selfTest/Off.svg</file>
-        <file>ecgs/non_shockable.csv</file>
-        <file>ecgs/v_fib.csv</file>
-        <file>ecgs/v_tachy.png</file>
     </qresource>
 </RCC>

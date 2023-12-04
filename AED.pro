@@ -9,7 +9,9 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    aedGui/CompressionsToggleButton.cpp \
     aedGui/LCDDisplay.cpp \
+    aedGui/LampButton.cpp \
     aedGui/LampWidget.cpp \
     aedModel/AED.cpp \
     aedModel/AED_setup.cpp \
@@ -31,9 +33,12 @@ SOURCES += \
     qcustomplot.cpp
 
 HEADERS += \
+    aedGui/CompressionsToggleButton.h \
     aedGui/LCDDisplay.h \
+    aedGui/LampButton.h \
     aedGui/LampWidget.h \
-    aedGui/prompts.h \
+    aedGui/strings.h \
+    aedGui/styles.h \
     aedModel/AED.h \
     aedModel/CPRHelpAdult.h \
     aedModel/CPRHelpChild.h \
@@ -43,6 +48,7 @@ HEADERS += \
     aedModel/ModuleSelfTest.h \
     aedModel/ModuleShock.h \
     aedModel/ModuleStartupAdvice.h \
+    aedconst.h \
     event/AdviceEvent.h \
     event/EventSequence.h \
     event/PictogramAdviceEvent.h \
@@ -60,11 +66,3 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     assets/aed.qrc
-
-DISTFILES += \
-    assets/ecgs/non_shockable.csv \
-    assets/ecgs/non_shockable.png \
-    assets/ecgs/v_fib.csv \
-    assets/ecgs/v_fib.png \
-    assets/ecgs/v_tachy.csv \
-    assets/ecgs/v_tachy.png

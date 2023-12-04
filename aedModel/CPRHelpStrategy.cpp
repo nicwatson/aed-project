@@ -1,5 +1,5 @@
 #include "CPRHelpStrategy.h"
-#include "aedGui/prompts.h"
+#include "aedGui/strings.h"
 
 using namespace aedModel;
 
@@ -31,10 +31,10 @@ void CPRHelpStrategy::reset()
 // SLOT
 void CPRHelpStrategy::start()
 {
+    qDebug() << "CPRHelpStrategy now starting." << Qt::endl;
     if(eventActive) return;
     eventActive = true;
     timer.start();
-    emit signalCPRStarted();
     emit signalUserPrompt(P_CPR_START);
 }
 
@@ -43,14 +43,12 @@ void CPRHelpStrategy::abort()
 {
     if(!eventActive) return;
     reset();
-    emit signalCPRAborted();
 }
 
 // SLOT
 void CPRHelpStrategy::exit()
 {
     if(!eventActive) return;
-    reset();
-    emit signalCPREnded();
+    emit signalCPRStrategyEnded();
     emit signalUserPrompt(P_CPR_STOP);
 }

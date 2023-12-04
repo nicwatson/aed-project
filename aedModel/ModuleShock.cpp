@@ -1,5 +1,5 @@
 #include "ModuleShock.h"
-#include "aedGui/prompts.h"
+#include "aedGui/strings.h"
 
 using namespace aedModel;
 

@@ -16,6 +16,7 @@
 #ifndef MODULECPRHELP_H
 #define MODULECPRHELP_H
 
+#include <QDebug>
 #include "AED.h"
 #include "CPRHelpStrategy.h"
 
@@ -113,8 +114,9 @@ namespace aedModel
             // the LCD, simulating the idea that it is sensing compression depth directly from user action
             void signalDisplayCompressionDepth(int depth);      // Info from Strategy, outgoing to GUI
 
-            void signalCPRComplete(); // Slot is cprStopped() on AED class
-            void signalCPRAborted(); // extraneous
+            void signalCPRStarted();  // (Unchecks and) enables GUI button toggleCompressionsButton
+            void signalCPRComplete(); // Slot is cprStopped() on AED class    ... Also unchecks and disables GUI button toggleCompressionsButton
+            void signalCPRAborted();  // Unchecks and disables GUI button toggleCompressionsButton
 
             void signalCompressionsStarted(); // Info from Strategy, incoming to GUI 'Start/Stop Compressions' toggle button
             void signalCompressionsStopped(); // Info from Strategy, incoming to GUI 'Start/Stop Compressions' toggle button

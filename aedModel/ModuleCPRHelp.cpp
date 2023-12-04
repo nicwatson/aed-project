@@ -14,7 +14,7 @@ ModuleCPRHelp::ModuleCPRHelp() : QObject(), strategy(nullptr), numStrategies(2),
     connect(strategyList[CPR_ADULT], SIGNAL(signalDisplayCompressionDepth(int)), this, SLOT(forwardCompressionDepth(int)));
     connect(strategyList[CPR_ADULT], SIGNAL(signalCompressionsStarted()), this, SLOT(compressionsStarted()));
     connect(strategyList[CPR_ADULT], SIGNAL(signalCompressionsStopped()), this, SLOT(compressionsStopped()));
-    connect(strategyList[CPR_ADULT], SIGNAL(signalCPREnded()), this, SLOT(cprCompleted()));
+    connect(strategyList[CPR_ADULT], SIGNAL(signalCPRStrategyEnded()), this, SLOT(cprCompleted()));
     strategyList[CPR_ADULT]->blockSignals(true);
 
     strategyList[CPR_CHILD] = new CPRHelpChild();
@@ -23,7 +23,7 @@ ModuleCPRHelp::ModuleCPRHelp() : QObject(), strategy(nullptr), numStrategies(2),
     connect(strategyList[CPR_CHILD], SIGNAL(signalDisplayCompressionDepth(int)), this, SLOT(forwardCompressionDepth(int)));
     connect(strategyList[CPR_CHILD], SIGNAL(signalCompressionsStarted()), this, SLOT(compressionsStarted()));
     connect(strategyList[CPR_CHILD], SIGNAL(signalCompressionsStopped()), this, SLOT(compressionsStopped()));
-    connect(strategyList[CPR_CHILD], SIGNAL(signalCPREnded()), this, SLOT(cprCompleted()));
+    connect(strategyList[CPR_CHILD], SIGNAL(signalCPRStrategyEnded()), this, SLOT(cprCompleted()));
     strategyList[CPR_CHILD]->blockSignals(true);
 }
 
@@ -40,7 +40,7 @@ ModuleCPRHelp::~ModuleCPRHelp()
     disconnect(strategyList[CPR_ADULT], SIGNAL(signalCompressionsStarted()), this, SLOT(compressionsStarted()));
     disconnect(strategyList[CPR_ADULT], SIGNAL(signalCompressionsStopped()), this, SLOT(compressionsStopped()));
     disconnect(strategyList[CPR_CHILD], SIGNAL(signalDisplayCompressionDepth(int)), this, SLOT(forwardCompressionDepth(int)));
-    disconnect(strategyList[CPR_CHILD], SIGNAL(signalCPREnded()), this, SLOT(cprCompleted()));
+    disconnect(strategyList[CPR_CHILD], SIGNAL(signalCPRStrategyEnded()), this, SLOT(cprCompleted()));
 
     for(int i = 0; i < numStrategies; i++)
     {
@@ -66,6 +66,8 @@ void ModuleCPRHelp::setStrategy(CPRHelpStrategy *strat)
 void ModuleCPRHelp::start(AED::cableState_t padType)
 {
     if(active) return;
+    active = true;
+
     if(padType == AED::UNPLUGGED) return;
 
     if(padType == AED::PAD_ADULT)
@@ -77,7 +79,12 @@ void ModuleCPRHelp::start(AED::cableState_t padType)
         setStrategy(strategyList[CPR_CHILD]);
     }
 
+    emit signalCPRStarted();
+
     strategy->blockSignals(false);
+
+    qDebug() << "ModuleCPRHelp in start(), now starting strategy..." << Qt::endl;
+
     strategy->start();
 }
 
@@ -85,8 +92,8 @@ void ModuleCPRHelp::reset()
 {
     strategy->reset();
     active = false;
-    this->strategy->blockSignals(true);
-    this->strategy = nullptr;
+    strategy->blockSignals(true);
+    strategy = nullptr;
 }
 
 void ModuleCPRHelp::cprCompleted()
@@ -131,27 +138,32 @@ void ModuleCPRHelp::updateCompressionRate(int cpm)
 
 void ModuleCPRHelp::toggleCompressions(bool start)
 {
+    qDebug() << "ModuleCPRHelp::toggleCompressions(" << (start ? "true" : "false") << ")" << Qt::endl;
     if(!active || strategy == nullptr) return;
     start ? startCompressions() : stopCompressions();
 }
 
 void ModuleCPRHelp::startCompressions()
 {
+    qDebug() << "ModuleCPRHelp::startCompressions()" << Qt::endl;
     strategy->startCompressions();
 }
 
 void ModuleCPRHelp::stopCompressions()
 {
+    qDebug() << "ModuleCPRHelp::stopCompressions()" << Qt::endl;
     strategy->stopCompressions();
 }
 
 void ModuleCPRHelp::compressionsStarted()
 {
+    qDebug() << "ModuleCPRHelp::compressionsStarted()" << Qt::endl;
     emit signalCompressionsStarted();
 }
 
 void ModuleCPRHelp::compressionsStopped()
 {
+    qDebug() << "ModuleCPRHelp::compressionsStopped()" << Qt::endl;
     emit signalCompressionsStopped();
 }
 

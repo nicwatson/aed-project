@@ -1,7 +1,7 @@
 // AED class - general function defs
 
 #include "AED.h"
-#include "aedGui/prompts.h"
+#include "aedGui/strings.h"
 
 using namespace aedModel;
 
@@ -13,23 +13,29 @@ using namespace aedModel;
 
 void AED::doSelfTest()
 {
+    qDebug() << "HELLO" << Qt::endl;
+    changeStateSafe(SELF_TEST);
+    signalUserPrompt(P_TESTING);
     emit signalStartTest(this);
 }
 
 void AED::doStartupAdvice()
 {
-    qDebug() << "Starting startup advice by AED emitting signal to ModuleStartupPAdvice";
+    qDebug() << "Starting startup advice by AED emitting signal to ModuleStartupdvice";
+    changeStateSafe(STARTUP_ADVICE);
     emit signalStartupAdvice(cableState);
 }
 
 void AED::doStartECG()
 {
+    changeStateSafe(ECG_ASSESS);
     emit signalStartLampStandback();
     emit signalStartECG();
 }
 
 void AED::doPrepShock()
 {
+    changeStateSafe(SHOCK);
     emit signalStopLampStandback();
     emit signalStartLampStandback();
     emit signalPrepShock(cableState == PAD_CHILD);
@@ -37,6 +43,7 @@ void AED::doPrepShock()
 
 void AED::doStartCPR()
 {
+    changeStateSafe(CPR);
     emit signalStartLampCPR();
     emit signalStartCPR(cableState);
 }
@@ -47,6 +54,7 @@ void AED::doStartCPR()
 
 void AED::changeState(state_t newState)
 {
+    qDebug() << "AED transitioning from state " << stateNames[aedState] << " to state " << stateNames[newState] << Qt::endl;
     aedState = newState;
 }
 
@@ -124,7 +132,7 @@ void AED::failAED()
 
 void AED::clearPrompt()
 {
-    userPrompt("");
+    userPrompt(P_BLANK);
 }
 
 void AED::stopActivity()

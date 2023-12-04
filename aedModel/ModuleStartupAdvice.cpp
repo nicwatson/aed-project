@@ -1,6 +1,6 @@
 #include "ModuleStartupAdvice.h"
 
-#include "aedGui/prompts.h"
+#include "aedGui/strings.h"
 #include "event/PictogramAdviceEvent.h"
 #include "AED.h"
 
@@ -8,10 +8,10 @@ using namespace aedModel;
 
 // DO NOT USE THIS CONSTRUCTOR
 // It's only here because QT's MOC requires it
-ModuleStartupAdvice::ModuleStartupAdvice() : event::EventSequence()
-{
+//ModuleStartupAdvice::ModuleStartupAdvice() : event::EventSequence()
+//{
 
-}
+//}
 
 ModuleStartupAdvice::ModuleStartupAdvice(aedGui::LampWidget * lamp_CheckResponsiveness, aedGui::LampWidget * lamp_CallHelp, aedGui::LampWidget * lamp_AttachPads)
     : event::EventSequence()

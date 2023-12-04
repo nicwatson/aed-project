@@ -9,8 +9,7 @@
 #include <QObject>
 #include <QTimer>
 
-#define TEST_TIME 1000
-#define BATTERY_THRESHHOLD 0.3
+
 
 // No direct connections needed between ModuleSelfTest and GUI widgets
 
@@ -48,7 +47,7 @@ namespace aedModel
         void finishSelfTest();   
 
     signals:
-        void signalResult(testResult_t);
+        void signalResult(ModuleSelfTest::testResult_t);
 
     };
 }

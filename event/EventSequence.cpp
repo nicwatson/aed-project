@@ -92,7 +92,7 @@ bool EventSequence::startFromHere()
 bool EventSequence::proceed()
 {
     if(!active || !validateIndex(position)) return false;
-    qDebug() << "In proceed functionn for EventSequencee";
+    qDebug() << "In proceed function for EventSequence";
     if(!queue[position]->isUntimed())
     {
         timer.setSingleShot(true);

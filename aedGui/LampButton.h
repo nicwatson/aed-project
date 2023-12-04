@@ -1,24 +1,25 @@
-#ifndef LAMPWIDGET_H
-#define LAMPWIDGET_H
+#ifndef LAMPBUTTON_H
+#define LAMPBUTTON_H
 
-#include <QWidget>
-#include <QFrame>
+#include <QObject>
+#include <QPushButton>
 #include <QTimer>
+
 
 namespace aedGui
 {
-    class LampWidget : public QFrame
+    class LampButton : public QPushButton
     {
         Q_OBJECT
 
         public:
 
-            // Use this constructor to get a LampWidget with blank style sheets. A LampWidget added in Qt Designer
+            // Use this constructor to get a LampButton with blank style sheets. A LampButton added in Qt Designer
             // will use this by default. Then use setStyleUnlit() and setStyleLit() to set style sheets.
-            explicit LampWidget(QWidget * parent);
+            explicit LampButton(QWidget * parent);
 
             // Use this constructor to make a LampWidget, passing in style sheet strings for the unlit and lit states.
-            explicit LampWidget(QWidget * parent, const QString & styleUnlit, const QString & styleLit, int flashInterval);
+            explicit LampButton(QWidget * parent, const QString & styleUnlit, const QString & styleLit, int flashInterval);
 
             // Basic getters/setters
             inline bool getLit() const { return lit; }
@@ -44,6 +45,7 @@ namespace aedGui
             int flashInterval;
             QTimer flashTimer;
 
+
         protected slots:
             void flashTimerExpired();
 
@@ -58,4 +60,4 @@ namespace aedGui
     };
 }
 
-#endif // LAMPWIDGET_H
+#endif // LAMPBUTTON_H

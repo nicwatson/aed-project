@@ -10,9 +10,6 @@
 
 #include "CPRHelpStrategy.h"
 
-// Time interval (ms) that CPR should last for a child patient (happens to be the same as for an adult patient)
-#define CPR_TIME_CHILD CPR_TIME_COMMON
-
 namespace aedModel
 {
     class CPRHelpChild : public CPRHelpStrategy

@@ -10,7 +10,7 @@ AdviceEvent::AdviceEvent(const QString & name, int timerInterval, const QString 
 
 void AdviceEvent::enter()
 {
-    qDebug() << "Entering advice event";
+    qDebug() << "Entering advice event: " << name << "    Lasts for: " << timerInterval;
     QDebug debug = qDebug().noquote().nospace();
     debug
           << "[DEBUG] Starting advice stage: \""

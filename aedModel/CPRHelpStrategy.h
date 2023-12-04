@@ -11,10 +11,9 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QDebug>
+#include "aedconst.h"
 
-#define CPR_TIME_COMMON 120000
-#define CPR_TARGET_MIN 95
-#define CPR_TOO_SLOW 80
 
 // No direct GUI connections needed here.
 // CPRHelpStrategy communicates with GUI through ModuleCPRHelp
@@ -51,9 +50,7 @@ namespace aedModel
             virtual void stopCompressions() = 0;
 
         signals:
-            void signalCPRStarted();
-            void signalCPRAborted();
-            void signalCPREnded();
+            void signalCPRStrategyEnded();
 
             // Normal LCD/voice prompt signal - use for CPR-related prompts specified in the Admin Guide
             // i.e. relating to compression depth as well as start/stop CPR.

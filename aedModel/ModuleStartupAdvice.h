@@ -14,11 +14,6 @@
 #include "aedGui/LampWidget.h"
 
 
-#define DURATION_UNIT_OK 3000
-#define DURATION_STAY_CALM 3000
-#define DURATION_CHECK_RESP 4000
-#define DURATION_CALL_HELP 4000
-
 // NOTE: This class establishes its connections to GUI elements by having them (the three blinking lights, LampWidgets) passed to its constructor.
 // The object will not keep the pointers to the lamp widgets - it just uses them to connect. MainWindow (or other client) is responsible for the
 // LampWidgets' lifecycles.
@@ -37,7 +32,7 @@ namespace aedModel
         public:
             // DO NOT USE THIS DEFAULT CONSTRUCTOR
             // It's only here because QT's MOC requires it
-            explicit ModuleStartupAdvice();
+            //explicit ModuleStartupAdvice();
 
             explicit ModuleStartupAdvice(aedGui::LampWidget * lamp_CheckResponsiveness, aedGui::LampWidget * lamp_CallHelp, aedGui::LampWidget * lamp_AttachPads);
             ~ModuleStartupAdvice();

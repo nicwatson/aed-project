@@ -21,12 +21,13 @@
 #include <QObject>
 #include <QString>
 #include <QDebug>
+#include "aedconst.h"
 #include "ModuleSelfTest.h"
 
 // This class needs direct connections to GUI elements. Look for "TODO" comments in this header file.
 // Change "TODO" to "COMPLETE" after code has been written to establish connection.
 
-#define TIMER_STANDARD_DELAY 2000
+
 
 namespace aedModel
 {
@@ -45,6 +46,8 @@ namespace aedModel
             // Enumeration type defs
             enum state_t { OFF, SELF_TEST, FAILURE, STARTUP_ADVICE, ECG_ASSESS, SHOCK, CPR };
             enum cableState_t { UNPLUGGED, PAD_ADULT, PAD_CHILD };
+
+            const QString stateNames[7] = { "OFF", "SELF_TEST", "FAILURE", "STARTUP_ADVICE", "ECG_ASSESS", "SHOCK", "CPR"};
 
             // Lifecycle
             explicit AED();
@@ -168,7 +171,7 @@ namespace aedModel
             // COMPLETE connect this to some mainwindow/GUI logic that will make the red x show
             void signalUnitFailed();
 
-            void signalStartupAdvice(cableState_t);
+            void signalStartupAdvice(AED::cableState_t);
             void signalPadsAttached();
             void signalStartECG();
             void signalCompleteECG();

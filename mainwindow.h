@@ -11,7 +11,8 @@
 #include "aedModel/AED.h"
 
 #include "aedGui/LCDDisplay.h"
-
+#include "aedGui/CompressionsToggleButton.h"
+#include "aedGui/styles.h"
 
 #include <QString>
 #include <QRegExp>
@@ -36,12 +37,8 @@ private:
     QList<event::SequencedEvent *> eventHandles;
     aedModel::ModuleStartupAdvice * startupSequence;
 
-    QTimer timer;
     QTimer shockButtonFlashTimer;
     aedModel::AED * aed;
-
-    const QRegExp acceptedKeys = QRegExp("[asdfjkl;]");
-    int numKeysDown;
 
     aedGui::LCDDisplay* LCDDisplay;
     aedModel::ModuleECGAssessment* ecgModule;
@@ -50,8 +47,16 @@ private:
     aedModel::ModuleShock* shockModule;
     aedModel::ModuleStartupAdvice* startupAdviceModule;
 
-public slots:
-    void toggleShockButtonFlash();
+    // Setup helpers
+    void prepareLampWidgets();
+    void buildModules();
+    void buildModuleConnections();
+    void buildAEDConnections();
+    void buildDebugFeatures();
+
+    // Extinguish all lamps etc.
+    void turnoff();
+
 
 private slots:
     void quitProgram();

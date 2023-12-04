@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame_2">
+   <widget class="QFrame" name="frame_device">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -32,7 +32,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QGraphicsView" name="graphicsView">
+    <widget class="QGraphicsView" name="picto_05_cpr">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -46,7 +46,7 @@
 background-color: rgba(0,0,0,0);</string>
      </property>
     </widget>
-    <widget class="QGraphicsView" name="graphicsView_2">
+    <widget class="QGraphicsView" name="picto_01_check">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -59,7 +59,7 @@ background-color: rgba(0,0,0,0);</string>
       <string notr="true">border-image: url(:/pictograms/01_CheckResponsiveness.svg);</string>
      </property>
     </widget>
-    <widget class="QGraphicsView" name="graphicsView_3">
+    <widget class="QGraphicsView" name="picto_02_help">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -72,7 +72,7 @@ background-color: rgba(0,0,0,0);</string>
       <string notr="true">border-image: url(:/pictograms/02_CallForHelp.svg);</string>
      </property>
     </widget>
-    <widget class="QGraphicsView" name="graphicsView_4">
+    <widget class="QGraphicsView" name="picto_03_pads">
      <property name="geometry">
       <rect>
        <x>520</x>
@@ -85,7 +85,7 @@ background-color: rgba(0,0,0,0);</string>
       <string notr="true">border-image: url(:/pictograms/03_AttachPads.svg);</string>
      </property>
     </widget>
-    <widget class="QGraphicsView" name="graphicsView_5">
+    <widget class="QGraphicsView" name="picto_04_clear">
      <property name="geometry">
       <rect>
        <x>430</x>
@@ -111,7 +111,7 @@ background-color: rgba(0,0,0,0);</string>
       <string notr="true">border-image: url(:/shockButton/ShockButton_Background.svg);</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="shockButton">
+    <widget class="aedGui::LampButton" name="shockButton">
      <property name="geometry">
       <rect>
        <x>290</x>
@@ -220,7 +220,7 @@ background-color: rgba(0,0,0,0);</string>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="LCDPrompt">
+     <widget class="QLabel" name="lcdPrompt">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -236,7 +236,7 @@ background-color: rgba(0,0,0,0);</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="lcd_static_shockCounter">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -257,7 +257,7 @@ background-color: rgba(0,0,0,0);</string>
        <string>Shocks: </string>
       </property>
      </widget>
-     <widget class="QLabel" name="LCDTimer">
+     <widget class="QLabel" name="lcdTimer">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -315,7 +315,7 @@ background-color: rgba(0,0,0,0);</string>
        <string>%p%</string>
       </property>
      </widget>
-     <widget class="QLabel" name="LCDHelp">
+     <widget class="QLabel" name="lcdCPRHelp">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -331,7 +331,7 @@ background-color: rgba(0,0,0,0);</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="label_14">
+     <widget class="QLabel" name="lcd_static_cprDepthMax">
       <property name="geometry">
        <rect>
         <x>255</x>
@@ -347,7 +347,7 @@ background-color: rgba(0,0,0,0);</string>
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_15">
+     <widget class="QLabel" name="lcd_static_cprDepthMin">
       <property name="geometry">
        <rect>
         <x>255</x>
@@ -363,7 +363,7 @@ background-color: rgba(0,0,0,0);</string>
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="LCDShocks">
+     <widget class="QLabel" name="lcdShocks">
       <property name="geometry">
        <rect>
         <x>75</x>
@@ -431,11 +431,11 @@ QPushButton:checked {
     </widget>
     <zorder>selfTestIndicator</zorder>
     <zorder>shockButtonBackground</zorder>
-    <zorder>graphicsView</zorder>
-    <zorder>graphicsView_2</zorder>
-    <zorder>graphicsView_3</zorder>
-    <zorder>graphicsView_4</zorder>
-    <zorder>graphicsView_5</zorder>
+    <zorder>picto_05_cpr</zorder>
+    <zorder>picto_01_check</zorder>
+    <zorder>picto_02_help</zorder>
+    <zorder>picto_03_pads</zorder>
+    <zorder>picto_04_clear</zorder>
     <zorder>shockButton</zorder>
     <zorder>lamp_CheckResp</zorder>
     <zorder>lamp_CallHelp</zorder>
@@ -445,7 +445,7 @@ QPushButton:checked {
     <zorder>LCDDisplay</zorder>
     <zorder>powerButton</zorder>
    </widget>
-   <widget class="QFrame" name="frame_4">
+   <widget class="QFrame" name="frame_battery">
     <property name="geometry">
      <rect>
       <x>720</x>
@@ -460,7 +460,7 @@ QPushButton:checked {
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLabel" name="label_7">
+    <widget class="QLabel" name="bat_static_percentage">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -499,7 +499,7 @@ QPushButton:checked {
       <string>100</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="batt_static_percentSign">
      <property name="geometry">
       <rect>
        <x>176</x>
@@ -539,7 +539,7 @@ QPushButton:checked {
        <string>Unplugged</string>
       </property>
       <property name="checked">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
      </widget>
      <widget class="QRadioButton" name="pediatricPadsButton">
@@ -567,10 +567,13 @@ QPushButton:checked {
       <property name="text">
        <string>Adult Pads</string>
       </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
    </widget>
-   <widget class="QTabWidget" name="tabWidget_2">
+   <widget class="QTabWidget" name="tabwidget_pads">
     <property name="geometry">
      <rect>
       <x>720</x>
@@ -579,7 +582,7 @@ QPushButton:checked {
       <height>141</height>
      </rect>
     </property>
-    <widget class="QWidget" name="tab_4">
+    <widget class="QWidget" name="tab_pads">
      <attribute name="title">
       <string>Pads</string>
      </attribute>
@@ -614,7 +617,7 @@ QPushButton:checked {
      </widget>
     </widget>
    </widget>
-   <widget class="QTabWidget" name="tabWidget_3">
+   <widget class="QTabWidget" name="tabWidget_cpr">
     <property name="geometry">
      <rect>
       <x>880</x>
@@ -623,7 +626,7 @@ QPushButton:checked {
       <height>301</height>
      </rect>
     </property>
-    <widget class="QWidget" name="tab_6">
+    <widget class="QWidget" name="tab_cpr">
      <attribute name="title">
       <string>CPR Compressions</string>
      </attribute>
@@ -698,7 +701,10 @@ QPushButton:checked {
        <number>10</number>
       </property>
      </widget>
-     <widget class="QPushButton" name="toggleCompressionsButton">
+     <widget class="aedGui::CompressionsToggleButton" name="toggleCompressionsButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -717,7 +723,7 @@ QPushButton:checked {
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel" name="cpr_static_slider_depthTitle">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -734,7 +740,7 @@ QPushButton:checked {
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_9">
+     <widget class="QLabel" name="cpr_static_slider_rateTitle">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -751,7 +757,7 @@ QPushButton:checked {
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="cpr_static_slider_rate40">
       <property name="geometry">
        <rect>
         <x>92</x>
@@ -764,7 +770,7 @@ QPushButton:checked {
        <string>40</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="cpr_static_slider_rate100">
       <property name="geometry">
        <rect>
         <x>84</x>
@@ -777,7 +783,7 @@ QPushButton:checked {
        <string>100</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="cpr_static_slider_rate60">
       <property name="geometry">
        <rect>
         <x>92</x>
@@ -790,7 +796,7 @@ QPushButton:checked {
        <string>60</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_10">
+     <widget class="QLabel" name="cpr_static_slider_depth0_0">
       <property name="geometry">
        <rect>
         <x>8</x>
@@ -800,10 +806,13 @@ QPushButton:checked {
        </rect>
       </property>
       <property name="text">
-       <string>2.4</string>
+       <string>0</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_11">
+     <widget class="QLabel" name="cpr_static_slider_depth0_8">
       <property name="geometry">
        <rect>
         <x>8</x>
@@ -813,10 +822,13 @@ QPushButton:checked {
        </rect>
       </property>
       <property name="text">
-       <string>1.6</string>
+       <string>0.8</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_12">
+     <widget class="QLabel" name="cpr_static_slider_depth1_6">
       <property name="geometry">
        <rect>
         <x>8</x>
@@ -826,25 +838,31 @@ QPushButton:checked {
        </rect>
       </property>
       <property name="text">
-       <string>0.8</string>
+       <string>1.6</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_13">
+     <widget class="QLabel" name="cpr_static_slider_depth2_4">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>8</x>
         <y>38</y>
-        <width>16</width>
+        <width>21</width>
         <height>17</height>
        </rect>
       </property>
       <property name="text">
-       <string>0</string>
+       <string>2.4</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </widget>
    </widget>
-   <widget class="QTabWidget" name="tabWidget_4">
+   <widget class="QTabWidget" name="tabWidget_ecg">
     <property name="geometry">
      <rect>
       <x>720</x>
@@ -853,11 +871,14 @@ QPushButton:checked {
       <height>201</height>
      </rect>
     </property>
-    <widget class="QWidget" name="tab_5">
+    <widget class="QWidget" name="tab_ecg">
      <attribute name="title">
       <string>ECG Testing</string>
      </attribute>
      <widget class="QPushButton" name="beginECGButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -874,6 +895,9 @@ QPushButton:checked {
       </property>
      </widget>
      <widget class="QPushButton" name="stopECGButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -945,6 +969,16 @@ QPushButton:checked {
    <extends>QWidget</extends>
    <header>qcustomplot.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>aedGui::LampButton</class>
+   <extends>QPushButton</extends>
+   <header>aedGui/LampButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>aedGui::CompressionsToggleButton</class>
+   <extends>QPushButton</extends>
+   <header>aedGui/CompressionsToggleButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -1,21 +1,16 @@
 #include "ModuleECGAssessment.h"
-#include "aedGui/prompts.h"
+#include "aedGui/strings.h"
+#include "aedconst.h"
 
 using namespace aedModel;
 
 ModuleECGAssessment::ModuleECGAssessment(aedGui::LCDDisplay* l) : active(false), rhythm(VENT_FIB), lcdDisplay(l)
 {
-
-    // Get the path of the directory containing the ECG data (data is in csv files)
-    QDir parentDir = QDir::current();
-    parentDir.cdUp();
-    QString csvDirPath = parentDir.path() + "/comp3004-team14/assets/";
-
     // Iterate over all the csv files and load them into class attributes (to save time, no need to read from file each time the startaAsessment slot is called)
-    QStringList csvList = {"/ecgs/v_fib.csv", "/ecgs/v_tachy.csv", "/ecgs/non_shockable.csv"};
+    QStringList csvList = {":/ecgs/v_fib.csv", ":/ecgs/v_tachy.csv", ":/ecgs/non_shockable.csv"};
     for (int i = 0; i < csvList.length(); i++)
     {
-        readCSVFile(csvDirPath, csvList[i]);
+        readCSVFile(csvList[i]);
     }
 }
 
@@ -27,6 +22,8 @@ ModuleECGAssessment::~ModuleECGAssessment()
 // When a signal is received from AED to this slot, the assessment will begin.
 void ModuleECGAssessment::startAssessment()
 {
+    qDebug() << "Starting an ECG assessment!" << Qt::endl;
+
     // If an assessment is in progress, can't start a new one
     if (active == true) return;
 
@@ -35,7 +32,7 @@ void ModuleECGAssessment::startAssessment()
     emit signalUserPrompt(P_ANALYZING);
 
     // Start the 5-second timer to simulate analysis. Once timer runs out, the appropriate function is called, depending on which rhythm is shockable.
-    timer.setInterval(5000);
+    timer.setInterval(ECG_TIME);
     timer.setSingleShot(true);
     if (rhythm == VENT_FIB)
     {
@@ -79,19 +76,17 @@ void ModuleECGAssessment::endAssessment()
 
     // Cause the current graph to be removed from the gui
     lcdDisplay->clearGraphData();
-
-    // I wasnt sure what to do if analysis interrupted
-    emit signalUserPrompt("");
+    emit signalUserPrompt(P_BLANK);
 
     // An asssessment is no longer in process
     active = false;
 }
 
 // Iterate over all the csv files and load them into class attributes (to save time, no need to read from file each time the startaAsessment slot is called)
-void ModuleECGAssessment::readCSVFile(QString fileDirectory, QString fileName)
+void ModuleECGAssessment::readCSVFile(QString fileName)
 {
-    QFile CSVFile(fileDirectory + fileName);
-    if (CSVFile.open(QIODevice::ReadWrite))
+    QFile CSVFile(fileName);
+    if (CSVFile.open(QIODevice::ReadOnly))
     {
         QTextStream Stream(&CSVFile);
         while(Stream.atEnd() == false)
@@ -102,15 +97,15 @@ void ModuleECGAssessment::readCSVFile(QString fileDirectory, QString fileName)
             QStringList data = lineData.split(",");
             for (int i = 0; i < data.length(); i++)
             {
-                if (fileName == "/ecgs/v_fib.csv")
+                if (fileName == ":/ecgs/v_fib.csv")
                 {
                     ventFibXData.push_back(data[0].toDouble()); // The datum in the 1st column of the current row is the x-coordinate
                     ventFibYData.push_back(data[1].toDouble()); // The datum in the 2nd column of the current row is the y-coordinate
-                } else if (fileName == "/ecgs/v_tachy.csv")
+                } else if (fileName == ":/ecgs/v_tachy.csv")
                 {
                     ventTachyXData.push_back(data[0].toDouble()); // The datum in the 1st column of the current row is the x-coordinate
                     ventTachyYData.push_back(data[1].toDouble()); // The datum in the 2nd column of the current row is the y-coordinate
-                } else if (fileName == "/ecgs/non_shockable.csv")
+                } else if (fileName == ":/ecgs/non_shockable.csv")
                 {
                     nonShockableXData.push_back(data[0].toDouble()); // The datum in the 1st column of the current row is the x-coordinate
                     nonShockableYData.push_back(data[1].toDouble()); // The datum in the 2nd column of the current row is the y-coordinate
