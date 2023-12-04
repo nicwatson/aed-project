@@ -60,3 +60,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     assets/aed.qrc
+
+DISTFILES += \
+    assets/ecgs/non_shockable.csv \
+    assets/ecgs/non_shockable.png \
+    assets/ecgs/v_fib.csv \
+    assets/ecgs/v_fib.png \
+    assets/ecgs/v_tachy.csv \
+    assets/ecgs/v_tachy.png
