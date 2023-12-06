@@ -8,7 +8,7 @@
 
 // If AEDCONST_DEBUG_ENABLE is defined here, debug values (mostly faster time intervals for timers) will be used instead of normal ones
 // COMMENT THIS OUT FOR NORMAL USE
-// #define AEDCONST_DEBUG_ENABLE
+ #define AEDCONST_DEBUG_ENABLE
 
 //
 // SELF TEST PARAMETERS
@@ -43,7 +43,7 @@
 // SHOCK MODULE CONSTANTS
 //
     // How many joules of total work are available from a full battery pack?
-    #define FULL_BATT 700.0
+    #define FULL_BATT 800.0
     // Therefore, one joule is (1 / FULL_BATT) worth of battery level (where battery level 1.0 is "full")
     #define BATT_RATIO (1.0 / FULL_BATT)
     // How long does it take to charge up the defib pads?

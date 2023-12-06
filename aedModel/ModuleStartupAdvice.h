@@ -20,7 +20,6 @@
 
 namespace aedModel
 {
-
     class ModuleStartupAdvice : public event::EventSequence
     {
         // HEAP ALLOCATIONS:
@@ -30,13 +29,10 @@ namespace aedModel
         Q_OBJECT
 
         public:
-            // DO NOT USE THIS DEFAULT CONSTRUCTOR
-            // It's only here because QT's MOC requires it
-            //explicit ModuleStartupAdvice();
-
             explicit ModuleStartupAdvice(aedGui::LampWidget * lamp_CheckResponsiveness, aedGui::LampWidget * lamp_CallHelp, aedGui::LampWidget * lamp_AttachPads);
             ~ModuleStartupAdvice();
 
+            // Queue/list management
             virtual int add(event::AdviceEvent * newEvent);
             virtual int addBefore(event::AdviceEvent * newEvent, int index);
             virtual int remove(event::AdviceEvent * target);
@@ -44,12 +40,26 @@ namespace aedModel
 
 
         public slots:
+
+            // Receive (from an AdviceEvent) and forward (to AED) a user advice prompt
+            // Trigger: signal AdviceEvent::signalForwardUserPrompt(const QString &) : connections in ModuleStarupAdvice::add(...), ::addBefore(...)
             void userPrompt(const QString & prompt);
+
+            // Start the advice sequence - have to know the cable type to display the initial "UNIT OK / ADULT PADS" or "UNIT OK / CHILD PADS" prompt
+            // Trigger: signal AED::signalStartAdvice() : connection in AED::addModuleStartupAdvice()
             void startAdvice(AED::cableState_t cable);
+
+            // Stop the advice sequence immediately
+            // Trigger 1: signal AED::signalPadsAttached(...) : connection in AED::addModuleStartupAdvice()
+            // Trigger 2: signal AED::signalAbortStartupAdvice(...) : connection in AED::addModuleStartupAdvice()
             virtual void stop() override;
 
         signals:
-            void signalUserPrompt(const QString & prompt);
+
+            // Send the user prompt on to the AED
+            // Emitter: ModuleStartupAdvice::userPrompt(const QString &)
+            // Receiver: AED::userPrompt(const QString &) : connection in AED::addModuleStartupAdvice()
+            void signalForwardUserPrompt(const QString & prompt);
 
     };
 }

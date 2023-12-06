@@ -18,8 +18,12 @@
 #define STYLE_SHOCK_LIT     "image: url(:/shockButton/ShockButton_ButtonPressed.svg); border: 0;"
 #define STYLE_SHOCK_UNLIT   "image: url(:/shockButton/ShockButton_Button.svg); border: 0;"
 
+// Flashing light intervals to use (this is a visual effect so we put it in styles.h)
 #define FLASH_TIME_DEFAULT 200
 #define FLASH_TIME_SHOCK 500
 
+// Style sheets for the LCD screen
+#define STYLE_LCD_ON "background-color: rgb(255, 255, 255);"
+#define STYLE_LCD_OFF "background-color: rgb(61, 56, 70);"
 
 #endif // STYLES_H

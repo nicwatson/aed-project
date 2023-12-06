@@ -1,7 +1,9 @@
+// FILE: AED_slots.cpp
 // AED class - slot function defs
 
 #include "AED.h"
 #include "aedGui/strings.h"
+#include "ModuleSelfTest.h"
 
 using namespace aedModel;
 
@@ -12,19 +14,18 @@ using namespace aedModel;
 
 void AED::togglePowerButton()
 {
-    if (aedState == OFF) // If aed is OFF turned it on
+    qDebug() << "[ENTRY SLOT] AED::togglePowerButton()" << Qt::endl;
+
+    if (aedState == OFF) // If aed is OFF, turn it on
     {
-        qDebug() << "Toggling power button on";
-        doSelfTest();
+        turnOn();
     }
-    else // If aed is in one of the 'on' states turn it off
+    else // If aed is in one of the 'on' states, turn it off
     {
-        // TODO Need to reset all modules and turn off widgets
-        stopActivity();
-        clearPrompt();
-        emit signalPowerOff();
-        changeStateSafe(OFF);
+        turnOff();
     }
+
+    qDebug() << "[EXIT SLOT] AED::togglePowerButton()" << Qt::endl;
 }
 
 //
@@ -33,28 +34,44 @@ void AED::togglePowerButton()
 
 void AED::plugCable(cableState_t newCableState)
 {
+    qDebug().noquote() << "[ENTRY SLOT] AED::plugCable(" << cableStateNames[newCableState] << ")" << Qt::endl;
+
     // changeCableState determines if it is necessary to go back to self test
     changeCableState(newCableState);
+
+    qDebug().noquote() << "[EXIT SLOT] AED::plugCable(" << cableStateNames[newCableState] << ")" << Qt::endl;
 }
 
 void AED::plugCableAdult()
 {
+    qDebug() << "[ENTRY SLOT] AED::plugCableAdult()" << Qt::endl;
     changeCableState(PAD_ADULT);
+    qDebug() << "[EXIT SLOT] AED::plugCableAdult()" << Qt::endl;
 }
 
 void AED::plugCableChild()
 {
+    qDebug() << "[ENTRY SLOT] AED::plugCableChild()" << Qt::endl;
     changeCableState(PAD_CHILD);
+    qDebug() << "[EXIT SLOT] AED::plugCableChild()" << Qt::endl;
 }
 
 void AED::unplugCable()
 {
+    qDebug() << "[ENTRY SLOT] AED::unplugCable()" << Qt::endl;
     changeCableState(UNPLUGGED);
+    qDebug() << "[EXIT SLOT] AED::unplugCable()" << Qt::endl;
 }
 
 void AED::attachPads(bool attached)
 {
-    if(padsAttached == attached) return;   // Pads unchanged
+    qDebug().noquote() << "[ENTRY SLOT] AED::attachPads(" << attached << ")" << Qt::endl;
+
+    if(padsAttached == attached)
+    {
+        qDebug().noquote() << "[EXIT SLOT] AED::attachPads(" << attached << "): no change" << Qt::endl;
+        return;   // Pads unchanged
+    }
 
     padsAttached = attached;
 
@@ -63,6 +80,8 @@ void AED::attachPads(bool attached)
         // Pads are being attached
 
         // This tells the ModuleStartupAdvice that pads have been attached
+
+        qDebug() << "[SIGNAL] Emit AED::signalPadsAttached()" << Qt::endl;
         emit signalPadsAttached();
 
         if(aedState == STARTUP_ADVICE || aedState == ECG_ASSESS || aedState == SHOCK)
@@ -70,8 +89,10 @@ void AED::attachPads(bool attached)
             // Either we are short-circuiting STARTUP_ADVICE because pads were attached,
             // or we are reattaching pads that lost connectivity during ECG_ASSESS or SHOCK.
             // In any case, we go to the start of ECG_ASSESS.
-            changeStateSafe(ECG_ASSESS);
             doStartECG();
+
+            qDebug().noquote() << "[EXIT SLOT] AED::attachPads(" << attached << "): pads reattached, recovered to ECG" << Qt::endl;
+
             return;
         }
 
@@ -82,21 +103,26 @@ void AED::attachPads(bool attached)
         if(aedState == ECG_ASSESS)
         {
             // Pad connectivity error
+
+            qDebug() << "[SIGNAL] Emit AED::signalStopLampStandback()" << Qt::endl;
             emit signalStopLampStandback();
+            qDebug() << "[SIGNAL] Emit AED::signalAbortECG()" << Qt::endl;
             emit signalAbortECG();
-            emit signalUserPrompt(P_CHECK_ELEC);
+            userPrompt(P_CHECK_ELEC);
         }
         else if(aedState == SHOCK)
         {
             // Pad connectivity error
+            qDebug() << "[SIGNAL] Emit AED::signalStopLampStandback()" << Qt::endl;
             emit signalStopLampStandback();
+            qDebug() << "[SIGNAL] Emit AED::signalAbortShock()" << Qt::endl;
             emit signalAbortShock();
-            emit signalUserPrompt(P_CHECK_ELEC);
+            userPrompt(P_CHECK_ELEC);
         }
         // In other states, it doesn't matter if the electrodes get detached from the patient.
+        qDebug().noquote() << "[EXIT SLOT] AED::attachPads(" << attached << "): pads detached" << Qt::endl;
     }
 }
-
 
 
 
@@ -106,7 +132,11 @@ void AED::attachPads(bool attached)
 
 void AED::setBattery(double newBatt)
 {
+    qDebug().noquote() << "[ENTRY SLOT] AED::setBattery(" << QString::number(newBatt, 'g', 2) << Qt::endl;
+
     if(newBatt >= 0) battery = newBatt;
+
+    qDebug().noquote() << "[SIGNAL] Emit AED::signalBatteryChanged(" << QString::number(battery, 'g', 2) << Qt::endl;
     emit signalBatteryChanged(battery);
 
     if(battery < BATTERY_THRESHHOLD)
@@ -114,33 +144,47 @@ void AED::setBattery(double newBatt)
         failAED();
         errorBattery();
     }
+
+    qDebug().noquote() << "[EXIT SLOT] AED::setBattery(" << QString::number(newBatt, 'g', 2) << Qt::endl;
 }
 
 void AED::useBattery(double loseBatt)
 {
+    qDebug().noquote() << "[ENTRY SLOT] AED::useBattery(" << QString::number(loseBatt, 'g', 2) << Qt::endl;
+
     if(loseBatt >= 0)
     {
         setBattery(std::max(0.0, battery - loseBatt));
     }
+
+    qDebug().noquote() << "[EXIT SLOT] AED::useBattery(" << QString::number(loseBatt, 'g', 2) << Qt::endl;
 }
 
 void AED::changeBatteries()
 {
+    qDebug().noquote() << "[ENTRY SLOT] AED::changeBatteries()" << Qt::endl;
+
     if(isOn())
     {
         togglePowerButton(); // turn it off
     }
     battery = 1;
+
+    qDebug().noquote() << "[SIGNAL] Emit AED::signalBatteryChanged(" << QString::number(battery, 'g', 2) << Qt::endl;
     emit signalBatteryChanged(battery);
+
+    qDebug().noquote() << "[EXIT SLOT] AED::changeBatteries()" << Qt::endl;
 }
 
 
 void AED::selfTestResult(ModuleSelfTest::testResult_t result)
 {
-    qDebug() << "AED has received notice of passing self test";
+    qDebug().noquote() << "[ENTRY SLOT] AED::selfTestResult(" << ModuleSelfTest::testResultNames[result] << ")" << Qt::endl;
+
     switch(result)
     {
         case ModuleSelfTest::OK:
+            qDebug() << "[SIGNAL] Emit AED::signalDisplayPassTest()" << Qt::endl;
             emit signalDisplayPassTest();
             doStartupAdvice();
             break;
@@ -157,79 +201,85 @@ void AED::selfTestResult(ModuleSelfTest::testResult_t result)
             failAED();
             errorOther();
     }
+
+    qDebug().noquote() << "[EXIT SLOT] AED::selfTestResult(" << ModuleSelfTest::testResultNames[result] << ")" << Qt::endl;
 }
 
 void AED::ecgResult(bool shockable)
 {
+    qDebug().noquote() << "[ENTRY SLOT] AED::ecgResult(" << shockable << ")" << Qt::endl;
+
     // Entry guard: must be in ECG_ASSESS state
     if(aedState != ECG_ASSESS)
     {
-        qDebug() << "Error: AED received ecgResult signal when ECG_ASSESS was not active!" << Qt::endl;
+        qDebug().noquote() << "[EXIT - WARNING] AED::ecgResult(" << shockable<< ") "
+                           << "triggered when ECG_ASSESS was not active!" << Qt::endl;
         return;
     }
 
     if(shockable)
     {
-        emit signalUserPrompt(P_SHOCKABLE);
+        userPrompt(P_SHOCKABLE);
         doPrepShock();
     }
     else
     {
         // Not shockable
-        emit signalUserPrompt(P_NOTSHOCKABLE);
-        emit signalStopLampStandback();
-        emit signalStartLampCPR();
-        changeStateSafe(CPR);
+        userPrompt(P_NOTSHOCKABLE);
 
-        // Introduce a short delay to give time for the "NOT SHOCKABLE" message to be read
-        // Before it gets replaced by "START CPR"
-        timer.setSingleShot(true);
-        timer.setInterval(AED_TIMER_DEFAULT);
-        connect(&timer, SIGNAL(timeout()), this, SLOT(startCPR()));
-        timer.start();
+        qDebug() << "[SIGNAL] Emit AED::signalStopLampStandback()" << Qt::endl;
+        emit signalStopLampStandback();
+
+        scheduleCPR();
     }
+
+    qDebug().noquote() << "[EXIT SLOT] AED::ecgResult(" << shockable << ")" << Qt::endl;
 }
 
 void AED::shockDelivered()
 {
-    // Introduce a short delay to give time for the "SHOCK DELIVERED" message to be read
-    // Before it gets replaced by "START CPR"
-    timer.setSingleShot(true);
-    timer.setInterval(AED_TIMER_DEFAULT);
-    connect(&timer, SIGNAL(timeout()), this, SLOT(startCPR()));
-    timer.start();
+    qDebug().noquote() << "[ENTRY SLOT] AED::shockDelivered()" << Qt::endl;
+    scheduleCPR();
+    qDebug().noquote() << "[EXIT SLOT] AED::shockDelivered()" << Qt::endl;
 }
 
 void AED::startCPR()
 {
-    emit signalStopLampStandback();
-    disconnect(&timer, SIGNAL(timeout()), this, SLOT(startCPR()));
+    qDebug().noquote() << "[ENTRY SLOT] AED::startCPR()" << Qt::endl;
+
+    disconnect(&timer, &QTimer::timeout, this, &AED::startCPR);
     doStartCPR();
+
+    qDebug().noquote() << "[EXIT SLOT] AED::startCPR()" << Qt::endl;
 }
 
 void AED::cprStopped()
 {
-    emit signalStopLampCPR();
+    qDebug().noquote() << "[ENTRY SLOT] AED::cprStopped()" << Qt::endl;
+
     if(aedState != CPR)
     {
-        qDebug() << "Error: AED received signal stopCPR() when CPR was not active." << Qt::endl;
-        return;
+        qDebug().noquote() << "[WARNING] AED::cprStopped() "
+                           << "triggered when CPR was not active!" << Qt::endl;
     }
 
-    // Introduce a short delay to give time for the "STOP CPR" prompt to be read
-    // Before it gets replaced by "DON'T TOUCH PATIENT"
-    timer.setSingleShot(true);
-    timer.setInterval(AED_TIMER_DEFAULT);
-    connect(&timer, SIGNAL(timeout()), this, SLOT(restartECG()));
-    timer.start();
+    qDebug() << "[SIGNAL] Emit AED::signalStopLampCPR()" << Qt::endl;
+    emit signalStopLampCPR();
+
+    scheduleECG();
+
+    qDebug().noquote() << "[EXIT SLOT] AED::cprStopped()" << Qt::endl;
 }
 
 void AED::restartECG()
 {
-    disconnect(&timer, SIGNAL(timeout()), this, SLOT(restartECG()));
-    doStartECG();
-}
+    qDebug().noquote() << "[ENTRY SLOT] AED::restartECG()" << Qt::endl;
 
+    disconnect(&timer, &QTimer::timeout, this, &AED::restartECG);
+    doStartECG();
+
+    qDebug().noquote() << "[EXIT SLOT] AED::restartECG()" << Qt::endl;
+}
 
 
 //
@@ -238,7 +288,16 @@ void AED::restartECG()
 
 void AED::userPrompt(const QString & prompt)
 {
-    if(aedState == OFF) return;
-    emit signalUserPrompt(prompt);
-}
+    qDebug() << "[ENTRY SLOT] AED::userPrompt(" << prompt << ")" << Qt::endl;
 
+    if(aedState == OFF)
+    {
+        qDebug() << "[EXIT - WARNING] AED::userPrompt(" << prompt << "): AED is off!" << Qt::endl;
+        return;
+    }
+
+    qDebug() << "[SIGNAL] Emit AED::signalUserPrompt(" << prompt << ")" << Qt::endl;
+    emit signalUserPrompt(prompt);
+
+    qDebug() << "[EXIT SLOT] AED::userPrompt(" << prompt << ")" << Qt::endl;
+}

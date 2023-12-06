@@ -18,16 +18,25 @@ namespace aedModel
 
         public:
             explicit CPRHelpChild();
+            ~CPRHelpChild();
 
         public slots:
             // Update compression depth (overrides abstract)
             // For a child patient, this will do nothing
+            // Trigger: No signals currently; direct call from ModuleCPRHelp::updateCompressionDepth(int) which is itself a slot with signal triggers
             virtual void updateCompressionDepth(int depth) override;
+
             // Update compression rate (overrides abstract)
             // For a child patient, this will do nothing
+            // Trigger: No signals currently; direct call from ModuleCPRHelp::updateCompressionDepth(int) which is itself a slot with signal triggers
             virtual void updateCompressionRate(int cpm) override;
 
+            // User starts doing compressions
+            // Trigger: No signals currently; direct call from ModuleCPRHelp::stopCompressions() which is itself a slot with signal triggers
             virtual void startCompressions() override;
+
+            // User stops doing compressions
+            // Trigger: No signals currently; direct call from ModuleCPRHelp::stopCompressions() which is itself a slot with signal triggers
             virtual void stopCompressions() override;
     };
 }
