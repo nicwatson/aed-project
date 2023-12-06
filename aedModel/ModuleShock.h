@@ -87,6 +87,12 @@ namespace aedModel
             void shockButtonPressed();
             void shockButtonReleased();
 
+            // After delivering a shock, the battery might be too depleted to continue
+            // ModuleShock signals to the AED to signal it back if (and only if) there is enough battery to continue
+            // If it does get a reply, it goes to this slot, allowing the shock event to resolve (reporting "SHOCK DELIVERED") and go to CPR phase
+            // Trigger: signal AED::signalResolveShock() : connection in AED::addModuleShock(...)
+            void resolveShock();
+
 
         signals:
 
@@ -120,6 +126,13 @@ namespace aedModel
             // Receiver 1: slot ui->shockButton->LampButton::stopFlash() : connection in MainWindow::buildModuleConnections()
             // Receiver 2: slot LCDDisplay::setShockCounter(int) : connection in MainWindow::buildModuleConnections()
             void signalShockDelivered(int count);
+
+            // After delivering a shock, the battery might be too depleted to continue
+            // ModuleShock signals to the AED to signal it back if (and only if) there is enough battery to continue
+            // This is the signal it sends.
+            // Emitter: ModuleShock::shockButtonPressed()
+            // Receiver: AED::scheduleShockResolution() : connection in AED::addModuleShock(...)
+            void signalScheduleShockResolution();
 
     };
 }

@@ -143,19 +143,6 @@ void MainWindow::buildModuleConnections()
     // CONNECTING GUI ELEMENTS TO ModuleShock (and vice-versa)
     //
 
-    /*
-    // TODO REMOVE THIS
-    // Lights up the Shock button when pressed. [[Old Checked- working]]
-    connect(ui->shockButton, &QPushButton::pressed, shockModule, [=]() {
-        shockModule->shockButtonPressed();
-        ui->shockButton->turnOn();
-    });
-
-    // Darkens the Shock button when released. [[Old Checked- working]]
-    connect(ui->shockButton, &QPushButton::released, shockModule, [=]() {
-        shockModule->shockButtonReleased();
-        ui->shockButton->turnOff();
-    });*/
 
     // Lets the shock button send press/release events to the AED's shock module
     connect(ui->shockButton, &QPushButton::pressed, shockModule, &aedModel::ModuleShock::shockButtonPressed);
@@ -237,14 +224,17 @@ void MainWindow::buildAEDConnections()
     connect(aed, &aedModel::AED::signalStopLampStandback,   ui->lamp_Analysing, &aedGui::LampWidget::stopFlash); // [[OLD checked- working]]
 
     // Connect AED power/test/battery status changes to GUI indicators
-    connect(aed, &aedModel::AED::signalBatteryChanged,  ui->batteryPercentLabel, [this](double newBatt) {
+    connect(aed, &aedModel::AED::signalBatteryLevelChanged,  ui->batteryPercentLabel, [this](double newBatt) {
         ui->batteryPercentLabel->setText(QString("%1").arg((int) (newBatt * 100))); }); // [[OLD checked- working]]
     connect(aed, &aedModel::AED::signalStartTest,       [this](aedModel::AED*) {
         lcdDisplay->startLCD();} ); // [[OLD checked- working]]
-    connect(aed, &aedModel::AED::signalPowerOff,        lcdDisplay, &aedGui::LCDDisplay::endLCD);
+    connect(aed, &aedModel::AED::signalPowerOff,        lcdDisplay,            &aedGui::LCDDisplay::endLCD);
+    connect(aed, &aedModel::AED::signalBatteriesPulled, ui->powerButton,       [=]() { ui->powerButton->setChecked(false); } );
+    connect(aed, &aedModel::AED::signalPowerOff,        ui->selfTestIndicator, [=]() { ui->selfTestIndicator->setStyleSheet(STYLE_INDICATOR_OFF); });
     connect(aed, &aedModel::AED::signalDisplayPassTest, ui->selfTestIndicator, [=]() { ui->selfTestIndicator->setStyleSheet(STYLE_INDICATOR_PASS); });
     connect(aed, &aedModel::AED::signalUnitFailed,      ui->selfTestIndicator, [=]() { ui->selfTestIndicator->setStyleSheet(STYLE_INDICATOR_FAIL); });
-    connect(aed, &aedModel::AED::signalPowerOff,        ui->selfTestIndicator, [=]() { ui->selfTestIndicator->setStyleSheet(STYLE_INDICATOR_OFF); });
+
+
 }
 
 

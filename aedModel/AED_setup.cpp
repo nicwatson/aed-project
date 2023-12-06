@@ -11,7 +11,7 @@ using namespace aedModel;
 
 
 // Used for debugging - translate between state_t underlying integers and readable strings
-const QString AED::stateNames[7] = { "OFF", "SELF_TEST", "FAILURE", "STARTUP_ADVICE", "ECG_ASSESS", "SHOCK", "CPR"};
+const QString AED::stateNames[8] = { "OFF", "SELF_TEST", "FAILURE", "STARTUP_ADVICE", "ECG_ASSESS", "SHOCK", "SHOCK_RESOLVE", "CPR"};
 
 // Used for debugging - translate between cableState_t underlying integers and readable strings
 const QString AED::cableStateNames[3] = { "UNPLUGGED", "PAD_ADULT", "PAD_CHILD" };
@@ -91,13 +91,15 @@ bool AED::addModuleShock(ModuleShock * module)
 
     if(module == nullptr) return false;
 
-    connect(module, &ModuleShock::signalForwardUserPrompt, this, &AED::userPrompt);
-    connect(module, &ModuleShock::signalDrainBatt,  this, &AED::useBattery);
-    connect(module, &ModuleShock::signalDone,       this, [=]() { this->shockDelivered(); } );
+    connect(module, &ModuleShock::signalForwardUserPrompt,       this, &AED::userPrompt);
+    connect(module, &ModuleShock::signalDrainBatt,               this, &AED::useBattery);
+    connect(module, &ModuleShock::signalDone,                    this, [=]() { this->shockDelivered(); } );
+    connect(module, &ModuleShock::signalScheduleShockResolution, this, &AED::scheduleShockResolution);
 
-    connect(this, &AED::signalPrepShock,  module, &ModuleShock::start);
-    connect(this, &AED::signalAbortShock, module, &ModuleShock::abort);
-    connect(this, &AED::signalPowerOff,   module, &ModuleShock::fullReset);
+    connect(this, &AED::signalPrepShock,    module, &ModuleShock::start);
+    connect(this, &AED::signalAbortShock,   module, &ModuleShock::abort);
+    connect(this, &AED::signalPowerOff,     module, &ModuleShock::fullReset);
+    connect(this, &AED::signalResolveShock, module, &ModuleShock::resolveShock);
 
     qDebug() << "[EXIT] AED::addModuleShock(ModuleShock *)" << Qt::endl;
     return true;
@@ -124,7 +126,7 @@ void AED::dummy()
 {
     qDebug() << "[ENTRY] AED::dummy()" << Qt::endl;
 
-    emit signalBatteryChanged(0.255);
+    emit signalBatteryLevelChanged(0.255);
     emit signalStartLampStandback();
     emit signalStartLampCPR();
 

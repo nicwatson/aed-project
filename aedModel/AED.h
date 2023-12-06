@@ -42,7 +42,7 @@ namespace aedModel
         public:     // TYPE DEFS AND CONSTANTS
 
             // Type def: High-level state abstraction for the AED
-            enum state_t { OFF, SELF_TEST, FAILURE, STARTUP_ADVICE, ECG_ASSESS, SHOCK, CPR };
+            enum state_t { OFF, SELF_TEST, FAILURE, STARTUP_ADVICE, ECG_ASSESS, SHOCK, SHOCK_RESOLVE, CPR };
 
             // Type def: Cable state: either it's unplugged, adult pads are plugged in, or child pads are plugged in
             enum cableState_t { UNPLUGGED, PAD_ADULT, PAD_CHILD };
@@ -218,6 +218,10 @@ namespace aedModel
             // Trigger: signal from ModuleSelfTest::signalResult(testResult_t) : connection in
             void selfTestResult(ModuleSelfTest::testResult_t result);
 
+            // Allows startup advice phase to proceed after a short delay to display "UNIT OK" following successful self test
+            // Trigger: timer->QTimer::timeout : dynamic connection made in selfTestResult(testResult_t), broken in completeSelfTest()
+            void completeSelfTest();
+
             // Receives the simplified result of the ECG (shockable true/false) and uses it to determine the next action (shock or CPR)
             // Trigger: signal from ModuleECGAssessment::signalResult(bool) : connection in AED::addModuleECG(...)
             void ecgResult(bool shockable);
@@ -226,6 +230,12 @@ namespace aedModel
             // Connects and sets timer to trigger startCPR() a short time later (see below)
             // Trigger: signal from ModuleShock::signalDone() : connection in AED::addModuleShock
             void shockDelivered();
+
+            // After delivering a shock, the battery might be too depleted to continue
+            // ModuleShock signals to the AED to signal it back if (and only if) there is enough battery to continue
+            // This slot accepts the signal from ModuleShock and decides whether to send a reply signal based on the current aedState
+            // Trigger: signal ModuleShock::signalScheduleShockResolution() : connection in AED::addModuleShock(...)
+            void scheduleShockResolution();
 
             // Receives notification that it is time to start CPR.
             // Trigger: signal from AED's timer timeout()
@@ -246,7 +256,7 @@ namespace aedModel
     signals:
 
             // Used to make the green checkmark indicator show when self-test is passed
-            // Emitter: AED::selfTestResult(testResult_t)
+            // Emitter: AED::showPassTest()
             // Receivers: slot is (QGraphicsView) ui->selfTestIndicator::setStyleSheet(const QString &) : connection in MainWindow::buildAEDConnections()
             void signalDisplayPassTest();
 
@@ -308,8 +318,14 @@ namespace aedModel
             // Emitter: AED::turnOff()
             // Receiver 1: ModuleShock::fullReset : connection in AED::addModuleShock(...) -- needed to reset shock counter
             // Receiver 2: ui->lcdDisplay->LCDDisplay::endLCD() : connection in MainWindow::buildAEDConnections()
-            // Receiver 3: ui->selfTestIndicator->QGraphicsView::setStyleSheet(...) : connection in MainWindow::buildAEDConnections() -- turns off the indicator light
+            // Receiver 3: ui->selfTestIndicator->QGraphicsView::setStyleSheet(...) : connection in MainWindow::buildAEDConnections() -- turns off the test result indicator light
             void signalPowerOff();
+
+            // Signals to GUI to turn off the power light when batteries are pulled - need a separate signal from signalPowerOff() because otherwise clicking to turn off would
+            // cause interference with that signal
+            // Emitter: AED::changeBatteries()
+            // Receiver: ui->powerButton->QPushButton::setChecked(false) : connection in MainWindow::buildAEDconnections() -- turn off the power light
+            void signalBatteriesPulled();
 
             // Signals to LCD's user advice prompt widget to update the displayed text
             // Any strings sent to AED::userPrompt() will get forwarded out again on this signal
@@ -320,7 +336,14 @@ namespace aedModel
             // Signals to update the GUI label that shows the battery level as a percentage
             // Emitters: AED::setBattery(double), AED::changeBatteries()
             // Receiver: slot ui->batteryPercentLabel->QLabel::setText(...) : connection in MainWindow::buildAEDConnections
-            void signalBatteryChanged(double newBatt);
+            void signalBatteryLevelChanged(double newBatt);
+
+            // After delivering a shock, the battery might be too depleted to continue
+            // ModuleShock signals to the AED to signal it back if (and only if) there is enough battery to continue
+            // This signal is the reply sent back to ModuleShock if it is OK to continue
+            // Emitter: AED::scheduleShockResolution()
+            // Receiver: ModuleShock::resolveShock() : connection in AED::addModuleShock(...)
+            void signalResolveShock();
 
             // Signals to start/stop flashing lights on the interface (only directly AED-managed lights, not for those managed by ModuleStartupAdvice)
             // This means the lamps on the "Stand back" (ECG/shock) and "Start CPR" pictograms

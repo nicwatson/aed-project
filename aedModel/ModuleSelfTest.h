@@ -35,6 +35,7 @@ namespace aedModel
 
     protected:
         bool active;            // Is self-test currently running?
+        bool childPads;         // If pads are plugged in, are they child pads?
         QTimer timer;           // Timer to time the self-test event
         testResult_t result;    // Stores test result
 
@@ -53,15 +54,15 @@ namespace aedModel
 
     protected slots:
 
-        // Triggered when the test timer expires, to finalize and transmit test result
+        // Triggered when the test timer expires, to emit
         // Trigger: timer->QTimer::timeout() : connection in ModuleSelfTest constructor
-        void finishSelfTest();   
+        void finishSelfTest();
 
     signals:
 
         // Transmits test result back to the AED
         // Emitter: ModuleSelfTest::finishSelfTest()
-        // Receiver: AED::selfTestResult(testResult_t) : connection in AED::addModuleSelfTest(...)v
+        // Receiver: AED::selfTestResult(testResult_t) : connection in AED::addModuleSelfTest(...)
         void signalResult(ModuleSelfTest::testResult_t);
 
     };

@@ -4,6 +4,7 @@
 #include "ModuleSelfTest.h"
 #include "AED.h"
 #include <QDebug>
+#include "aedGui/strings.h"
 
 using namespace aedModel;
 
@@ -14,12 +15,12 @@ bool ModuleSelfTest::FORCE_FAIL = false;
 const QString ModuleSelfTest::testResultNames[4] = { "OK", "FAIL_BATTERY", "FAIL_CABLE", "FAIL_OTHER" };
 
 ModuleSelfTest::ModuleSelfTest()
-    : QObject(), active(false), result(FAIL_OTHER)
+    : QObject(), active(false), childPads(false), result(FAIL_OTHER)
 {
     qDebug() << "[CONSTRUCTOR ENTRY] ModuleSelfTest()" << Qt::endl;
 
-    timer.setSingleShot(true);
     timer.setInterval(TEST_TIME);
+    timer.setSingleShot(true);
     connect(&timer, &QTimer::timeout, this, &aedModel::ModuleSelfTest::finishSelfTest);
 
     qDebug() << "[CONSTRUCTOR EXIT] ModuleSelfTest()" << Qt::endl;
@@ -36,6 +37,7 @@ void ModuleSelfTest::reset()
     qDebug() << "[ENTRY] ModuleSelfTest::reset()" << Qt::endl;
 
     active = false;
+    childPads = false;
     result = FAIL_OTHER;
 
     qDebug() << "[EXIT] ModuleSelfTest::reset()" << Qt::endl;
@@ -65,15 +67,21 @@ void ModuleSelfTest::startSelfTest(AED * unit)
     {
         result = FAIL_BATTERY;
     }
-    if(unit->getCableState() == AED::UNPLUGGED)
+    else if(unit->getCableState() == AED::UNPLUGGED)
     {
         result = FAIL_CABLE;
     }
     else
     {
+        if(unit->getCableState() == AED::PAD_CHILD)
+        {
+            childPads = true;
+        }
         result = OK;
     }
-    timer.start();  // Simulate short delay before reporting test result
+
+    // Simulate short delay before reporting test result
+    timer.start();
 
     qDebug().noquote() << "[EXIT SLOT] ModuleSelfTest::startSelfTest(AED*) : Result: " << testResultNames[result] << Qt::endl;
 }
@@ -102,5 +110,6 @@ void ModuleSelfTest::finishSelfTest()
 
     qDebug() << "[EXIT SLOT] ModuleSelfTest::finishSelfTest()" << Qt::endl;
 }
+
 
 

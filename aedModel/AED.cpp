@@ -23,7 +23,7 @@ bool AED::changeStateSafe(state_t newState)
     qDebug() << "[ENTRY] AED::changeStateSafe() from " << stateNames[aedState] << " to  " << stateNames[newState] << Qt::endl;
     bool result = legalStateChange(newState);
     if(result) changeState(newState);
-    qDebug() << "[EXIT] AED::changeStateSafe() from " << stateNames[aedState] << " to  " << stateNames[newState]
+    qDebug() << "[EXIT] AED::changeStateSafe() to " << stateNames[aedState]
              << " : result from legalStateChange() was: " << result << Qt::endl;
     return result;
 }
@@ -39,12 +39,17 @@ bool AED::legalStateChange(state_t newState)
             return true;
         case STARTUP_ADVICE:    // STARTUP_ADVICE may only follow a SELF_TEST
             return aedState == SELF_TEST;
-        case ECG_ASSESS:        // ECG_ASSESS may follow STARTUP_ADVICE (the first time) or follow a CPR cycle
-            return aedState == STARTUP_ADVICE || aedState == CPR;
+        case ECG_ASSESS:        // ECG_ASSESS may follow STARTUP_ADVICE (the first time) or follow a CPR cycle.
+                                // Allow allowed to immediately follow SHOCK if the pads were disconnected during SHOCK
+                                // Also allowed to directly follow itself for the same reason
+                                // May also come immediately after SELF_TEST is STARTUP_ADVICE skipped due to pads being already on patient
+            return aedState == STARTUP_ADVICE || aedState == CPR || aedState == SHOCK || aedState == ECG_ASSESS || aedState == SELF_TEST;
         case SHOCK:             // Can only shock after an ECG_ASSESS
             return aedState == ECG_ASSESS;
-        case CPR:               // CPR is either directly after ECG_ASSESS (rhythm not shockable) or after SHOCK
-            return aedState == ECG_ASSESS || aedState == SHOCK;
+        case SHOCK_RESOLVE:     // Can only do this after SHOCK
+            return aedState == SHOCK;
+        case CPR:               // CPR is either directly after ECG_ASSESS (rhythm not shockable) or after SHOCK_RESOLVE
+            return aedState == ECG_ASSESS || aedState == SHOCK_RESOLVE;
     }
     return false;
 }
@@ -52,6 +57,12 @@ bool AED::legalStateChange(state_t newState)
 
 void AED::scheduleECG()
 {
+    if(aedState == FAILURE)
+    {
+        stopActivity();
+        return;     // Stop if the AED has failed!
+    }
+
     qDebug() << "[ENTRY] AED::scheduleECG()" << Qt::endl;
 
     qDebug() << "[SIGNAL] Emit AED::signalStopLampCPR()" << Qt::endl;
@@ -72,6 +83,12 @@ void AED::scheduleECG()
 
 void AED::scheduleCPR()
 {
+    if(aedState == FAILURE)
+    {
+        stopActivity();
+        return;     // Stop if the AED has failed!
+    }
+
     qDebug() << "[ENTRY] AED::scheduleCPR()" << Qt::endl;
 
     qDebug() << "[SIGNAL] Emit AED::signalStopLampStandback()" << Qt::endl;
@@ -184,6 +201,19 @@ void AED::doSelfTest()
 
 void AED::doStartupAdvice()
 {
+    if(aedState == FAILURE)
+    {
+        // Stop if the AED has failed
+        return;
+    }
+
+    if(padsAttached)
+    {
+        // Skip if pads are already on patient
+        doStartECG();
+        return;
+    }
+
     qDebug() << "[ENTRY] AED::doStartupAdvice()" << Qt::endl;
 
     changeStateSafe(STARTUP_ADVICE);
@@ -196,6 +226,17 @@ void AED::doStartupAdvice()
 
 void AED::doStartECG()
 {
+    if(aedState == FAILURE)
+    {
+        return;     // Stop if the AED has failed!
+    }
+
+    if(!padsAttached)
+    {
+        userPrompt(P_CHECK_ELEC);
+        return;
+    }
+
     qDebug() << "[ENTRY] AED::doStartECG()" << Qt::endl;
     changeStateSafe(ECG_ASSESS);
     emit signalStartLampStandback();
@@ -205,6 +246,18 @@ void AED::doStartECG()
 
 void AED::doPrepShock()
 {
+    if(aedState == FAILURE)
+    {
+        //stopActivity();
+        return;     // Stop if the AED has failed!
+    }
+
+    if(!padsAttached)
+    {
+        userPrompt(P_CHECK_ELEC);
+        return;
+    }
+
     qDebug() << "[ENTRY] AED::doPrepShock()" << Qt::endl;
     changeStateSafe(SHOCK);
     emit signalStartLampStandback();
@@ -214,6 +267,12 @@ void AED::doPrepShock()
 
 void AED::doStartCPR()
 {
+    if(aedState == FAILURE)
+    {
+        //stopActivity();
+        return;     // Stop if the AED has failed!
+    }
+
     qDebug() << "[ENTRY] AED::doStartCPR()" << Qt::endl;
     changeStateSafe(CPR);
 
@@ -272,6 +331,9 @@ void AED::clearPrompt()
     userPrompt(P_BLANK);
     qDebug() << "[EXIT] AED::clearPrompt()" << Qt::endl;
 }
+
+
+// OTHER
 
 void AED::abortAll()
 {

@@ -8,7 +8,7 @@
 
 // If AEDCONST_DEBUG_ENABLE is defined here, debug values (mostly faster time intervals for timers) will be used instead of normal ones
 // COMMENT THIS OUT FOR NORMAL USE
- #define AEDCONST_DEBUG_ENABLE
+// #define AEDCONST_DEBUG_ENABLE
 
 //
 // SELF TEST PARAMETERS
@@ -34,7 +34,7 @@
     #define AED_TIMER_DEFAULT 2000
 
 //
-// ECG CONSTANTS#define CHARGE_TIME 1000
+// ECG CONSTANTS
 //
     // How long should an ECG analysis take?
     #define ECG_TIME 5000
