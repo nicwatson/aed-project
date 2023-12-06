@@ -15,6 +15,7 @@ ModuleStartupAdvice::ModuleStartupAdvice(aedGui::LampWidget * lamp_CheckResponsi
 {
     qDebug() << "[CONSTRUCTOR ENTRY] ModuleStartupAdvice(LampWidget *, LampWidget *, LampWidget *)" << Qt::endl;
 
+    //EventSequence::add(new event::SequencedEvent("Blank delay event", DURATION_UNIT_OK));
     add(new event::AdviceEvent("Msg: Stay calm", DURATION_STAY_CALM, P_STAY_CALM));
     add(new event::PictogramAdviceEvent("Picto: Check responsiveness", DURATION_CHECK_RESP, P_CHECK_RESP, lamp_CheckResponsiveness));
     add(new event::PictogramAdviceEvent("Picto: Call for help", DURATION_CALL_HELP, P_CALL_HELP, lamp_CallHelp));
@@ -106,7 +107,6 @@ void ModuleStartupAdvice::startAdvice(AED::cableState_t cable)
     qDebug().noquote() << "[ENTRY SLOT] ModuleStartupAdvice::startAdvice(" << AED::cableStateNames[cable] << ")" << Qt::endl;
 
     if(cable == AED::UNPLUGGED) return;
-    addBefore(new event::AdviceEvent("Msg: Unit OK", DURATION_UNIT_OK, P_UNIT_OK + QString(" / ") + (cable == AED::PAD_ADULT ? P_PAD_ADULT : P_PAD_CHILD)), 0);
     start();
 
     qDebug().noquote() << "[EXIT SLOT] ModuleStartupAdvice::startAdvice(" << AED::cableStateNames[cable] << ")" << Qt::endl;
@@ -118,7 +118,6 @@ void ModuleStartupAdvice::stop()
     qDebug() << "[ENTRY SLOT] ModuleStartupAdvice::stop()" << Qt::endl;
 
     event::EventSequence::stop();
-    remove(0);
 
     qDebug() << "[EXIT SLOT] ModuleStartupAdvice::stop()" << Qt::endl;
 }

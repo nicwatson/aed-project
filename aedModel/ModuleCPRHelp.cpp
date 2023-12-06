@@ -131,6 +131,8 @@ void ModuleCPRHelp::reset()
 {
     qDebug() << "[ENTRY] ModuleCPRHelp::reset()" << Qt::endl;
 
+    forwardCompressionDepth(0);
+
     strategy->reset();
     active = false;
     strategy->blockSignals(true);
@@ -148,6 +150,9 @@ void ModuleCPRHelp::cprCompleted()
 
     qDebug() << "[SIGNAL] Emit ModuleCPRHelp::signalCPRCompressionRatePrompt(P_BLANK)" << Qt::endl;
     emit signalCPRCompressionRatePrompt(P_BLANK);
+
+    qDebug() << "[SIGNAL] Emit ModuleCPRHelp::signalForwardUserPrompt(" << P_CPR_STOP << ")" << Qt::endl;
+    emit signalForwardUserPrompt(P_CPR_STOP);
 
     qDebug() << "[SIGNAL] Emit ModuleCPRHelp::signalCPRComplete()" << Qt::endl;
     emit signalCPRComplete();
@@ -272,18 +277,3 @@ void ModuleCPRHelp::stopCompressions()
     strategy->stopCompressions();
     qDebug() << "[EXIT SLOT] ModuleCPRHelp::stopCompressions()" << Qt::endl;
 }
-
-/*
-// TODO REMOVE THIS
-void ModuleCPRHelp::compressionsStarted()
-{
-    qDebug() << "ModuleCPRHelp::compressionsStarted()" << Qt::endl;
-    emit signalCompressionsStarted();
-}
-
-void ModuleCPRHelp::compressionsStopped()
-{
-    qDebug() << "ModuleCPRHelp::compressionsStopped()" << Qt::endl;
-    emit signalCompressionsStopped();
-}
-*/

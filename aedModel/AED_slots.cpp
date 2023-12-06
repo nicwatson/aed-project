@@ -132,12 +132,13 @@ void AED::attachPads(bool attached)
 
 void AED::setBattery(double newBatt)
 {
-    qDebug().noquote() << "[ENTRY SLOT] AED::setBattery(" << QString::number(newBatt, 'g', 2) << Qt::endl;
+    qDebug().noquote() << "[ENTRY SLOT] AED::setBattery(" << QString::number(newBatt, 'g', 2)
+                       << "): prev batt=" << QString::number(battery, 'g', 2) << Qt::endl;
 
     if(newBatt >= 0) battery = newBatt;
 
-    qDebug().noquote() << "[SIGNAL] Emit AED::signalBatteryChanged(" << QString::number(battery, 'g', 2) << Qt::endl;
-    emit signalBatteryChanged(battery);
+    qDebug().noquote() << "[SIGNAL] Emit AED::signalBatteryLevelChanged(" << QString::number(battery, 'g', 2) << ")" << Qt::endl;
+    emit signalBatteryLevelChanged(battery);
 
     if(battery < BATTERY_THRESHHOLD)
     {
@@ -145,19 +146,20 @@ void AED::setBattery(double newBatt)
         errorBattery();
     }
 
-    qDebug().noquote() << "[EXIT SLOT] AED::setBattery(" << QString::number(newBatt, 'g', 2) << Qt::endl;
+    qDebug().noquote() << "[EXIT SLOT] AED::setBattery(" << QString::number(newBatt, 'g', 2) << ")" << Qt::endl;
 }
 
 void AED::useBattery(double loseBatt)
 {
-    qDebug().noquote() << "[ENTRY SLOT] AED::useBattery(" << QString::number(loseBatt, 'g', 2) << Qt::endl;
+    qDebug().noquote() << "[ENTRY SLOT] AED::useBattery(" << QString::number(loseBatt, 'g', 2)
+                       << "): prev batt=" << QString::number(battery, 'g', 2) << Qt::endl;
 
     if(loseBatt >= 0)
     {
         setBattery(std::max(0.0, battery - loseBatt));
     }
 
-    qDebug().noquote() << "[EXIT SLOT] AED::useBattery(" << QString::number(loseBatt, 'g', 2) << Qt::endl;
+    qDebug().noquote() << "[EXIT SLOT] AED::useBattery(" << QString::number(loseBatt, 'g', 2) << ")" << Qt::endl;
 }
 
 void AED::changeBatteries()
@@ -166,12 +168,15 @@ void AED::changeBatteries()
 
     if(isOn())
     {
-        togglePowerButton(); // turn it off
+        turnOff(); // turn it off
+
+        qDebug().noquote() << "[SIGNAL] AED::signalBatteriesPulled()" << Qt::endl;
+        emit AED::signalBatteriesPulled();
     }
     battery = 1;
 
-    qDebug().noquote() << "[SIGNAL] Emit AED::signalBatteryChanged(" << QString::number(battery, 'g', 2) << Qt::endl;
-    emit signalBatteryChanged(battery);
+    qDebug().noquote() << "[SIGNAL] Emit AED::signalBatteryChanged(" << QString::number(battery, 'g', 2) << ")" << Qt::endl;
+    emit signalBatteryLevelChanged(battery);
 
     qDebug().noquote() << "[EXIT SLOT] AED::changeBatteries()" << Qt::endl;
 }
@@ -186,8 +191,14 @@ void AED::selfTestResult(ModuleSelfTest::testResult_t result)
         case ModuleSelfTest::OK:
             qDebug() << "[SIGNAL] Emit AED::signalDisplayPassTest()" << Qt::endl;
             emit signalDisplayPassTest();
-            doStartupAdvice();
-            break;
+            userPrompt(P_UNIT_OK + QString(" / ") + ((cableState == PAD_CHILD) ? "CHILD PADS" : "ADULT PADS" ));
+
+            // Let "UNIT OK" display for a moment before allowing the AED to overwrite it
+            connect(&timer, &QTimer::timeout, this, &AED::completeSelfTest);
+            timer.setInterval(DURATION_UNIT_OK);
+            timer.start();
+            return;
+
         case ModuleSelfTest::FAIL_BATTERY:
             failAED();
             errorBattery();
@@ -203,6 +214,15 @@ void AED::selfTestResult(ModuleSelfTest::testResult_t result)
     }
 
     qDebug().noquote() << "[EXIT SLOT] AED::selfTestResult(" << ModuleSelfTest::testResultNames[result] << ")" << Qt::endl;
+}
+
+// SLOT
+void AED::completeSelfTest()
+{
+    qDebug().noquote() << "[ENTRY/EXIT SLOT] AED::completeSelfTest()" << Qt::endl;
+
+    disconnect(&timer, &QTimer::timeout, this, &AED::completeSelfTest);
+    doStartupAdvice();
 }
 
 void AED::ecgResult(bool shockable)
@@ -243,6 +263,21 @@ void AED::shockDelivered()
     qDebug().noquote() << "[EXIT SLOT] AED::shockDelivered()" << Qt::endl;
 }
 
+void AED::scheduleShockResolution()
+{
+    qDebug().noquote() << "[ENTRY SLOT] AED::scheduleShockResolution(): aedState is " << stateNames[aedState] << Qt::endl;
+
+    if(aedState == SHOCK)
+    {
+        changeStateSafe(SHOCK_RESOLVE);
+
+        qDebug() << "[SIGNAL] Emit ModuleShock::signalResolveShock()" << Qt::endl;
+        emit signalResolveShock();
+    }
+
+    qDebug().noquote() << "[EXIT SLOT] AED::scheduleShockResolution()" << Qt::endl;
+}
+
 void AED::startCPR()
 {
     qDebug().noquote() << "[ENTRY SLOT] AED::startCPR()" << Qt::endl;
@@ -276,6 +311,7 @@ void AED::restartECG()
     qDebug().noquote() << "[ENTRY SLOT] AED::restartECG()" << Qt::endl;
 
     disconnect(&timer, &QTimer::timeout, this, &AED::restartECG);
+    changeStateSafe(ECG_ASSESS);
     doStartECG();
 
     qDebug().noquote() << "[EXIT SLOT] AED::restartECG()" << Qt::endl;

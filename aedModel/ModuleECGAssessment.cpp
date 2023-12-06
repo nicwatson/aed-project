@@ -99,8 +99,8 @@ void ModuleECGAssessment::endAssessment()
     // Cause the current graph to be removed from the gui
     lcdDisplay->clearGraphData();
 
-    qDebug() << "[SIGNAL] Emit signalForwardUserPrompt(P_BLANK)" << Qt::endl;
-    emit signalForwardUserPrompt(P_BLANK);
+    //qDebug() << "[SIGNAL] Emit signalForwardUserPrompt(P_BLANK)" << Qt::endl;
+    //emit signalForwardUserPrompt(P_BLANK);
 
     // An asssessment is no longer in process
     active = false;

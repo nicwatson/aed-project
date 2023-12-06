@@ -113,15 +113,26 @@ void ModuleShock::shockButtonPressed()
         qDebug().noquote() << "[SIGNAL] Emit ModuleShock::signalShockDelivered(" << QString::number(shocksDelivered+1) << ")" << Qt::endl;
         emit signalShockDelivered(++shocksDelivered);
 
-        qDebug() << "[SIGNAL] Emit ModuleShock::signalForwardUserPrompt(" << P_DELIVERED << ")" << Qt::endl;
-        emit signalForwardUserPrompt(P_DELIVERED);
-
-        // Brief delay on exit to avoid overwriting "Shock delivered" with "Start CPR" immediately
-        connect(&timer, SIGNAL(timeout()), this, SLOT(exit()));
-        inExitDelay = true;
-        timer.start(STOP_TIME);
+        qDebug() << "[SIGNAL] Emit ModuleShock::signalScheduleShockResolution()" << Qt::endl;
+        emit signalScheduleShockResolution();
     }
     qDebug() << "[EXIT SLOT] ModuleShock::shockButtonPressed()" << Qt::endl;
+}
+
+// SLOT
+void ModuleShock::resolveShock()
+{
+    qDebug() << "[ENTRY SLOT] ModuleSHock::resolveShock()" << Qt::endl;
+
+    qDebug() << "[SIGNAL] Emit ModuleShock::signalForwardUserPrompt(" << P_DELIVERED << ")" << Qt::endl;
+    emit signalForwardUserPrompt(P_DELIVERED);
+
+    // Brief delay on exit to avoid overwriting "Shock delivered" with "Start CPR" immediately
+    connect(&timer, SIGNAL(timeout()), this, SLOT(exit()));
+    inExitDelay = true;
+    timer.start(STOP_TIME);
+
+    qDebug() << "[EXIT SLOT] ModuleSHock::resolveShock()" << Qt::endl;
 }
 
 // SLOT

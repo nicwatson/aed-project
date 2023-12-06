@@ -69,5 +69,6 @@ private:
     // Whether to build extra debug features - control by defining BUILD_DEBUG macro at the top of this file
     bool debug;
 
+
 };
 #endif // MAINWINDOW_H
