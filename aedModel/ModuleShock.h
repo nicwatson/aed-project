@@ -10,15 +10,6 @@
 #include <QString>
 #include "AED.h"
 
-#define BATT_RATIO 1.0/700.0
-#define CHARGE_TIME 3000
-#define STOP_TIME 1500
-
-// TODO there are GUI widget connections needed for this class: Look for "TODO" comments below
-// SLOT shockButtonPressed
-// SLOT shockButtonReleased
-// SIGNAL signalShockDelivered
-
 namespace aedModel
 {
     class ModuleShock : public QObject
@@ -28,8 +19,10 @@ namespace aedModel
             static const int ADULT_SHOCKS[];    // Stores the energy levels for adult shocks
             static const int CHILD_SHOCKS[];    // Stores the energy levels for child shocks
 
-            ModuleShock();
+            explicit ModuleShock();
+            ~ModuleShock();
 
+            // Getters
             inline bool getActive() { return active; }
             inline bool getCharged() { return charged; }
             inline bool getShocksDelivered() { return shocksDelivered; }
@@ -38,6 +31,15 @@ namespace aedModel
             // far, and whether adult or child pads are plugged in (pass true for child pads, false
             // for adult)
             int calcShockEnergy(bool childPads);
+
+            // Debug dummy function
+            void dummy() {
+                emit signalCharged();
+                QTimer::singleShot(10000, this, [=]() {
+                    emit signalAborted();
+                    emit signalShockDelivered(4);
+                });
+            }
 
         private:
             bool active;                // Shock event is active
@@ -56,42 +58,68 @@ namespace aedModel
 
 
         private slots:
-            void chargeReady();         // Charge is ready to go
+
+            // Slot triggered when shock is charged and ready
+            // Trigger: signal timer->QTimer::timeout() : connection in ModuleShock::start(bool) (dynamic connection, made and broken as needed)
+            void chargeReady();
+
+            // Slot triggered when charge is delivered and it's time to exit the shock phase
+            // Trigger: signal timer->QTimer::timeout() : connection in ModuleShock::shockButtonPressed() (dynamic connection, made and broken as needed)
+            void exit();
 
         public slots:
+
+            // Starts the shock prep and shock delivery phase of treatment. The passed arg determines if child or adult pads are in use.
+            // Trigger: signal AED::signalPrepShock() : connection in AED::addModuleShock(...)
             void start(bool usingChildPads);
 
             // Abort because pads detached, cable disconnected, unit failure (battery), or unit turned off
+            // Trigger: signal AED::signalAbortShock() : connection in AED::addModuleShock(...)
             void abort();
 
-            void exit();
+            // Used when unit power is turned off. This is triggers the reset() function, and is different from the cleanup() used after every shock phase completion
+            // in that this resets the shock counter as well.
+            // Trigger: signal AED::signalPowerOff : connection in AED::addModuleShock(...)
+            void fullReset();
 
-            // TODO Connect the GUI's shock button's pressed and released signals to these slots
+            // Tells the shock module that the button was pressed
+            // Trigger: ui->shockButton::pressed() and ::released() : connections in MainWindow::buildModuleConnections()
             void shockButtonPressed();
             void shockButtonReleased();
 
-            // Used when unit power is turned off
-            void fullReset();
 
         signals:
-            // These two talk to the AED object and don't need to be connected to widgets directly
-            void signalUserPrompt(const QString & prompt);
+
+            // This signal talks to the AED object and doesn't need to be connected to widgets directly
+            // Emitters: ModuleShock::chargeReady(), ::shockButtonPressed(), ::shockButtonReleased()
+            // Receiver: slot AED::userPrompt(const QString &) : connection in AED::addModuleShock(...)
+            void signalForwardUserPrompt(const QString & prompt);
+
+            // This signal talks to the AED object and doesn't need to be connected to widgets directly
+            // Emitter: ModuleShock::shockButtonPressed()
+            // Receiver: slot AED::useBattery(double) : connection in AED::addModuleShock(...)
             void signalDrainBatt(double amt);
 
-            // TODO connect this to the shock button to make it flash
+            // Tells the GUI that the shock is charged, so that the button will start flashing
+            // Emitter: ModuleShock::chargeReady()
+            // Receiver: slot ui->shockButton->LampButton::startFlash() : connection in MainWindow::buildModuleConnections()
             void signalCharged();
 
-            // TODO connect this to the flashing shock button to make it stop flashing if the shock event is aborted (e.g. unit turned off)
+            // Tells the GUI to make the shock button stop flashing (shock is aborted for some reason such as unit turned off)
+            // Emitter: ModuleShock::abort()
+            // Receiver: slot ui->shockButton->LampButton::stopFlash() : connection in MainWindow::buildModuleConnections()
             void signalAborted();
 
+            // Tells the AED that the shock prep / delivery phase has completed
+            // Emitter: ModuleShock::exit()
+            // Receiver: slot AED::shockDelivered() : connection in AED::addModuleShock(...)
             void signalDone();
 
-            // TODO This should connect to the LCD to update the shock count.
-            // Not sure if it can connect directly to the QLabel. The LCD may need some intermediate slot
-            // to convert the number to a string?
-            // This should also stop the shock button from flashing.
+            // When a shock is delivered, this will stpo the button flashing, and also update the shock counter on the LCD screen
+            // Emitter: ModuleShock::shockButtonPressed()
+            // Receiver 1: slot ui->shockButton->LampButton::stopFlash() : connection in MainWindow::buildModuleConnections()
+            // Receiver 2: slot LCDDisplay::setShockCounter(int) : connection in MainWindow::buildModuleConnections()
             void signalShockDelivered(int count);
-
 
     };
 }

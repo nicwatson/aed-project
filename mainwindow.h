@@ -3,17 +3,24 @@
 
 #include <QMainWindow>
 
+#include <QString>
+#include <QRegExp>
+
+#include "aedModel/ModuleCPRHelp.h"
+#include "aedModel/ModuleSelfTest.h"
+#include "aedModel/ModuleShock.h"
 #include "aedModel/ModuleStartupAdvice.h"
 #include "aedModel/ModuleECGAssessment.h"
 #include "aedModel/AED.h"
 
 #include "aedGui/LCDDisplay.h"
+#include "aedGui/CompressionsToggleButton.h"
+#include "aedGui/styles.h"
 
 
-#include <QString>
-#include <QRegExp>
+// Uncomment this to run with extra debug features (ECG test buttons etc.)
+// #define BUILD_DEBUG
 
-#define INITIAL_ADVICE_DELAY 3000
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,23 +37,37 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    QList<event::SequencedEvent *> eventHandles;
-    aedModel::ModuleStartupAdvice * startupSequence;
-
-    QTimer timer;
+    // Main AED model object
     aedModel::AED * aed;
 
-    const QRegExp acceptedKeys = QRegExp("[asdfjkl;]");
-    int numKeysDown;
+    // AED's LCD container object
+    aedGui::LCDDisplay* lcdDisplay;
 
-    aedGui::LCDDisplay* LCDDisplay;
+    // Function-specific modules/containers for AED features
+    // AED function has five basic phases:
+    //  self-test, startup advice ("check responsiveness" etc.), ECG assessment, shock (if applicable), and CPR
+    //  Each of these is represented by a "Module" object.
+    aedModel::ModuleSelfTest* selfTestModule;
+    aedModel::ModuleStartupAdvice* startupAdviceModule;
     aedModel::ModuleECGAssessment* ecgModule;
+    aedModel::ModuleShock* shockModule;
+    aedModel::ModuleCPRHelp* cprHelpModule;
 
-private slots:
-    void quitProgram();
 
-signals:
-    void startSequence();
+    // Setup helper functions
+    void prepareLampWidgets();
+    void buildModules();
+    void buildModuleConnections();
+    void buildAEDConnections();
+
+    // Extinguish all lamps etc.
+    void turnoff();
+
+    // Special helper function to set up debug features (e.g. ECG test buttons)
+    void buildDebugFeatures();
+
+    // Whether to build extra debug features - control by defining BUILD_DEBUG macro at the top of this file
+    bool debug;
 
 };
 #endif // MAINWINDOW_H
