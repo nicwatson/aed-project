@@ -94,9 +94,6 @@ namespace aedModel
             bool addModuleShock(ModuleShock *);
             bool addModuleCPR(ModuleCPRHelp *);
 
-            // Debug dummy/unit test function - Def in AED_setup.cpp
-            void dummy();
-
             // Returns whether it would be valid, according to our model, to transition to newState from the current state
             // Def in AED.cpp
             bool legalStateChange(state_t newState);

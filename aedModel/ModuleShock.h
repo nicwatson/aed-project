@@ -32,14 +32,6 @@ namespace aedModel
             // for adult)
             int calcShockEnergy(bool childPads);
 
-            // Debug dummy function
-            void dummy() {
-                emit signalCharged();
-                QTimer::singleShot(10000, this, [=]() {
-                    emit signalAborted();
-                    emit signalShockDelivered(4);
-                });
-            }
 
         private:
             bool active;                // Shock event is active
