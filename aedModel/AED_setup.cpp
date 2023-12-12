@@ -121,20 +121,3 @@ bool AED::addModuleCPR(ModuleCPRHelp * module)
     qDebug() << "[EXIT] AED::addModuleCPR(ModuleCPRHelp *)" << Qt::endl;
     return true;
 }
-
-void AED::dummy()
-{
-    qDebug() << "[ENTRY] AED::dummy()" << Qt::endl;
-
-    emit signalBatteryLevelChanged(0.255);
-    emit signalStartLampStandback();
-    emit signalStartLampCPR();
-
-    QTimer::singleShot(5000, this, [=]() {
-        emit signalUserPrompt("dumbodore");
-        emit signalStopLampStandback();
-        emit signalStopLampCPR();
-    });
-
-    qDebug() << "[EXIT] AED::dummy()" << Qt::endl;
-}

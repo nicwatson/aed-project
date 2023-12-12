@@ -51,8 +51,6 @@ namespace aedModel
 
             void setStrategy(CPRHelpStrategy *);
 
-            inline void dummy() {emit signalDisplayCompressionDepth(23);}
-
         private:
             // Array of available strategies
             CPRHelpStrategy ** strategyList;

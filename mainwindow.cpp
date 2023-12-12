@@ -267,10 +267,6 @@ void MainWindow::buildDebugFeatures()
         ui->beginECGButton->show();
         ui->stopECGButton->show();
 
-        //    Dummy functions are for testing that certain connections are working (since we cant easily test functions via the GUI as the overall flow isnt working)
-        //    aed->dummy();
-        //    cprHelpModule->dummy();
-        //    shockModule->dummy();
     }
     else
     {
