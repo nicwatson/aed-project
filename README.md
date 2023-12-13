@@ -22,6 +22,9 @@ Repo for the development work on the Comp 3004 group project for Team 14
 6. Nic Watson
    - state diagrams
    - backend
-   - (please add all things you done)
+   - class design: AED, ModuleSelfTest, ModuleStartupAdvice, ModuleShock, ModuleCPRHelp
+   - CPR backend logic classes (CPRHelpStrategy etc.)
+   - LampWidget/LampButton
+   - signal/slot and sequence tracing/documentation
 
 # Organization of the submission
