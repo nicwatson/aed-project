@@ -7,22 +7,23 @@ Repo for the development work on the Comp 3004 group project for Team 14
    - Use cases
    - GUI (including SVGs)
    - `LCDDisplay` class (backend)
-3. Charu Idnani
+2. Charu Idnani
    - Use Cases
    - Traceability matrix
    - Sequence Diagram for normal success scenario
    - Video demo
-4. Shariat Jahan Shanu
+3. Shariat Jahan Shanu
    - Use Cases
    - Design Documentaion
    - UML class digram
    - Sequence Diagrams for safety scenarios
-5. Shaun Sim
+   - README.md
+4. Shaun Sim
    - Use cases
    - Middleware
    - Some backend (`ModuleECGAssessment`)
    - Requirements clarification with client (Voja)
-6. Nic Watson
+5. Nic Watson
    - State diagrams
    - Backend
    - Class design: `AED`, `ModuleSelfTest`, `ModuleStartupAdvice`, `ModuleShock`, `ModuleCPRHelp`
@@ -49,7 +50,7 @@ Repo for the development work on the Comp 3004 group project for Team 14
    - `Textual explanation of design decisions.pdf`: A document explaining the design decisions made during the development of the project.
    - `Traceability Matrix.pdf`: The traceability matrix for the project.
    - `Use Cases.pdf` : A document containing all the use cases for the AED project
-   - `Video`: A video demonstration of the project.
+   - `Video.mp4`: A video demonstration of the project.
 
 2. **Project code**: This directory contains all the source code files for the AED project. It includes:
 
