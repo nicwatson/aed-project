@@ -8,10 +8,12 @@ Repo for the development work on the Comp 3004 group project for Team 14
    - GUI (including SVGs)
    - `LCDDisplay` class (backend)
 3. Charu Idnani
+   - Use Cases
    - Traceability matrix
    - Sequence Diagram for normal success scenario
-   - Video
+   - Video demo
 4. Shariat Jahan Shanu
+   - Use Cases
    - Design Documentaion
    - UML class digram
    - Sequence Diagrams for safety scenarios
