@@ -18,7 +18,8 @@ Repo for the development work on the Comp 3004 group project for Team 14
 5. Shaun Sim
    - use cases
    - middleware
-   - (please add all things you done)
+   - some backend (ModuleECGAssessment)
+   - requirements clarification with client (Voja)
 6. Nic Watson
    - state diagrams
    - backend
