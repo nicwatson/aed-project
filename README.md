@@ -46,6 +46,7 @@ Repo for the development work on the Comp 3004 group project for Team 14
   
    - `Textual explanation of design decisions.pdf`: A document explaining the design decisions made during the development of the project.
    - `Traceability Matrix.pdf`: The traceability matrix for the project.
+   - `Use Cases.pdf` : A document containing all the use cases for the AED project
    - `Video`: A video demonstration of the project.
 
 2. **Project code**: This directory contains all the source code files for the AED project. It includes:
