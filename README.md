@@ -36,9 +36,9 @@ Repo for the development work on the Comp 3004 group project for Team 14
    - `AED UML.png`: The UML class diagram for the AED project.
    - **Sequence Diagrams**:This directory contains all the sequence diagrams created for the project. It includes:
 
-         - `Main Success Scenario Diagram.png`: The sequence diagram for the main success scenario of the AED project.
+     - `Main Success Scenario Diagram.png`: The sequence diagram for the main success scenario of the AED project.
 
-         - **Safety Scenarios**: A sub-directory containing sequence diagrams for various safety scenarios. It includes:
+      - **Safety Scenarios**: A sub-directory containing sequence diagrams for various safety scenarios. It includes:
          - `Cable unplugged.png`: The sequence diagram for the scenario where the cable is unplugged during a current session.
          - `Self test fail.png`: The sequence diagram for the scenario where the self-test fails.
          - `Low battery.png`: The sequence diagram for the scenario where a low battery condition is reached during operation.
