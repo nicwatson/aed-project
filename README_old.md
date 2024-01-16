@@ -1,3 +1,6 @@
+### Note
+This is the original README file for academic submission.
+
 # COMP3004
 Repo for the development work on the Comp 3004 group project for Team 14
 
